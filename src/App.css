@@ -19,3 +19,99 @@
   opacity: 1;
   box-shadow: 0 0 6px currentColor;
 }
+
+/* Mobile-first responsive utilities */
+
+/* Hide on mobile, show on desktop */
+.desktop-only {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .desktop-only {
+    display: flex;
+  }
+}
+
+/* Show on mobile, hide on desktop */
+.mobile-only {
+  display: flex;
+}
+
+@media (min-width: 1024px) {
+  .mobile-only {
+    display: none;
+  }
+}
+
+/* Mobile column section styling */
+.mobile-section {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1rem;
+}
+
+.mobile-section:last-child {
+  border-bottom: none;
+}
+
+/* Collapsible sections for mobile */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  padding: 0.5rem 0;
+}
+
+.section-header:hover {
+  opacity: 0.8;
+}
+
+.section-content {
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+
+.section-content.collapsed {
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+/* Smooth scrolling for mobile */
+@media (max-width: 1023px) {
+  .scroll-container {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+}
+
+/* Ensure touch targets are large enough on mobile */
+@media (max-width: 1023px) {
+  button, select {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Custom scrollbar for mobile sections */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(74, 222, 128, 0.3);
+  border-radius: 2px;
+}
+
+/* Mobile header improvements */
+@media (max-width: 1023px) {
+  .mobile-header-input {
+    width: 100%;
+    min-width: 0;
+  }
+}

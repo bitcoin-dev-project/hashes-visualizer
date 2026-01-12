@@ -685,10 +685,62 @@ function App() {
   const btnClass = 'px-3 py-1 rounded bg-gray-800 text-white border border-gray-700 hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed text-xs';
 
   return (
-    <div className="App font-mono text-xs bg-black text-gray-300 h-screen flex flex-col overflow-hidden">
+    <div className="App font-mono text-xs bg-black text-gray-300 min-h-screen lg:h-screen flex flex-col lg:overflow-hidden">
       {/* Header */}
-      <div className="border-b border-gray-800 px-4 py-3 shrink-0">
-        <div className="flex items-center justify-between gap-4">
+      <div className="border-b border-gray-800 px-3 lg:px-4 py-2 lg:py-3 shrink-0">
+        {/* Mobile Header */}
+        <div className="lg:hidden space-y-3">
+          {/* Top row: Logo + Links */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span 
+                onClick={onFullReset}
+                className="text-gray-300 text-sm tracking-wide cursor-pointer hover:text-white transition-colors"
+                title="Reset"
+              >
+                Hashes
+              </span>
+              <span className="text-gray-500 text-[10px] px-1.5 py-0.5 bg-gray-800/80 rounded">SHA-256</span>
+            </div>
+            <div className="flex items-center gap-3 text-xs">
+              <a href="https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300" title="NIST Spec">📄</a>
+              <a href="https://github.com/bitcoin-dev-project/hashes-visualizer" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-gray-300" title="GitHub">
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" /></svg>
+              </a>
+            </div>
+          </div>
+          
+          {/* Input row */}
+          <div className="flex items-center gap-2 bg-gray-900 border border-gray-700 rounded px-2 py-2 focus-within:border-green-600 transition-colors">
+            <select value={inputBase} onChange={e => onInputBaseChange(e.target.value)} className="bg-transparent text-gray-400 py-0.5 px-1 rounded text-xs cursor-pointer">
+              <option value="text">Txt</option>
+              <option value="bin">Bin</option>
+              <option value="hex">Hex</option>
+            </select>
+            <input
+              type="text"
+              value={input}
+              onChange={e => onInputChange(e.target.value)}
+              placeholder={inputPlaceholder}
+              className="flex-1 bg-transparent text-green-400 text-sm focus:outline-none placeholder:text-gray-600 min-w-0"
+            />
+          </div>
+          
+          {/* Controls row */}
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-1">
+              <button className={`${btnClass} !px-2`} onClick={onClockInit} disabled={clock === 0} title="Reset">⟲</button>
+              <button className={`${btnClass} !px-3`} onClick={onClockBack} disabled={clock === 0} title="Step back">←</button>
+              <button className={`${btnClass} !px-4 ${!finished ? 'bg-green-900/50 border-green-700/50 text-green-400' : ''}`} onClick={onAutoClock} disabled={finished}>{autoplay ? '⏸' : '▶'}</button>
+              <button className={`${btnClass} !px-3`} onClick={onClock} disabled={finished} title="Step forward">→</button>
+              <button className={`${btnClass} !px-2`} onClick={onClockFinish} title="Skip to end">⏭</button>
+            </div>
+            <span className="text-gray-500 text-xs whitespace-nowrap bg-gray-800/50 px-2 py-1 rounded">{clock}/{lastClockValue}</span>
+          </div>
+        </div>
+        
+        {/* Desktop Header */}
+        <div className="hidden lg:flex items-center justify-between gap-4">
           {/* Left: Logo and algorithm */}
           <div className="flex items-center gap-2">
             <span 
@@ -761,22 +813,22 @@ function App() {
       </div>
 
       {/* Main: Data columns on left, Detailed explanation on right */}
-      <div className="flex-1 flex overflow-hidden min-h-0">
+      <div className="flex-1 flex flex-col lg:flex-row overflow-auto lg:overflow-hidden min-h-0">
         
         {/* LEFT SIDE: Data columns */}
-        <div className="flex-1 flex items-stretch overflow-x-auto overflow-y-hidden">
+        <div className="flex-1 flex flex-col lg:flex-row lg:items-stretch overflow-x-auto overflow-y-auto lg:overflow-y-hidden">
           
           {/* Column 1: Message → Padded block */}
-          <div className={`w-[290px] shrink-0 border-r border-gray-800 p-2 overflow-hidden transition-opacity ${paddingDone && phase !== 'padding' ? 'opacity-20' : ''}`}>
+          <div className={`w-full lg:w-[290px] shrink-0 border-b lg:border-b-0 lg:border-r border-gray-800 p-3 lg:p-2 overflow-hidden transition-opacity ${paddingDone && phase !== 'padding' ? 'lg:opacity-20' : ''}`}>
             <div 
               onClick={() => jumpToPhase(0)}
-              className="text-[10px] uppercase tracking-wider text-green-600 mb-1 cursor-pointer hover:text-green-400 hover:underline underline-offset-2 transition-all inline-block"
+              className="text-[11px] lg:text-[10px] uppercase tracking-wider text-green-600 mb-2 lg:mb-1 cursor-pointer hover:text-green-400 hover:underline underline-offset-2 transition-all inline-block"
               title="Click to jump to Padding"
             >
               {phase === 'padding' ? '● Padding' : '✓ Padded block'} <span className="text-[9px] opacity-50">↗</span>
             </div>
             
-            <div className="space-y-0 font-mono text-[11px] leading-tight">
+            <div className="space-y-0 font-mono text-[10px] lg:text-[11px] leading-tight overflow-x-auto">
               {/* Show block building up - color each bit, show word indices */}
               {(() => {
                 let blockBits = '';
@@ -793,14 +845,14 @@ function App() {
                   if (row.trim() === '') return null;
                   
                   return (
-                    <div key={rowIdx} className="flex gap-1">
+                    <div key={rowIdx} className="flex gap-1 whitespace-nowrap">
                       {/* Word label with arrow when block is complete */}
                       {showWordLabels && (
-                        <span className="text-yellow-500 w-7 shrink-0">
+                        <span className="text-yellow-500 w-7 shrink-0 text-[9px] lg:text-[11px]">
                           w{rowIdx}→
                         </span>
                       )}
-                      <span>
+                      <span className="text-[9px] lg:text-[11px]">
                         {row.split('').map((bit, bitIdx) => {
                           const globalBit = rowIdx * 32 + bitIdx;
                           let color = 'text-gray-700';
@@ -827,16 +879,16 @@ function App() {
           </div>
 
           {/* Column 2: Message schedule w[0..63] */}
-          <div className={`w-[400px] shrink-0 border-r border-gray-800 p-2 flex flex-col overflow-hidden transition-opacity ${scheduleDone && phase !== 'schedule' && phase !== 'chunk' && phase !== 'compress' ? 'opacity-20' : ''}`}>
+          <div className={`w-full lg:w-[400px] shrink-0 border-b lg:border-b-0 lg:border-r border-gray-800 p-3 lg:p-2 flex flex-col overflow-hidden transition-opacity ${scheduleDone && phase !== 'schedule' && phase !== 'chunk' && phase !== 'compress' ? 'lg:opacity-20' : ''}`}>
             <div 
               onClick={() => jumpToPhase(6)}
-              className="text-[10px] uppercase tracking-wider text-green-600 mb-1 cursor-pointer hover:text-green-400 hover:underline underline-offset-2 transition-all inline-block shrink-0"
+              className="text-[11px] lg:text-[10px] uppercase tracking-wider text-green-600 mb-2 lg:mb-1 cursor-pointer hover:text-green-400 hover:underline underline-offset-2 transition-all inline-block shrink-0"
               title="Click to jump to Message Schedule"
             >
               {phase === 'chunk' || phase === 'schedule' ? '● Message schedule' : scheduleDone ? '✓ w[0..63]' : '○ Message schedule'} <span className="text-[9px] opacity-50">↗</span>
             </div>
             
-            <div className="space-y-0 flex-1 overflow-y-auto overflow-x-hidden leading-tight">
+            <div className="space-y-0 flex-1 max-h-[300px] lg:max-h-none overflow-y-auto overflow-x-auto leading-tight custom-scrollbar">
               {Array.from({length: 64}).map((_, i) => {
                 const computed = i <= wComputedUpTo;
                 const current = i === currentWIndex;
@@ -857,15 +909,15 @@ function App() {
                 const dimmedDuringSchedule = phase === 'schedule' && currentWIndex !== null && !current && !isDependency;
                 
                 return (
-                  <div key={i} className={`flex gap-1.5 text-[11px] transition-opacity whitespace-nowrap ${current ? 'bg-gray-800 -mx-1 px-1 rounded' : usedInCompression ? 'bg-purple-900/50 -mx-1 px-1 rounded' : ''} ${dimmedDuringCompression || dimmedDuringSchedule ? 'opacity-30' : ''}`}>
-                    <span className={`w-8 shrink-0 ${current ? 'text-green-400 font-bold' : usedInCompression ? 'text-purple-400 font-bold' : isDependency ? 'text-gray-500' : computed ? (fromChunk ? 'text-yellow-600' : 'text-green-600') : 'text-gray-800'}`}>w{i}</span>
+                  <div key={i} className={`flex gap-1 lg:gap-1.5 text-[9px] lg:text-[11px] transition-opacity whitespace-nowrap ${current ? 'bg-gray-800 -mx-1 px-1 rounded' : usedInCompression ? 'bg-purple-900/50 -mx-1 px-1 rounded' : ''} ${dimmedDuringCompression || dimmedDuringSchedule ? 'opacity-30' : ''}`}>
+                    <span className={`w-6 lg:w-8 shrink-0 ${current ? 'text-green-400 font-bold' : usedInCompression ? 'text-purple-400 font-bold' : isDependency ? 'text-gray-500' : computed ? (fromChunk ? 'text-yellow-600' : 'text-green-600') : 'text-gray-800'}`}>w{i}</span>
                     <span className={`shrink-0 ${current ? 'text-white' : usedInCompression ? 'text-purple-300' : isDependency ? 'text-gray-600 opacity-60' : computed ? 'text-gray-500' : 'text-gray-900'}`}>{toBin(wView[i])}</span>
-                    {current && <span className="ml-1 text-[10px] text-green-400 font-bold shrink-0">◄ COMPUTING</span>}
-                    {usedInCompression && <span className="ml-1 text-[10px] text-purple-400 font-bold shrink-0">◄ USING</span>}
-                    {isW16 && <span className="text-gray-500 ml-1 text-[10px] shrink-0">+w[{i}]</span>}
-                    {isW15 && <span className="text-orange-400/60 ml-1 text-[10px] shrink-0">+σ₀(w[{i}])</span>}
-                    {isW7 && <span className="text-gray-500 ml-1 text-[10px] shrink-0">+w[{i}]</span>}
-                    {isW2 && <span className="text-yellow-400/60 ml-1 text-[10px] shrink-0">+σ₁(w[{i}])</span>}
+                    {current && <span className="ml-1 text-[8px] lg:text-[10px] text-green-400 font-bold shrink-0">◄ COMPUTING</span>}
+                    {usedInCompression && <span className="ml-1 text-[8px] lg:text-[10px] text-purple-400 font-bold shrink-0">◄ USING</span>}
+                    {isW16 && <span className="text-gray-500 ml-1 text-[8px] lg:text-[10px] shrink-0 hidden lg:inline">+w[{i}]</span>}
+                    {isW15 && <span className="text-orange-400/60 ml-1 text-[8px] lg:text-[10px] shrink-0 hidden lg:inline">+σ₀(w[{i}])</span>}
+                    {isW7 && <span className="text-gray-500 ml-1 text-[8px] lg:text-[10px] shrink-0 hidden lg:inline">+w[{i}]</span>}
+                    {isW2 && <span className="text-yellow-400/60 ml-1 text-[8px] lg:text-[10px] shrink-0 hidden lg:inline">+σ₁(w[{i}])</span>}
                   </div>
                 );
               })}
@@ -873,10 +925,10 @@ function App() {
           </div>
 
           {/* Column 3: Working variables a..h */}
-          <div className={`w-[580px] shrink-0 border-r border-gray-800 p-2 flex flex-col self-stretch transition-opacity ${compressDone && phase !== 'compress' && phase !== 'init' ? 'opacity-20' : ''}`}>
+          <div className={`w-full lg:w-[580px] shrink-0 border-b lg:border-b-0 lg:border-r border-gray-800 p-3 lg:p-2 flex flex-col self-stretch transition-opacity ${compressDone && phase !== 'compress' && phase !== 'init' ? 'lg:opacity-20' : ''}`}>
             <div 
               onClick={() => jumpToPhase(55)}
-              className="text-xs uppercase tracking-wider text-green-600 mb-2 cursor-pointer hover:text-green-400 hover:underline underline-offset-2 transition-all inline-block shrink-0"
+              className="text-[11px] lg:text-xs uppercase tracking-wider text-green-600 mb-2 cursor-pointer hover:text-green-400 hover:underline underline-offset-2 transition-all inline-block shrink-0"
               title="Click to jump to Compression"
             >
               {phase === 'init' || phase === 'compress' ? '● Compression' : compressDone ? '✓ Compressed' : '○ Compression'} <span className="text-[10px] opacity-50">↗</span>
@@ -893,45 +945,63 @@ function App() {
                 
                 {/* During compression: show OLD → NEW transition */}
                 {phase === 'compress' && lettersBefore.length > 0 ? (
-                  <div className="space-y-0.5">
-                    <div className="flex items-center text-[10px] text-gray-500 mb-1">
-                      <span className="w-5 shrink-0"></span>
-                      <span className="w-[220px] shrink-0 text-center opacity-50">Before</span>
-                      <span className="w-5 shrink-0"></span>
-                      <span className="flex-1 text-center">After</span>
+                  <div className="space-y-0.5 overflow-x-auto">
+                    {/* Desktop: side by side comparison */}
+                    <div className="hidden lg:block">
+                      <div className="flex items-center text-[10px] text-gray-500 mb-1">
+                        <span className="w-5 shrink-0"></span>
+                        <span className="w-[220px] shrink-0 text-center opacity-50">Before</span>
+                        <span className="w-5 shrink-0"></span>
+                        <span className="flex-1 text-center">After</span>
+                      </div>
+                      {['a','b','c','d','e','f','g','h'].map((l, i) => {
+                        const isNew = i === 0 || i === 4;
+                        const isShift = i === 1 || i === 2 || i === 3 || i === 5 || i === 6 || i === 7;
+                        const shiftFrom = ['', 'a', 'b', 'c', '', 'e', 'f', 'g'][i];
+                        const oldVal = lettersBefore[i] || 0;
+                        const newVal = letters[i] || 0;
+                        
+                        return (
+                          <div key={i} className={`flex items-center ${isNew ? 'bg-purple-900/30 -mx-1 px-1 py-0.5 rounded' : ''}`}>
+                            <span className={`w-5 shrink-0 text-xs ${isNew ? 'text-purple-300' : 'text-gray-500'}`}>{l}</span>
+                            <span className="w-[220px] shrink-0 text-gray-600 opacity-50 text-[10px] font-mono">{toBin(oldVal)}</span>
+                            <span className={`w-5 shrink-0 text-center text-xs ${isNew ? 'text-purple-400' : 'text-gray-600'}`}>→</span>
+                            <span className={`font-mono text-[10px] ${isNew ? 'text-white' : isShift ? 'text-gray-400' : 'text-gray-500'}`}>
+                              {toBin(newVal)}
+                            </span>
+                            <span className="shrink-0 text-[10px] ml-2">
+                              {isNew && i === 0 && <span className="text-purple-400">T₁+T₂</span>}
+                              {isNew && i === 4 && <span className="text-purple-400">d+T₁</span>}
+                              {isShift && <span className="text-gray-600">←{shiftFrom}</span>}
+                            </span>
+                          </div>
+                        );
+                      })}
                     </div>
-                    {['a','b','c','d','e','f','g','h'].map((l, i) => {
-                      const isNew = i === 0 || i === 4; // a or e get new values
-                      const isShift = i === 1 || i === 2 || i === 3 || i === 5 || i === 6 || i === 7;
-                      const shiftFrom = ['', 'a', 'b', 'c', '', 'e', 'f', 'g'][i];
-                      const oldVal = lettersBefore[i] || 0;
-                      const newVal = letters[i] || 0;
-                      
-                      return (
-                        <div key={i} className={`flex items-center ${isNew ? 'bg-purple-900/30 -mx-1 px-1 py-0.5 rounded' : ''}`}>
-                          {/* Variable name */}
-                          <span className={`w-5 shrink-0 text-xs ${isNew ? 'text-purple-300' : 'text-gray-500'}`}>{l}</span>
-                          
-                          {/* Old value - dimmed */}
-                          <span className="w-[220px] shrink-0 text-gray-600 opacity-50 text-[10px] font-mono">{toBin(oldVal)}</span>
-                          
-                          {/* Arrow showing transformation */}
-                          <span className={`w-5 shrink-0 text-center text-xs ${isNew ? 'text-purple-400' : 'text-gray-600'}`}>→</span>
-                          
-                          {/* New value - highlighted */}
-                          <span className={`font-mono text-[10px] ${isNew ? 'text-white' : isShift ? 'text-gray-400' : 'text-gray-500'}`}>
-                            {toBin(newVal)}
-                          </span>
-                          
-                          {/* Source indicator */}
-                          <span className="shrink-0 text-[10px] ml-2">
-                            {isNew && i === 0 && <span className="text-purple-400">T₁+T₂</span>}
-                            {isNew && i === 4 && <span className="text-purple-400">d+T₁</span>}
-                            {isShift && <span className="text-gray-600">←{shiftFrom}</span>}
-                          </span>
-                        </div>
-                      );
-                    })}
+                    
+                    {/* Mobile: stacked compact view */}
+                    <div className="lg:hidden space-y-1">
+                      {['a','b','c','d','e','f','g','h'].map((l, i) => {
+                        const isNew = i === 0 || i === 4;
+                        const isShift = i === 1 || i === 2 || i === 3 || i === 5 || i === 6 || i === 7;
+                        const shiftFrom = ['', 'a', 'b', 'c', '', 'e', 'f', 'g'][i];
+                        const newVal = letters[i] || 0;
+                        
+                        return (
+                          <div key={i} className={`flex items-center gap-2 ${isNew ? 'bg-purple-900/30 px-2 py-1 rounded' : ''}`}>
+                            <span className={`w-4 shrink-0 text-xs font-bold ${isNew ? 'text-purple-300' : 'text-gray-500'}`}>{l}</span>
+                            <span className={`font-mono text-[9px] ${isNew ? 'text-white' : 'text-gray-400'}`}>
+                              {toBin(newVal)}
+                            </span>
+                            <span className="shrink-0 text-[9px] text-gray-500">
+                              {isNew && i === 0 && <span className="text-purple-400">T₁+T₂</span>}
+                              {isNew && i === 4 && <span className="text-purple-400">d+T₁</span>}
+                              {isShift && <span className="text-gray-600">←{shiftFrom}</span>}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
                     
                     {/* Visual shift diagram */}
                     <div className="mt-2 pt-2 border-t border-gray-800 text-xs">
@@ -950,11 +1020,11 @@ function App() {
                     // Initial hash values h0..h7 (same as in sha256step)
                     const initialH = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];
                     return (
-                      <div className="space-y-1">
-                        <div className="text-xs text-gray-500 mb-2">Working variables a..h</div>
+                      <div className="space-y-1 overflow-x-auto">
+                        <div className="text-[11px] lg:text-xs text-gray-500 mb-2">Working variables a..h</div>
                         {['a','b','c','d','e','f','g','h'].map((l, i) => (
-                          <div key={i} className="flex gap-2 text-xs">
-                            <span className="w-5 text-purple-400 font-bold">{l}</span>
+                          <div key={i} className="flex gap-2 text-[10px] lg:text-xs whitespace-nowrap">
+                            <span className="w-4 lg:w-5 text-purple-400 font-bold">{l}</span>
                             <span className="text-gray-500 font-mono">{toBin(initialH[i])}</span>
                           </div>
                         ))}
@@ -973,7 +1043,7 @@ function App() {
                   <span className="text-cyan-600">Round Constants</span> k₀..k₆₃
                   {phase === 'compress' && currentRound !== null && <span className="text-cyan-400 ml-2">← using k{currentRound}</span>}
                 </div>
-                <div className="grid grid-cols-4 gap-x-1 gap-y-0.5 text-[7px] font-mono">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-1 gap-y-0.5 text-[6px] lg:text-[7px] font-mono overflow-x-auto">
                   {k.slice(0, 64).map((kVal, i) => {
                     const isCurrent = phase === 'compress' && currentRound !== null && i === currentRound;
                     const allHighlight = phase === 'kconst' || phase === 'compressintro'; // During k intro and compress overview, highlight all
@@ -981,10 +1051,11 @@ function App() {
                     return (
                       <div 
                         key={i} 
-                        className={`rounded transition-all ${isCurrent ? 'bg-cyan-500/30 text-cyan-300 px-0.5' : allHighlight ? 'text-cyan-500' : 'text-gray-700 opacity-30'}`}
+                        className={`rounded transition-all whitespace-nowrap ${isCurrent ? 'bg-cyan-500/30 text-cyan-300 px-0.5' : allHighlight ? 'text-cyan-500' : 'text-gray-700 opacity-30'}`}
                         title={`k${i}: ${kBin}`}
                       >
-                        {kBin.slice(0,16)}...
+                        <span className="lg:hidden">{kBin.slice(0,8)}...</span>
+                        <span className="hidden lg:inline">{kBin.slice(0,16)}...</span>
                       </div>
                     );
                   })}
@@ -994,20 +1065,20 @@ function App() {
         </div>
 
           {/* Column 4: Final hash h0..h7 */}
-          <div className={`w-[320px] shrink-0 p-2 transition-opacity ${!compressDone ? 'opacity-20' : ''}`}>
+          <div className={`w-full lg:w-[320px] shrink-0 p-3 lg:p-2 transition-opacity ${!compressDone ? 'lg:opacity-20' : ''}`}>
             <div 
               onClick={() => jumpToPhase(lastClockValue)}
-              className="text-xs uppercase tracking-wider text-green-600 mb-2 cursor-pointer hover:text-green-400 hover:underline underline-offset-2 transition-all inline-block"
+              className="text-[11px] lg:text-xs uppercase tracking-wider text-green-600 mb-2 cursor-pointer hover:text-green-400 hover:underline underline-offset-2 transition-all inline-block"
               title="Click to jump to Final Hash"
             >
               {finished ? '● Final hash' : '○ Final hash'} <span className="text-[10px] opacity-50">↗</span>
       </div>
 
-            <div className="space-y-0.5 leading-tight">
+            <div className="space-y-0.5 leading-tight overflow-x-auto">
               <div className="text-xs text-gray-500 mb-1">h0..h7</div>
               {hs.map((h, i) => (
-                <div key={i} className="flex gap-2 text-xs">
-                  <span className="text-gray-500 w-6">h{i}</span>
+                <div key={i} className="flex gap-2 text-[10px] lg:text-xs whitespace-nowrap">
+                  <span className="text-gray-500 w-5 lg:w-6">h{i}</span>
                   <span className={finished ? 'text-white font-mono' : 'text-gray-700 font-mono'}>{toBin(h)}</span>
         </div>
               ))}
@@ -1016,7 +1087,7 @@ function App() {
               {phase === 'digest' && digestStep >= 2 && (
                 <div className="mt-3 pt-2 border-t border-gray-800">
                   <div className="text-[10px] text-green-400/80 mb-1">Combined (256 bits):</div>
-                  <div className="text-green-400/60 font-mono text-[7px] break-all leading-normal">
+                  <div className="text-green-400/60 font-mono text-[6px] lg:text-[7px] break-all leading-normal">
                     {hs.map(h => toBin(h)).join('')}
                   </div>
                 </div>
@@ -1026,7 +1097,7 @@ function App() {
               {phase === 'digest' && digestStep >= 3 && (
                 <div className="mt-3 bg-green-900/40 border border-green-500/50 rounded-lg p-3">
                   <div className="text-xs text-green-300 mb-2 font-bold uppercase tracking-wide">✓ SHA-256 Hash</div>
-                  <div className="text-green-400 font-mono text-sm font-bold break-all leading-relaxed tracking-wider">
+                  <div className="text-green-400 font-mono text-xs lg:text-sm font-bold break-all leading-relaxed tracking-wider">
                     {result}
                   </div>
                 </div>
@@ -1037,10 +1108,10 @@ function App() {
 
         {/* RIGHT SIDE: Detailed step-by-step explanation */}
         {showExplanation ? (
-        <div className="w-[450px] shrink-0 border-l border-green-500/40 bg-green-950/40 overflow-y-auto overflow-x-hidden flex flex-col p-3">
-          <div className="flex items-center justify-between mb-2 shrink-0">
-            <span className="text-xs uppercase tracking-wider text-green-600">Step Details</span>
-            <button onClick={() => setShowExplanation(false)} className="text-gray-500 hover:text-white text-lg leading-none px-1">×</button>
+        <div className="w-full lg:w-[450px] shrink-0 border-t lg:border-t-0 lg:border-l border-green-500/40 bg-green-950/40 overflow-y-auto overflow-x-hidden flex flex-col p-4 lg:p-3">
+          <div className="flex items-center justify-between mb-3 lg:mb-2 shrink-0">
+            <span className="text-sm lg:text-xs uppercase tracking-wider text-green-600">Step Details</span>
+            <button onClick={() => setShowExplanation(false)} className="text-gray-500 hover:text-white text-xl lg:text-lg leading-none px-2 py-1">×</button>
           </div>
           
           {/* Main explanation content */}
@@ -1124,10 +1195,21 @@ function App() {
         ) : (
           <button 
             onClick={() => setShowExplanation(true)} 
-            className="shrink-0 w-10 bg-green-950/80 border-l border-green-500/50 text-green-500 hover:text-green-300 hover:bg-green-900/60 flex flex-col items-center justify-center gap-1"
+            className="hidden lg:flex shrink-0 w-10 bg-green-950/80 border-l border-green-500/50 text-green-500 hover:text-green-300 hover:bg-green-900/60 flex-col items-center justify-center gap-1"
             title="Show step details"
           >
             <span className="text-lg">?</span>
+          </button>
+        )}
+        
+        {/* Mobile floating button to show explanation */}
+        {!showExplanation && (
+          <button 
+            onClick={() => setShowExplanation(true)} 
+            className="lg:hidden fixed bottom-4 right-4 w-14 h-14 bg-green-900 border-2 border-green-500 text-green-400 rounded-full shadow-lg flex items-center justify-center z-50"
+            title="Show step details"
+          >
+            <span className="text-2xl">?</span>
           </button>
         )}
       </div>
