@@ -541,6 +541,20 @@ function App() {
     setHsBefore(res.hsBefore);
   }
 
+  function onFullReset() {
+    setInput('');
+    setPaddedInput(padding('', inputBase));
+    setClock(0);
+    setAutoplay(false);
+    let res = shaStepped('', firstLoop(0), secondLoop(0), 1);
+    setWView(res.w);
+    setResult(res.hash);
+    setLetters(res.letters);
+    setLettersBefore(res.lettersBefore);
+    setHs(res.hs);
+    setHsBefore(res.hsBefore);
+  }
+
   // Jump to a specific clock value
   function jumpToPhase(targetClock) {
     setClock(targetClock);
@@ -676,7 +690,13 @@ function App() {
         <div className="flex items-center justify-between gap-4">
           {/* Left: Logo and algorithm */}
           <div className="flex items-center gap-2">
-            <span className="text-gray-300 text-sm tracking-wide">Hashes Visualizer</span>
+            <span 
+              onClick={onFullReset}
+              className="text-gray-300 text-sm tracking-wide cursor-pointer hover:text-white transition-colors"
+              title="Reset"
+            >
+              Hashes Visualizer
+            </span>
             <span className="text-gray-500 text-xs px-2 py-0.5 bg-gray-800/80 rounded">SHA-256</span>
           </div>
           
