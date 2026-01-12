@@ -209,7 +209,7 @@ export function SigmaAnimation({
   const dimColor = type === 'sigma0' ? 'text-orange-300/70' : 'text-yellow-300/70';
 
   return (
-    <div className="bg-gray-900/80 rounded-lg p-3 space-y-2 text-[10px] font-mono">
+    <div className="bg-gray-900/80 rounded p-2 space-y-1 text-[10px] font-mono">
       {/* Header */}
       <div className="flex items-center gap-2 text-[10px] text-gray-400 pb-1 border-b border-gray-800">
         <span className={`font-bold ${color}`}>{sigmaName}</span>
@@ -218,7 +218,7 @@ export function SigmaAnimation({
 
       {/* Input */}
       <div className="flex items-center gap-2">
-        <span className="text-gray-500 w-16 text-right">{inputLabel}</span>
+        <span className="text-gray-500 w-14 text-right">{inputLabel}</span>
         <span className="text-gray-300">{formatBin(input)}</span>
       </div>
 
@@ -229,15 +229,14 @@ export function SigmaAnimation({
           <button
             onClick={() => handleAnimate(i)}
             disabled={animatingOp !== null}
-            className={`w-16 text-right shrink-0 transition-all rounded px-1 ${
+            className={`w-14 text-right shrink-0 transition-all rounded px-1 ${
               animatingOp === i 
                 ? 'bg-green-600/30 text-green-400' 
                 : `${dimColor} hover:text-white hover:bg-gray-800 pulse-clickable`
             }`}
             title="Click to animate"
           >
-            {op.op === 'rotr' ? `rot ${op.by}` : `shr ${op.by}`}
-            <span className="text-[8px] ml-1">{animatingOp === i ? '●' : '▶'}</span>
+            {op.op === 'rotr' ? `rot${op.by}` : `shr${op.by}`}
           </button>
           
           {/* Animated bits display */}
@@ -255,7 +254,7 @@ export function SigmaAnimation({
 
       {/* XOR result */}
       <div className="flex items-center gap-2 pt-1 border-t border-gray-800">
-        <span className={`w-16 text-right font-bold ${color}`}>{sigmaName} =</span>
+        <span className={`w-14 text-right font-bold ${color}`}>{sigmaName} =</span>
         <span className={`font-bold ${color}`}>{formatBin(finalResult)}</span>
       </div>
     </div>
@@ -302,14 +301,14 @@ export function BigSigmaAnimation({
   const isSigma0 = type === 'Sigma0';
 
   return (
-    <div className="bg-gray-900/80 rounded-lg p-3 space-y-2 text-[10px] font-mono">
+    <div className="bg-gray-900/80 rounded p-2 space-y-1 text-[10px] font-mono">
       <div className="flex items-center gap-2 text-[10px] text-gray-400 pb-1 border-b border-gray-800">
         <span className={`font-bold ${isSigma0 ? 'text-cyan-400' : 'text-orange-400'}`}>{sigmaName}</span>
         <span>= ROTR{ops[0].by} ⊕ ROTR{ops[1].by} ⊕ ROTR{ops[2].by}</span>
       </div>
 
       <div className="flex items-center gap-2">
-        <span className="text-gray-500 w-16 text-right">{inputLabel}</span>
+        <span className="text-gray-500 w-14 text-right">{inputLabel}</span>
         <span className={isSigma0 ? 'text-cyan-400/50' : 'text-orange-400/50'}>{formatBin(input)}</span>
       </div>
 
@@ -318,15 +317,14 @@ export function BigSigmaAnimation({
           <button
             onClick={() => handleAnimate(i)}
             disabled={animatingOp !== null}
-            className={`w-16 text-right shrink-0 transition-all rounded px-1 ${
+            className={`w-14 text-right shrink-0 transition-all rounded px-1 ${
               animatingOp === i 
                 ? (isSigma0 ? 'bg-cyan-500/20 text-cyan-300' : 'bg-orange-500/20 text-orange-300')
                 : (isSigma0 ? 'text-cyan-500/80 hover:text-cyan-400 hover:bg-cyan-900/30 pulse-clickable' : 'text-orange-500/80 hover:text-orange-400 hover:bg-orange-900/30 pulse-clickable')
             }`}
             title="Click to animate"
           >
-            rot {op.by}
-            <span className="text-[8px] ml-1">{animatingOp === i ? '●' : '▶'}</span>
+            rot{op.by}
           </button>
           
           <span className={isSigma0 ? 'text-cyan-400/50' : 'text-orange-400/50'}>
@@ -342,7 +340,7 @@ export function BigSigmaAnimation({
       ))}
 
       <div className="flex items-center gap-2 pt-1 border-t border-gray-800">
-        <span className={`w-16 text-right font-bold ${isSigma0 ? 'text-cyan-400' : 'text-orange-400'}`}>{sigmaName} =</span>
+        <span className={`w-14 text-right font-bold ${isSigma0 ? 'text-cyan-400' : 'text-orange-400'}`}>{sigmaName} =</span>
         <span className={`font-bold ${isSigma0 ? 'text-cyan-400' : 'text-orange-400'}`}>{formatBin(finalResult)}</span>
       </div>
     </div>
@@ -368,59 +366,28 @@ export function ChoiceAnimation({ e, f, g }) {
   const resultBits = toBin32(result).split('');
 
   return (
-    <div className="bg-gray-900/80 rounded-lg p-3 space-y-2 text-[10px] font-mono">
+    <div className="bg-gray-900/80 rounded p-2 space-y-1 text-[10px] font-mono">
       <div className="flex items-center gap-2 text-[10px] text-gray-400 pb-1 border-b border-gray-800">
-        <span className="font-bold text-purple-400">Ch(e,f,g)</span>
-        <span>= "if e=1 pick f, else pick g"</span>
+        <span className="font-bold text-purple-400">Ch</span>
+        <span>= if e=1→f, else→g</span>
       </div>
 
-      <div className="space-y-1">
+      <div className="space-y-0.5">
         <div className="flex items-center gap-2">
-          <span className="text-gray-500 w-16 text-right">e (select)</span>
+          <span className="text-gray-500 w-8 text-right">e</span>
           <span className="text-purple-400/50">{formatBin(e)}</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-gray-500 w-16 text-right">f (if 1)</span>
+          <span className="text-gray-500 w-8 text-right">f</span>
           <span className="text-purple-400/70">{formatBin(f)}</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-gray-500 w-16 text-right">g (if 0)</span>
+          <span className="text-gray-500 w-8 text-right">g</span>
           <span className="text-purple-400/40">{formatBin(g)}</span>
         </div>
         
-        {/* Toggle bit view */}
-        <button 
-          onClick={() => setShowBitView(!showBitView)}
-          className="text-[9px] text-purple-500 hover:text-purple-400 transition-colors pulse-clickable mt-1"
-        >
-          {showBitView ? '▼ Hide' : '▶ Show'} bit selection
-        </button>
-        
-        {showBitView && (
-          <div className="py-2 px-1 bg-gray-950 rounded mt-1">
-            <div className="text-[9px] text-gray-600 mb-1">Each bit: e=1→f (bright), e=0→g (dim)</div>
-            <div className="flex flex-wrap gap-[1px]">
-              {resultBits.map((bit, i) => (
-                <span key={i}>
-                  {i > 0 && i % 8 === 0 && <span className="w-1"> </span>}
-                  <span 
-                    className={eBits[i] === '1' ? 'text-purple-300' : 'text-purple-700'}
-                    title={eBits[i] === '1' ? `from f[${i}]` : `from g[${i}]`}
-                  >
-                    {bit}
-                  </span>
-                </span>
-              ))}
-            </div>
-            <div className="text-[8px] mt-1 flex gap-3">
-              <span className="text-purple-300">■ from f (e=1)</span>
-              <span className="text-purple-700">■ from g (e=0)</span>
-            </div>
-          </div>
-        )}
-        
         <div className="flex items-center gap-2 pt-1 border-t border-gray-800">
-          <span className="text-purple-400 w-16 text-right font-bold">Ch =</span>
+          <span className="text-purple-400 w-8 text-right font-bold">Ch</span>
           <span className="text-purple-300 font-bold">{formatBin(result)}</span>
         </div>
       </div>
@@ -452,70 +419,28 @@ export function MajorityAnimation({ a, b, c }) {
   };
 
   return (
-    <div className="bg-gray-900/80 rounded-lg p-3 space-y-2 text-[10px] font-mono">
+    <div className="bg-gray-900/80 rounded p-2 space-y-1 text-[10px] font-mono">
       <div className="flex items-center gap-2 text-[10px] text-gray-400 pb-1 border-b border-gray-800">
-        <span className="font-bold text-emerald-400">Maj(a,b,c)</span>
-        <span>= "majority vote of each bit"</span>
+        <span className="font-bold text-emerald-400">Maj</span>
+        <span>= majority vote</span>
       </div>
 
-      <div className="space-y-1">
+      <div className="space-y-0.5">
         <div className="flex items-center gap-2">
-          <span className="text-gray-500 w-16 text-right">a</span>
+          <span className="text-gray-500 w-8 text-right">a</span>
           <span className="text-emerald-400/50">{formatBin(a)}</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-gray-500 w-16 text-right">b</span>
+          <span className="text-gray-500 w-8 text-right">b</span>
           <span className="text-emerald-400/50">{formatBin(b)}</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-gray-500 w-16 text-right">c</span>
+          <span className="text-gray-500 w-8 text-right">c</span>
           <span className="text-emerald-400/50">{formatBin(c)}</span>
         </div>
         
-        {/* Toggle bit view */}
-        <button 
-          onClick={() => setShowBitView(!showBitView)}
-          className="text-[9px] text-emerald-500 hover:text-emerald-400 transition-colors pulse-clickable mt-1"
-        >
-          {showBitView ? '▼ Hide' : '▶ Show'} bit voting
-        </button>
-        
-        {showBitView && (
-          <div className="py-2 px-1 bg-gray-950 rounded mt-1">
-            <div className="text-[9px] text-gray-600 mb-1">Each bit: 2+ votes → 1 (brighter = more votes)</div>
-            <div className="flex flex-wrap gap-[1px]">
-              {resultBits.map((bit, i) => {
-                const votes = getVoteCount(i);
-                // Brightness based on vote count - emerald shades
-                let colorClass = 'text-emerald-900'; // 0 votes
-                if (votes === 3) colorClass = 'text-emerald-300';
-                else if (votes === 2) colorClass = 'text-emerald-400';
-                else if (votes === 1) colorClass = 'text-emerald-700';
-                
-                return (
-                  <span key={i}>
-                    {i > 0 && i % 8 === 0 && <span className="w-1"> </span>}
-                    <span 
-                      className={colorClass}
-                      title={`${votes}/3 votes for 1`}
-                    >
-                      {bit}
-                    </span>
-                  </span>
-                );
-              })}
-            </div>
-            <div className="text-[8px] mt-1 flex gap-2">
-              <span className="text-emerald-300">■ 3/3</span>
-              <span className="text-emerald-400">■ 2/3</span>
-              <span className="text-emerald-700">■ 1/3</span>
-              <span className="text-emerald-900">■ 0/3</span>
-            </div>
-          </div>
-        )}
-        
         <div className="flex items-center gap-2 pt-1 border-t border-gray-800">
-          <span className="text-emerald-400 w-16 text-right font-bold">Maj =</span>
+          <span className="text-emerald-400 w-8 text-right font-bold">Maj</span>
           <span className="text-emerald-300 font-bold">{formatBin(result)}</span>
         </div>
       </div>
@@ -562,29 +487,24 @@ export function WCalculationAnimation({ t, wView, toBin }) {
   };
 
   return (
-    <div className="space-y-4">
-      <div className="text-green-400 font-bold text-base">Computing w[{t}]</div>
+    <div className="space-y-2">
+      <div className="text-gray-300 text-base">Computing w[{t}]</div>
       
-      {/* Formula - large and prominent */}
-      <div className="bg-gray-900/50 rounded-lg p-3 border border-gray-800">
-        <div className="text-[14px] font-mono">
-          <span className="text-green-400 font-bold text-[16px]">w[{t}]</span>
-          <span className="text-gray-500"> = </span>
-          <span className="text-gray-500">w[{t-16}]</span>
-          <span className="text-gray-600"> + </span>
-          <span className="text-orange-400">σ₀</span><span className="text-gray-500">(w[{t-15}])</span>
-          <span className="text-gray-600"> + </span>
-          <span className="text-gray-500">w[{t-7}]</span>
-          <span className="text-gray-600"> + </span>
-          <span className="text-yellow-400">σ₁</span><span className="text-gray-500">(w[{t-2}])</span>
+      {/* Formula */}
+      <div className="bg-gray-900/50 rounded p-2 border border-gray-800">
+        <div className="text-sm font-mono">
+          <span className="text-gray-300">w[{t}]</span>
+          <span className="text-gray-500"> = w[{t-16}] + </span>
+          <span className="text-orange-400 font-semibold">σ₀</span><span className="text-gray-500"> + w[{t-7}] + </span>
+          <span className="text-yellow-400 font-semibold">σ₁</span>
         </div>
       </div>
 
       {/* Main calculation */}
-      <div className="space-y-1 font-mono text-[11px]">
+      <div className="space-y-0.5 font-mono text-xs leading-tight">
         {/* w[t-16] */}
         <div className="flex items-center gap-2">
-          <span className="text-gray-500 w-24 text-right shrink-0">w[{t-16}]</span>
+          <span className="text-gray-500 w-20 text-right shrink-0">w[{t-16}]</span>
           <span className="text-gray-300">{formatBin(w16)}</span>
         </div>
         
@@ -592,14 +512,14 @@ export function WCalculationAnimation({ t, wView, toBin }) {
         <div className="flex items-center gap-2">
           <button 
             onClick={() => setShowSigma0(!showSigma0)}
-            className={`w-24 text-right shrink-0 flex items-center justify-end gap-1 px-1 py-0.5 rounded transition-all ${
+            className={`w-20 text-right shrink-0 flex items-center justify-end gap-1 px-1 py-0.5 rounded transition-all ${
               showSigma0 
                 ? 'bg-orange-500/20 text-orange-400' 
                 : 'text-orange-400 pulse-clickable'
             }`}
           >
             <span className="text-[9px]">{showSigma0 ? '▼' : '▶'}</span>
-            <span>+ σ₀(w[{t-15}])</span>
+            <span>+ σ₀</span>
           </button>
           <span className="text-orange-400">{formatBin(s0)}</span>
         </div>
@@ -620,7 +540,7 @@ export function WCalculationAnimation({ t, wView, toBin }) {
         
         {/* w[t-7] */}
         <div className="flex items-center gap-2">
-          <span className="text-gray-500 w-24 text-right shrink-0">+ w[{t-7}]</span>
+          <span className="text-gray-500 w-20 text-right shrink-0">+ w[{t-7}]</span>
           <span className="text-gray-300">{formatBin(w7)}</span>
         </div>
         
@@ -628,14 +548,14 @@ export function WCalculationAnimation({ t, wView, toBin }) {
         <div className="flex items-center gap-2">
           <button 
             onClick={() => setShowSigma1(!showSigma1)}
-            className={`w-24 text-right shrink-0 flex items-center justify-end gap-1 px-1 py-0.5 rounded transition-all ${
+            className={`w-20 text-right shrink-0 flex items-center justify-end gap-1 px-1 py-0.5 rounded transition-all ${
               showSigma1 
                 ? 'bg-yellow-500/20 text-yellow-400' 
                 : 'text-yellow-400 pulse-clickable'
             }`}
           >
             <span className="text-[9px]">{showSigma1 ? '▼' : '▶'}</span>
-            <span>+ σ₁(w[{t-2}])</span>
+            <span>+ σ₁</span>
           </button>
           <span className="text-yellow-400">{formatBin(s1)}</span>
         </div>
@@ -655,14 +575,14 @@ export function WCalculationAnimation({ t, wView, toBin }) {
         </AnimatePresence>
         
         {/* Result - highlighted */}
-        <div className="flex items-center gap-2 pt-3 mt-3 border-t border-green-800/50">
-          <span className="text-green-400 w-24 text-right shrink-0 font-bold text-[12px]">= w[{t}]</span>
-          <span className="text-green-300 font-bold text-[12px]">{formatBin(result)}</span>
+        <div className="flex items-center gap-2 pt-2 mt-2 border-t border-green-800/50">
+          <span className="text-green-400 w-20 text-right shrink-0 font-bold">= w[{t}]</span>
+          <span className="text-green-300 font-bold">{formatBin(result)}</span>
         </div>
       </div>
 
       <div className="text-gray-600 text-[10px]">
-        ▶ Click <span className="text-orange-400">σ₀</span> or <span className="text-yellow-400">σ₁</span> to see breakdown
+        ▶ Click σ₀/σ₁ to expand
       </div>
     </div>
   );
@@ -705,24 +625,29 @@ export function CompressionRoundExplainer({ round, letters, lettersBefore = [], 
   const formatBinCompact = (n) => (n >>> 0).toString(2).padStart(32, '0');
 
   return (
-    <div className="space-y-6">
-      <div className="text-gray-200 font-bold text-sm">Round {r} of 64</div>
+    <div className="space-y-4">
+      <div className="text-gray-200 font-bold text-lg">Round {r} of 64</div>
       
       {/* T1 calculation */}
-      <div className="space-y-1">
-        <div className="text-gray-400 text-[11px] pb-1 border-b border-gray-800">T₁ = h + Σ₁(e) + Ch(e,f,g) + k[{r}] + w[{r}]</div>
-        <div className="font-mono text-[10px] space-y-0.5 pt-1">
+      <div className="space-y-2">
+        <div className="text-gray-500 text-xs uppercase tracking-wide mb-1">Step 1: Compute T₁</div>
+        <div className="text-gray-400 text-sm pb-1 border-b border-gray-800">T₁ = h + Σ₁(e) + Ch(e,f,g) + k[{r}] + w[{r}]</div>
+        <div className="font-mono text-xs space-y-0.5 leading-tight">
           <div className="flex items-center gap-2">
-            <span className="text-gray-600 w-20 text-right shrink-0">h</span>
+            <span className="text-gray-600 w-16 text-right shrink-0">h</span>
             <span className="text-gray-500">{formatBin(oldH)}</span>
           </div>
           
           <div className="flex items-center gap-2">
             <button 
               onClick={() => setShowSigma1(!showSigma1)}
-              className="w-20 text-right shrink-0 text-orange-500 hover:text-orange-400"
+              className={`w-16 text-right shrink-0 flex items-center justify-end gap-0.5 px-1 py-0.5 rounded transition-all ${
+                showSigma1 
+                  ? 'bg-orange-500/20 text-orange-400' 
+                  : 'text-orange-500 hover:text-orange-400 pulse-clickable'
+              }`}
             >
-              <span className="text-[8px] mr-1">{showSigma1 ? '▼' : '▶'}</span>+ Σ₁(e)
+              <span className="text-[8px]">{showSigma1 ? '▼' : '▶'}</span><span>+ Σ₁</span>
             </button>
             <span className="text-orange-400/70">{formatBin(bigS1)}</span>
           </div>
@@ -737,9 +662,13 @@ export function CompressionRoundExplainer({ round, letters, lettersBefore = [], 
           <div className="flex items-center gap-2">
             <button 
               onClick={() => setShowCh(!showCh)}
-              className="w-20 text-right shrink-0 text-purple-500 hover:text-purple-400"
+              className={`w-16 text-right shrink-0 flex items-center justify-end gap-0.5 px-1 py-0.5 rounded transition-all ${
+                showCh 
+                  ? 'bg-purple-500/20 text-purple-400' 
+                  : 'text-purple-500 hover:text-purple-400 pulse-clickable'
+              }`}
             >
-              <span className="text-[8px] mr-1">{showCh ? '▼' : '▶'}</span>+ Ch(e,f,g)
+              <span className="text-[8px]">{showCh ? '▼' : '▶'}</span><span>+ Ch</span>
             </button>
             <span className="text-purple-400/70">{formatBin(ch)}</span>
           </div>
@@ -752,34 +681,39 @@ export function CompressionRoundExplainer({ round, letters, lettersBefore = [], 
           </AnimatePresence>
           
           <div className="flex items-center gap-2">
-            <span className="text-gray-600 w-20 text-right shrink-0">+ k[{r}]</span>
+            <span className="text-gray-600 w-16 text-right shrink-0">+ k[{r}]</span>
             <span className="text-gray-600">{formatBin(kt)}</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-gray-600 w-20 text-right shrink-0">+ w[{r}]</span>
+            <span className="text-gray-600 w-16 text-right shrink-0">+ w[{r}]</span>
             <span className="text-gray-600">{formatBin(wt)}</span>
           </div>
           <div className="flex items-center gap-2 pt-1 border-t border-gray-800">
-            <span className="text-gray-300 w-20 text-right shrink-0 font-bold">= T₁</span>
+            <span className="text-gray-300 w-16 text-right shrink-0 font-bold">= T₁</span>
             <span className="text-white font-bold">{formatBin(temp1)}</span>
           </div>
         </div>
       </div>
       
       {/* Separator between T1 and T2 */}
-      <div className="border-t border-gray-700 my-4"></div>
+      <div className="border-t border-gray-700 my-4 pt-2"></div>
       
       {/* T2 calculation */}
-      <div className="space-y-1">
-        <div className="text-gray-400 text-[11px] pb-1 border-b border-gray-800">T₂ = Σ₀(a) + Maj(a,b,c)</div>
-        <div className="font-mono text-[10px] space-y-0.5 pt-1">
+      <div className="space-y-2">
+        <div className="text-gray-500 text-xs uppercase tracking-wide mb-1">Step 2: Compute T₂</div>
+        <div className="text-gray-400 text-sm pb-1 border-b border-gray-800">T₂ = Σ₀(a) + Maj(a,b,c)</div>
+        <div className="font-mono text-xs space-y-0.5 leading-tight">
           
           <div className="flex items-center gap-2">
             <button 
               onClick={() => setShowSigma0(!showSigma0)}
-              className="w-20 text-right shrink-0 text-cyan-500 hover:text-cyan-400"
+              className={`w-16 text-right shrink-0 flex items-center justify-end gap-0.5 px-1 py-0.5 rounded transition-all ${
+                showSigma0 
+                  ? 'bg-cyan-500/20 text-cyan-400' 
+                  : 'text-cyan-500 hover:text-cyan-400 pulse-clickable'
+              }`}
             >
-              <span className="text-[8px] mr-1">{showSigma0 ? '▼' : '▶'}</span>Σ₀(a)
+              <span className="text-[8px]">{showSigma0 ? '▼' : '▶'}</span><span>Σ₀</span>
             </button>
             <span className="text-cyan-400/70">{formatBin(bigS0)}</span>
           </div>
@@ -794,9 +728,13 @@ export function CompressionRoundExplainer({ round, letters, lettersBefore = [], 
           <div className="flex items-center gap-2">
             <button 
               onClick={() => setShowMaj(!showMaj)}
-              className="w-20 text-right shrink-0 text-emerald-500 hover:text-emerald-400"
+              className={`w-16 text-right shrink-0 flex items-center justify-end gap-0.5 px-1 py-0.5 rounded transition-all ${
+                showMaj 
+                  ? 'bg-emerald-500/20 text-emerald-400' 
+                  : 'text-emerald-500 hover:text-emerald-400 pulse-clickable'
+              }`}
             >
-              <span className="text-[8px] mr-1">{showMaj ? '▼' : '▶'}</span>+ Maj(a,b,c)
+              <span className="text-[8px]">{showMaj ? '▼' : '▶'}</span><span>+ Maj</span>
             </button>
             <span className="text-emerald-400/70">{formatBin(maj)}</span>
           </div>
@@ -809,19 +747,17 @@ export function CompressionRoundExplainer({ round, letters, lettersBefore = [], 
           </AnimatePresence>
           
           <div className="flex items-center gap-2 pt-1 border-t border-gray-800">
-            <span className="text-gray-300 w-20 text-right shrink-0 font-bold">= T₂</span>
+            <span className="text-gray-300 w-16 text-right shrink-0 font-bold">= T₂</span>
             <span className="text-white font-bold">{formatBin(temp2)}</span>
           </div>
         </div>
       </div>
       
       {/* Update summary */}
-      <div className="text-[10px] space-y-1 pt-2 border-t border-gray-800">
-        <div className="text-gray-500">Update:</div>
-        <div className="font-mono text-gray-400">
-          <span className="text-purple-400">a</span> = T₁+T₂ &nbsp;
-          <span className="text-purple-400">e</span> = d+T₁ &nbsp;
-          <span className="text-gray-600">b,c,d ← a,b,c &nbsp; f,g,h ← e,f,g</span>
+      <div className="pt-3 mt-2 border-t border-gray-700">
+        <div className="text-gray-500 text-xs uppercase tracking-wide mb-2">Step 3: Update Variables</div>
+        <div className="font-mono text-sm text-gray-400">
+          <span className="text-purple-400">a</span>=T₁+T₂  <span className="text-purple-400">e</span>=d+T₁  <span className="text-gray-600">shift rest</span>
         </div>
       </div>
     </div>

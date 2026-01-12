@@ -19,15 +19,15 @@ function DetailedExplainer({ phase, paddingStep, currentWIndex, currentRound, in
   if (phase === 'padding') {
     const titles = ["Message → Bits", "Add '1' marker", "Pad with zeros", "Add length", "Block ready"];
     return (
-      <div className="space-y-3">
-        <div className="text-green-400 font-bold text-sm">{titles[paddingStep]}</div>
+      <div className="space-y-5">
+        <div className="text-green-400 font-bold text-base">{titles[paddingStep]}</div>
         
         {paddingStep === 0 && (
-          <div className="space-y-2">
-            <div className="text-gray-400 text-[11px]">Each character → 8 bits (ASCII/UTF-8)</div>
-            <div className="bg-gray-800/50 rounded p-2 space-y-1">
+          <div className="space-y-4">
+            <div className="text-gray-400 text-sm leading-relaxed">Each character → 8 bits (ASCII/UTF-8)</div>
+            <div className="bg-gray-800/50 rounded p-4 space-y-2">
               {input.split('').map((char, i) => (
-                <div key={i} className="flex items-center gap-3 text-[11px]">
+                <div key={i} className="flex items-center gap-4 text-sm">
                   <span className="text-yellow-400 font-bold">'{char}'</span>
                   <span className="text-gray-500">→</span>
                   <span className="text-gray-400">{char.charCodeAt(0)}</span>
@@ -40,19 +40,19 @@ function DetailedExplainer({ phase, paddingStep, currentWIndex, currentRound, in
         )}
         
         {paddingStep === 1 && (
-          <div className="space-y-2">
-            <div className="text-gray-400 text-[11px]">Append "1" bit to mark end of message</div>
-            <div className="bg-gray-800/50 rounded p-2 text-[11px]">
+          <div className="space-y-4">
+            <div className="text-gray-400 text-sm leading-relaxed">Append "1" bit to mark end of message</div>
+            <div className="bg-gray-800/50 rounded p-4 text-sm">
               <span className="text-gray-500">message bits + </span>
-              <span className="text-green-400 font-bold">1</span>
+              <span className="text-green-400 font-bold text-lg">1</span>
             </div>
           </div>
         )}
         
         {paddingStep === 2 && (
-          <div className="space-y-2">
-            <div className="text-gray-400 text-[11px]">Pad with zeros until length ≡ 448 (mod 512)</div>
-            <div className="bg-gray-800/50 rounded p-2 text-[11px]">
+          <div className="space-y-4">
+            <div className="text-gray-400 text-sm leading-relaxed">Pad with zeros until length ≡ 448 (mod 512)</div>
+            <div className="bg-gray-800/50 rounded p-4 text-sm space-y-2">
               <div><span className="text-gray-500">Current: </span><span className="text-white">{inputLength + 1} bits</span></div>
               <div><span className="text-gray-500">Need: </span><span className="text-white">448 bits</span></div>
               <div><span className="text-gray-500">Add: </span><span className="text-blue-400 font-bold">{kZeros} zeros</span></div>
@@ -61,28 +61,28 @@ function DetailedExplainer({ phase, paddingStep, currentWIndex, currentRound, in
         )}
         
         {paddingStep === 3 && (
-          <div className="space-y-2">
-            <div className="text-gray-400 text-[11px]">Append original message length as 64-bit big-endian</div>
-            <div className="bg-gray-800/50 rounded p-2 text-[11px] space-y-1">
-              <div className="text-gray-500">How we calculate length:</div>
-              <div className="pl-2">
+          <div className="space-y-4">
+            <div className="text-gray-400 text-sm leading-relaxed">Append original message length as 64-bit big-endian</div>
+            <div className="bg-gray-800/50 rounded p-4 text-sm space-y-3">
+              <div className="text-gray-500 font-medium">How we calculate length:</div>
+              <div className="pl-3 space-y-1">
                 <div><span className="text-gray-500">Message: </span><span className="text-yellow-400">"{input}"</span></div>
                 <div><span className="text-gray-500">Characters: </span><span className="text-white">{input.length}</span></div>
                 <div><span className="text-gray-500">Bits per char: </span><span className="text-white">8</span></div>
                 <div><span className="text-gray-500">Total bits: </span><span className="text-white">{input.length} × 8 = <span className="text-green-400 font-bold">{inputLength}</span></span></div>
               </div>
-              <div className="border-t border-gray-700 pt-1 mt-1">
-                <div><span className="text-gray-500">Convert {inputLength} to 64-bit binary:</span></div>
-                <div className="text-purple-400 font-mono break-all">{lengthBits}</div>
+              <div className="border-t border-gray-700 pt-3 mt-3">
+                <div className="mb-2"><span className="text-gray-500">Convert {inputLength} to 64-bit binary:</span></div>
+                <div className="text-purple-400 font-mono break-all text-xs">{lengthBits}</div>
               </div>
             </div>
           </div>
         )}
         
         {paddingStep === 4 && (
-          <div className="space-y-2">
-            <div className="text-gray-400 text-[11px]">512-bit block ready</div>
-            <div className="bg-gray-800/50 rounded p-2 text-[11px]">
+          <div className="space-y-4">
+            <div className="text-gray-400 text-sm leading-relaxed">512-bit block ready</div>
+            <div className="bg-gray-800/50 rounded p-4 text-sm space-y-2">
               <div><span className="text-white">{inputLength}</span><span className="text-gray-500"> (message) + </span></div>
               <div><span className="text-green-400">1</span><span className="text-gray-500"> (marker) + </span></div>
               <div><span className="text-blue-400">{kZeros}</span><span className="text-gray-500"> (zeros) + </span></div>
@@ -96,28 +96,28 @@ function DetailedExplainer({ phase, paddingStep, currentWIndex, currentRound, in
 
   if (phase === 'chunk') {
     return (
-      <div className="space-y-3">
-        <div className="text-yellow-400 font-bold text-sm">Parse Block → Message Schedule</div>
+      <div className="space-y-5">
+        <div className="text-yellow-400 font-bold text-base">Parse Block → Message Schedule</div>
         
-        <div className="bg-gray-800/50 rounded p-2 text-[11px] space-y-2">
+        <div className="bg-gray-800/50 rounded p-4 text-sm space-y-4">
           <div className="text-gray-400 font-bold">512-bit block → 64 words (32 bits each)</div>
-          <div className="border-t border-gray-700 pt-2 mt-2 space-y-1">
-            <div className="flex items-center gap-2">
-              <span className="text-yellow-400">w[0..15]</span>
+          <div className="border-t border-gray-700 pt-4 mt-4 space-y-3">
+            <div className="flex items-center gap-3">
+              <span className="text-yellow-400 font-semibold">w[0..15]</span>
               <span className="text-gray-500">←</span>
               <span className="text-gray-400">Direct copy from padded block</span>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-green-400">w[16..63]</span>
+            <div className="flex items-center gap-3">
+              <span className="text-gray-300">w[16..63]</span>
               <span className="text-gray-500">←</span>
               <span className="text-gray-400">Computed using σ₀ and σ₁</span>
             </div>
           </div>
         </div>
         
-        <div className="bg-green-900/20 border border-green-800/30 rounded p-2 text-[11px]">
-          <div className="text-green-400 font-bold text-[10px] mb-1">Next: Computing w[16..63]</div>
-          <div className="text-gray-500">Each new word mixes 4 previous words to spread message bits throughout the schedule.</div>
+        <div className="bg-green-900/20 border border-green-800/30 rounded p-4 text-sm">
+          <div className="text-gray-400 mb-2">Next: Computing w[16..63]</div>
+          <div className="text-gray-500 leading-relaxed">Each new word mixes 4 previous words to spread message bits throughout the schedule.</div>
         </div>
       </div>
     );
@@ -144,26 +144,26 @@ function DetailedExplainer({ phase, paddingStep, currentWIndex, currentRound, in
     };
     
     return (
-      <div className="space-y-4">
-        <div className="text-purple-400 font-bold text-sm">Initialize Working Variables</div>
+      <div className="space-y-6">
+        <div className="text-purple-400 font-bold text-base">Initialize Working Variables</div>
         
-        <div className="text-gray-400 text-[11px] space-y-2">
+        <div className="text-gray-400 text-sm space-y-3 leading-relaxed">
           <p>Before compression begins, we need 8 working variables (<span className="text-purple-400">a..h</span>) that will be modified in each round.</p>
           <p>These start with special initial values defined by SHA-256:</p>
         </div>
         
         {/* Formula explanation */}
-        <div className="bg-gray-900/50 rounded p-2 border border-gray-800">
-          <div className="text-gray-500 text-[10px]">
+        <div className="bg-gray-900/50 rounded p-4 border border-gray-800">
+          <div className="text-gray-500 text-sm leading-relaxed">
             <span className="text-gray-400">Formula:</span> Take the <span className="text-purple-300">square root</span> of the first 8 prime numbers, extract the fractional part, and multiply by 2³² to get 32-bit integers.
           </div>
-          <div className="text-gray-600 text-[9px] font-mono mt-1">
+          <div className="text-gray-600 text-xs font-mono mt-3">
             h = frac(√prime) × 2³²
           </div>
         </div>
         
         {/* Mapping with primes - all inline */}
-        <div className="space-y-0.5 text-[9px] font-mono">
+        <div className="space-y-1.5 text-xs font-mono">
           {hValues.map((h, i) => (
             <div key={i} className="flex items-center whitespace-nowrap">
               <span className="text-gray-600 w-10">√{String(hPrimes[i]).padEnd(2)}</span>
@@ -177,7 +177,7 @@ function DetailedExplainer({ phase, paddingStep, currentWIndex, currentRound, in
           ))}
         </div>
         
-        <div className="text-gray-600 text-[10px] pt-2 border-t border-gray-800">
+        <div className="text-gray-600 text-sm pt-4 border-t border-gray-800 leading-relaxed">
           These "nothing up my sleeve" numbers are derived from math constants, ensuring no hidden backdoors in the algorithm.
         </div>
       </div>
@@ -190,26 +190,26 @@ function DetailedExplainer({ phase, paddingStep, currentWIndex, currentRound, in
     const formatBinCompact = (n) => (n >>> 0).toString(2).padStart(32, '0');
     
     return (
-      <div className="space-y-4">
-        <div className="text-cyan-400 font-bold text-sm">Round Constants k₀..k₆₃</div>
+      <div className="space-y-6">
+        <div className="text-cyan-400 font-bold text-base">Round Constants k₀..k₆₃</div>
         
-        <div className="text-gray-400 text-[11px] space-y-2">
+        <div className="text-gray-400 text-sm space-y-3 leading-relaxed">
           <p>In addition to working variables, SHA-256 uses <span className="text-cyan-400">64 constant values</span> - one for each compression round.</p>
           <p>These add extra "randomness" to the mixing process.</p>
         </div>
         
         {/* Formula explanation */}
-        <div className="bg-gray-900/50 rounded p-2 border border-gray-800">
-          <div className="text-gray-500 text-[10px]">
+        <div className="bg-gray-900/50 rounded p-4 border border-gray-800">
+          <div className="text-gray-500 text-sm leading-relaxed">
             <span className="text-gray-400">Formula:</span> Take the <span className="text-cyan-300">cube root</span> of the first 64 prime numbers, extract the fractional part, and multiply by 2³².
           </div>
-          <div className="text-gray-600 text-[9px] font-mono mt-1">
+          <div className="text-gray-600 text-xs font-mono mt-3">
             k = frac(∛prime) × 2³²
           </div>
         </div>
         
         {/* Show first 8 k values */}
-        <div className="space-y-0.5 text-[9px] font-mono">
+        <div className="space-y-1.5 text-xs font-mono">
           {kPrimes.map((prime, i) => (
             <div key={i} className="flex items-center whitespace-nowrap">
               <span className="text-gray-600 w-8">∛{String(prime).padEnd(2)}</span>
@@ -219,7 +219,7 @@ function DetailedExplainer({ phase, paddingStep, currentWIndex, currentRound, in
               <span className="text-gray-400">{formatBinCompact(k[i])}</span>
             </div>
           ))}
-          <div className="text-gray-600 py-1">⋮ k₈..k₆₂ (from ∛23 to ∛307) ⋮</div>
+          <div className="text-gray-600 py-2">⋮ k₈..k₆₂ (from ∛23 to ∛307) ⋮</div>
           <div className="flex items-center whitespace-nowrap">
             <span className="text-gray-600 w-8">∛311</span>
             <span className="text-gray-600">→</span>
@@ -229,7 +229,7 @@ function DetailedExplainer({ phase, paddingStep, currentWIndex, currentRound, in
           </div>
         </div>
         
-        <div className="text-gray-600 text-[10px] pt-2 border-t border-gray-800">
+        <div className="text-gray-600 text-sm pt-4 border-t border-gray-800 leading-relaxed">
           Like h₀..h₇, these are "nothing up my sleeve" numbers from mathematical constants.
         </div>
       </div>
@@ -238,16 +238,16 @@ function DetailedExplainer({ phase, paddingStep, currentWIndex, currentRound, in
 
   if (phase === 'compressintro') {
     return (
-      <div className="space-y-4">
-        <div className="text-orange-400 font-bold text-sm">Compression Overview</div>
+      <div className="space-y-6">
+        <div className="text-orange-400 font-bold text-base">Compression Overview</div>
         
-        <div className="text-gray-400 text-[11px] space-y-2">
+        <div className="text-gray-400 text-sm space-y-3 leading-relaxed">
           <p>Now we run <span className="text-orange-400 font-bold">64 rounds</span> of compression. Each round:</p>
         </div>
         
         {/* Steps overview */}
-        <div className="space-y-2 text-[10px]">
-          <div className="flex gap-2 items-start">
+        <div className="space-y-4 text-sm">
+          <div className="flex gap-3 items-start">
             <span className="text-orange-400 font-bold">1.</span>
             <div>
               <span className="text-gray-400">Compute </span>
@@ -261,7 +261,7 @@ function DetailedExplainer({ phase, paddingStep, currentWIndex, currentRound, in
             </div>
           </div>
           
-          <div className="flex gap-2 items-start">
+          <div className="flex gap-3 items-start">
             <span className="text-orange-400 font-bold">2.</span>
             <div>
               <span className="text-gray-400">Compute </span>
@@ -271,11 +271,11 @@ function DetailedExplainer({ phase, paddingStep, currentWIndex, currentRound, in
             </div>
           </div>
           
-          <div className="flex gap-2 items-start">
+          <div className="flex gap-3 items-start">
             <span className="text-orange-400 font-bold">3.</span>
             <div>
               <span className="text-gray-400">Update all 8 variables:</span>
-              <div className="text-gray-500 text-[9px] font-mono mt-1 ml-2">
+              <div className="text-gray-500 text-xs font-mono mt-3 ml-3 space-y-1">
                 <div><span className="text-purple-400">a</span> = T₁ + T₂</div>
                 <div><span className="text-purple-400">e</span> = d + T₁</div>
                 <div className="text-gray-600">b,c,d ← shift from a,b,c</div>
@@ -286,13 +286,13 @@ function DetailedExplainer({ phase, paddingStep, currentWIndex, currentRound, in
         </div>
         
         {/* Visual representation */}
-        <div className="bg-gray-900/50 rounded p-2 border border-gray-800">
-          <div className="text-gray-500 text-[10px]">
+        <div className="bg-gray-900/50 rounded p-4 border border-gray-800">
+          <div className="text-gray-500 text-sm leading-relaxed">
             Each round thoroughly mixes the message (<span className="text-green-400">w</span>) with the state (<span className="text-purple-400">a..h</span>) using bitwise operations like rotations, XOR, AND.
           </div>
         </div>
         
-        <div className="text-gray-600 text-[10px] pt-2 border-t border-gray-800">
+        <div className="text-gray-600 text-sm pt-4 border-t border-gray-800 leading-relaxed">
           After 64 rounds, the final a..h values are added back to h₀..h₇ to produce the hash.
         </div>
       </div>
@@ -314,10 +314,10 @@ function DetailedExplainer({ phase, paddingStep, currentWIndex, currentRound, in
 
   if (phase === 'digest') {
     return (
-      <div className="space-y-2">
-        <div className="text-emerald-400 font-bold text-sm">Final Hash</div>
-        <div className="text-gray-400 text-[11px]">Add a..h back to h0..h7</div>
-        <div className="text-gray-500 text-[11px]">Concatenate all 8 words → 256 bits</div>
+      <div className="space-y-5">
+        <div className="text-emerald-400 font-bold text-base">Final Hash</div>
+        <div className="text-gray-400 text-sm leading-relaxed">Add a..h back to h0..h7</div>
+        <div className="text-gray-500 text-sm leading-relaxed">Concatenate all 8 words → 256 bits</div>
       </div>
     );
   }
@@ -336,7 +336,7 @@ function App() {
   const [hsBefore, setHsBefore] = useState([]);
   const [clock, setClock] = useState(0);
   const [input, setInput] = useState('');
-  const [inputPlaceholder, setInputPlaceholderInput] = useState('Type message...');
+  const [inputPlaceholder, setInputPlaceholderInput] = useState('Enter message to hash...');
   const [chunksCount, setChunksCount] = useState(1);
   const [autoplay, setAutoplay] = useState(false);
 
@@ -357,14 +357,14 @@ function App() {
     if(clock !== lastClock() && autoplay) {
       const interval = setInterval(() => {
         onClock()
-      }, 300);
+      }, 60);
       return () => clearInterval(interval);
     }
     setAutoplay(false)
   }, [clock, autoplay]);
 
   useEffect(() => {
-    setPaddedInput(padding('', inputBase))
+    setPaddedInput(padding('', inputBase));
   }, []);
 
   function onAutoClock() {
@@ -600,62 +600,95 @@ function App() {
   // Current compression round (starts at clock 57, so round 0 = clock 57)
   const currentRound = localClock >= 57 ? localClock - 57 : null;
 
-  const btnClass = 'px-3 py-1 rounded bg-gray-800 text-white border border-gray-700 hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed text-[10px]';
+  const btnClass = 'px-3 py-1 rounded bg-gray-800 text-white border border-gray-700 hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed text-xs';
 
   return (
-    <div className="App font-mono text-[10px] bg-black text-gray-300 min-h-screen flex flex-col">
+    <div className="App font-mono text-xs bg-black text-gray-300 h-screen flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="border-b border-gray-800 p-2">
-        <div className="flex flex-wrap gap-2 items-center">
-          <span className="text-gray-500 text-[11px] font-bold mr-1">SHA-256</span>
-          <a 
-            href="https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="text-blue-500 hover:text-blue-400 text-[9px] underline mr-2"
-            title="NIST FIPS 180-4 - Secure Hash Standard"
-          >
-            📄 NIST Spec
-          </a>
-          <select value={inputBase} onChange={e => onInputBaseChange(e.target.value)} className="bg-gray-900 border border-gray-700 text-white py-1 px-2 rounded text-[10px]">
-              <option value="text">Text</option>
-            <option value="bin">Binary</option>
-              <option value="hex">Hex</option>
-            </select>
-          <input
-            type="text"
-            value={input}
-            onChange={e => onInputChange(e.target.value)}
-            placeholder={inputPlaceholder}
-            className="flex-1 min-w-[120px] bg-gray-900 border border-gray-700 text-white py-1 px-2 rounded focus:outline-none text-[10px]"
-          />
-          <button className={btnClass} onClick={onClockInit} disabled={clock === 0}>Reset</button>
-          <button className={btnClass} onClick={onClockBack} disabled={clock === 0}>←</button>
-          <button className={btnClass} onClick={onAutoClock} disabled={finished}>{autoplay ? '⏸' : '▶'}</button>
-          <button className={btnClass} onClick={onClock} disabled={finished}>→</button>
-          <button className={`${btnClass} opacity-60`} onClick={onClockFinish}>⏭</button>
-          <span className="text-gray-600 ml-1">{clock}/{lastClockValue}</span>
+      <div className="border-b border-gray-800 px-4 py-3 shrink-0">
+        <div className="flex items-center justify-between gap-4">
+          {/* Left: Logo and algorithm */}
+          <div className="flex items-center gap-2">
+            <span className="text-gray-300 text-sm tracking-wide">Hashes Visualizer</span>
+            <span className="text-gray-500 text-xs px-2 py-0.5 bg-gray-800/80 rounded">SHA-256</span>
+          </div>
+          
+          {/* Center: Input, controls, step counter */}
+          <div className="flex items-center gap-3 flex-1 justify-center">
+            {/* Input section */}
+            <div className="flex items-center gap-2 bg-gray-900 border border-gray-700 rounded px-3 py-1.5 min-w-[250px] max-w-[400px] flex-1 focus-within:border-green-600 transition-colors">
+              <select value={inputBase} onChange={e => onInputBaseChange(e.target.value)} className="bg-transparent text-gray-400 py-0.5 px-1 rounded text-xs cursor-pointer hover:text-gray-300">
+                <option value="text">Text</option>
+                <option value="bin">Binary</option>
+                <option value="hex">Hex</option>
+              </select>
+              <input
+                type="text"
+                value={input}
+                onChange={e => onInputChange(e.target.value)}
+                placeholder={inputPlaceholder}
+                className="flex-1 bg-transparent text-green-400 text-sm focus:outline-none placeholder:text-gray-600"
+              />
+            </div>
+            
+            {/* Playback controls */}
+            <div className="flex items-center gap-1">
+              <button className={btnClass} onClick={onClockInit} disabled={clock === 0} title="Reset">Reset</button>
+              <button className={btnClass} onClick={onClockBack} disabled={clock === 0} title="Step back">←</button>
+              <button className={`${btnClass} ${!finished ? 'bg-green-900/50 border-green-700/50 text-green-400' : ''}`} onClick={onAutoClock} disabled={finished} title={autoplay ? 'Pause' : 'Play'}>{autoplay ? '⏸' : '▶'}</button>
+              <button className={btnClass} onClick={onClock} disabled={finished} title="Step forward">→</button>
+              <button className={btnClass} onClick={onClockFinish} title="Skip to end">⏭</button>
+            </div>
+            
+            {/* Step counter */}
+            <span className="text-gray-500 text-xs whitespace-nowrap">{clock}/{lastClockValue}</span>
+          </div>
+          
+          {/* Right: Links */}
+          <div className="flex items-center gap-4 text-xs">
+            <a 
+              href="https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-blue-400 hover:text-blue-300 flex items-center gap-1 transition-colors"
+              title="NIST FIPS 180-4 - Secure Hash Standard"
+            >
+              <span>📄</span>
+              <span className="underline">NIST Spec</span>
+            </a>
+            <a 
+              href="https://github.com/bitcoin-dev-project/hashes-visualizer" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-gray-500 hover:text-gray-300 flex items-center gap-1 transition-colors"
+              title="View source on GitHub"
+            >
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
+              </svg>
+              <span>GitHub</span>
+            </a>
+          </div>
         </div>
-        
       </div>
 
       {/* Main: Data columns on left, Detailed explanation on right */}
       <div className="flex-1 flex overflow-hidden min-h-0">
         
         {/* LEFT SIDE: Data columns */}
-        <div className="flex-1 flex overflow-x-auto items-stretch">
+        <div className="flex-1 flex items-stretch overflow-x-auto overflow-y-hidden">
           
           {/* Column 1: Message → Padded block */}
-          <div className={`w-[320px] shrink-0 border-r border-gray-800 p-2 ${paddingDone && phase !== 'padding' ? 'opacity-30' : ''}`}>
+          <div className={`w-[290px] shrink-0 border-r border-gray-800 p-2 overflow-hidden transition-opacity ${paddingDone && phase !== 'padding' ? 'opacity-20' : ''}`}>
             <div 
               onClick={() => jumpToPhase(0)}
-              className="text-[9px] uppercase tracking-wider text-green-500 mb-2 cursor-pointer hover:text-green-300 hover:underline underline-offset-2 transition-all inline-block"
+              className="text-[10px] uppercase tracking-wider text-green-600 mb-1 cursor-pointer hover:text-green-400 hover:underline underline-offset-2 transition-all inline-block"
               title="Click to jump to Padding"
             >
-              {phase === 'padding' ? '● Padding' : '✓ Padded block'} <span className="text-[8px] opacity-50">↗</span>
+              {phase === 'padding' ? '● Padding' : '✓ Padded block'} <span className="text-[9px] opacity-50">↗</span>
             </div>
             
-            <div className="space-y-0.5 font-mono text-[10px]">
+            <div className="space-y-0 font-mono text-[11px] leading-tight">
               {/* Show block building up - color each bit, show word indices */}
               {(() => {
                 let blockBits = '';
@@ -706,16 +739,16 @@ function App() {
           </div>
 
           {/* Column 2: Message schedule w[0..63] */}
-          <div className={`w-[380px] shrink-0 border-r border-gray-800 p-2 ${scheduleDone && phase !== 'schedule' && phase !== 'chunk' && phase !== 'compress' ? 'opacity-30' : ''}`}>
+          <div className={`w-[400px] shrink-0 border-r border-gray-800 p-2 flex flex-col transition-opacity ${scheduleDone && phase !== 'schedule' && phase !== 'chunk' && phase !== 'compress' ? 'opacity-20' : ''}`}>
             <div 
               onClick={() => jumpToPhase(6)}
-              className="text-[9px] uppercase tracking-wider text-green-500 mb-2 cursor-pointer hover:text-green-300 hover:underline underline-offset-2 transition-all inline-block"
+              className="text-[10px] uppercase tracking-wider text-green-600 mb-1 cursor-pointer hover:text-green-400 hover:underline underline-offset-2 transition-all inline-block shrink-0"
               title="Click to jump to Message Schedule"
             >
-              {phase === 'chunk' || phase === 'schedule' ? '● Message schedule' : scheduleDone ? '✓ w[0..63]' : '○ Message schedule'} <span className="text-[8px] opacity-50">↗</span>
-        </div>
+              {phase === 'chunk' || phase === 'schedule' ? '● Message schedule' : scheduleDone ? '✓ w[0..63]' : '○ Message schedule'} <span className="text-[9px] opacity-50">↗</span>
+            </div>
             
-            <div className="space-y-0.5 max-h-[calc(100vh-120px)] overflow-y-auto">
+            <div className="space-y-0 flex-1 overflow-y-auto leading-tight">
               {Array.from({length: 64}).map((_, i) => {
                 const computed = i <= wComputedUpTo;
                 const current = i === currentWIndex;
@@ -736,15 +769,15 @@ function App() {
                 const dimmedDuringSchedule = phase === 'schedule' && currentWIndex !== null && !current && !isDependency;
                 
                 return (
-                  <div key={i} className={`flex gap-1 transition-opacity ${current ? 'bg-gray-800 -mx-1 px-1 rounded' : usedInCompression ? 'bg-purple-900/50 -mx-1 px-1 rounded' : ''} ${dimmedDuringCompression || dimmedDuringSchedule ? 'opacity-30' : ''}`}>
-                    <span className={`w-7 ${current ? 'text-green-400 font-bold' : usedInCompression ? 'text-purple-400 font-bold' : isDependency ? 'text-gray-500' : computed ? (fromChunk ? 'text-yellow-600' : 'text-green-600') : 'text-gray-800'}`}>w{i}</span>
+                  <div key={i} className={`flex gap-1.5 text-[11px] transition-opacity ${current ? 'bg-gray-800 -mx-1 px-1 rounded' : usedInCompression ? 'bg-purple-900/50 -mx-1 px-1 rounded' : ''} ${dimmedDuringCompression || dimmedDuringSchedule ? 'opacity-30' : ''}`}>
+                    <span className={`w-8 shrink-0 ${current ? 'text-green-400 font-bold' : usedInCompression ? 'text-purple-400 font-bold' : isDependency ? 'text-gray-500' : computed ? (fromChunk ? 'text-yellow-600' : 'text-green-600') : 'text-gray-800'}`}>w{i}</span>
                     <span className={`${current ? 'text-white' : usedInCompression ? 'text-purple-300' : isDependency ? 'text-gray-600 opacity-60' : computed ? 'text-gray-500' : 'text-gray-900'}`}>{toBin(wView[i])}</span>
-                    {current && <span className="ml-2 text-[10px] text-green-400 font-bold">◄ COMPUTING</span>}
-                    {usedInCompression && <span className="ml-2 text-[10px] text-purple-400 font-bold">◄ USING</span>}
-                    {isW16 && <span className="text-gray-500 ml-1 text-[8px]">+ w[{i}]</span>}
-                    {isW15 && <span className="text-orange-400/60 ml-1 text-[8px]">+ σ₀(w[{i}])</span>}
-                    {isW7 && <span className="text-gray-500 ml-1 text-[8px]">+ w[{i}]</span>}
-                    {isW2 && <span className="text-yellow-400/60 ml-1 text-[8px]">+ σ₁(w[{i}])</span>}
+                    {current && <span className="ml-1 text-[10px] text-green-400 font-bold">◄ COMPUTING</span>}
+                    {usedInCompression && <span className="ml-1 text-[10px] text-purple-400 font-bold">◄ USING</span>}
+                    {isW16 && <span className="text-gray-500 ml-1 text-[10px]">+w[{i}]</span>}
+                    {isW15 && <span className="text-orange-400/60 ml-1 text-[10px]">+σ₀</span>}
+                    {isW7 && <span className="text-gray-500 ml-1 text-[10px]">+w[{i}]</span>}
+                    {isW2 && <span className="text-yellow-400/60 ml-1 text-[10px]">+σ₁</span>}
                   </div>
                 );
               })}
@@ -752,31 +785,31 @@ function App() {
           </div>
 
           {/* Column 3: Working variables a..h */}
-          <div className={`w-[520px] shrink-0 border-r border-gray-800 p-2 flex flex-col self-stretch ${compressDone && phase !== 'compress' && phase !== 'init' ? 'opacity-30' : ''}`}>
+          <div className={`w-[580px] shrink-0 border-r border-gray-800 p-2 flex flex-col self-stretch transition-opacity ${compressDone && phase !== 'compress' && phase !== 'init' ? 'opacity-20' : ''}`}>
             <div 
               onClick={() => jumpToPhase(55)}
-              className="text-[9px] uppercase tracking-wider text-green-500 mb-2 cursor-pointer hover:text-green-300 hover:underline underline-offset-2 transition-all inline-block"
+              className="text-xs uppercase tracking-wider text-green-600 mb-2 cursor-pointer hover:text-green-400 hover:underline underline-offset-2 transition-all inline-block shrink-0"
               title="Click to jump to Compression"
             >
-              {phase === 'init' || phase === 'compress' ? '● Compression' : compressDone ? '✓ Compressed' : '○ Compression'} <span className="text-[8px] opacity-50">↗</span>
+              {phase === 'init' || phase === 'compress' ? '● Compression' : compressDone ? '✓ Compressed' : '○ Compression'} <span className="text-[10px] opacity-50">↗</span>
             </div>
             
             {(phase === 'init' || phase === 'kconst' || phase === 'compressintro' || phase === 'compress' || compressDone) && (
-              <div className="flex-1 space-y-0.5">
+              <div className="flex-1 space-y-1 overflow-hidden">
                 {/* Show current round during compression */}
                 {phase === 'compress' && currentRound !== null && (
-                  <div className="bg-cyan-900/30 border border-cyan-800/30 rounded p-2 mb-2 text-[10px]">
-                    <span className="text-cyan-400 font-bold">Round {currentRound}/63</span>
+                  <div className="bg-cyan-900/30 border border-cyan-800/30 rounded px-2 py-1 mb-1">
+                    <span className="text-cyan-400 font-bold text-xs">Round {currentRound}/63</span>
                   </div>
                 )}
                 
                 {/* During compression: show OLD → NEW transition */}
                 {phase === 'compress' && lettersBefore.length > 0 ? (
-                  <div className="space-y-1">
-                    <div className="flex gap-4 text-[8px] text-gray-500 mb-1">
-                      <span className="w-4"></span>
-                      <span className="flex-1 text-center opacity-50">Before</span>
-                      <span className="w-4"></span>
+                  <div className="space-y-0.5">
+                    <div className="flex items-center text-[10px] text-gray-500 mb-1">
+                      <span className="w-5 shrink-0"></span>
+                      <span className="w-[220px] shrink-0 text-center opacity-50">Before</span>
+                      <span className="w-5 shrink-0"></span>
                       <span className="flex-1 text-center">After</span>
                     </div>
                     {['a','b','c','d','e','f','g','h'].map((l, i) => {
@@ -787,23 +820,23 @@ function App() {
                       const newVal = letters[i] || 0;
                       
                       return (
-                        <div key={i} className={`flex items-center gap-1 ${isNew ? 'bg-purple-900/20 -mx-1 px-1 py-0.5 rounded' : ''}`}>
+                        <div key={i} className={`flex items-center ${isNew ? 'bg-purple-900/30 -mx-1 px-1 py-0.5 rounded' : ''}`}>
                           {/* Variable name */}
-                          <span className={`w-4 shrink-0 ${isNew ? 'text-purple-300 font-bold' : 'text-gray-500'}`}>{l}</span>
+                          <span className={`w-5 shrink-0 text-xs ${isNew ? 'text-purple-300' : 'text-gray-500'}`}>{l}</span>
                           
                           {/* Old value - dimmed */}
-                          <span className="text-gray-600 opacity-40 text-[9px] font-mono">{toBin(oldVal)}</span>
+                          <span className="w-[220px] shrink-0 text-gray-600 opacity-50 text-[10px] font-mono">{toBin(oldVal)}</span>
                           
                           {/* Arrow showing transformation */}
-                          <span className={`w-4 shrink-0 text-center ${isNew ? 'text-purple-400' : 'text-gray-600'}`}>→</span>
+                          <span className={`w-5 shrink-0 text-center text-xs ${isNew ? 'text-purple-400' : 'text-gray-600'}`}>→</span>
                           
                           {/* New value - highlighted */}
-                          <span className={`font-mono ${isNew ? 'text-white font-medium' : isShift ? 'text-gray-400' : 'text-gray-500'} text-[9px]`}>
+                          <span className={`font-mono text-[10px] ${isNew ? 'text-white' : isShift ? 'text-gray-400' : 'text-gray-500'}`}>
                             {toBin(newVal)}
                           </span>
                           
                           {/* Source indicator */}
-                          <span className="shrink-0 text-[8px] ml-1">
+                          <span className="shrink-0 text-[10px] ml-2">
                             {isNew && i === 0 && <span className="text-purple-400">T₁+T₂</span>}
                             {isNew && i === 4 && <span className="text-purple-400">d+T₁</span>}
                             {isShift && <span className="text-gray-600">←{shiftFrom}</span>}
@@ -813,13 +846,13 @@ function App() {
                     })}
                     
                     {/* Visual shift diagram */}
-                    <div className="mt-2 pt-2 border-t border-gray-800 text-[9px]">
-                      <div className="text-gray-500 mb-1">Update pattern:</div>
-                      <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 text-gray-600">
-                        <div><span className="text-purple-400">a</span> = T₁ + T₂ <span className="text-purple-300">(computed)</span></div>
-                        <div><span className="text-purple-400">e</span> = d + T₁ <span className="text-purple-300">(computed)</span></div>
-                        <div><span className="text-gray-500">b,c,d</span> ← a,b,c <span className="text-gray-500">(shift)</span></div>
-                        <div><span className="text-gray-500">f,g,h</span> ← e,f,g <span className="text-gray-500">(shift)</span></div>
+                    <div className="mt-2 pt-2 border-t border-gray-800 text-xs">
+                      <div className="text-gray-400 mb-1 font-bold">Update pattern:</div>
+                      <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 text-xs">
+                        <div><span className="text-purple-400 font-bold">a</span> = T₁ + T₂ <span className="text-purple-300">(computed)</span></div>
+                        <div><span className="text-purple-400 font-bold">e</span> = d + T₁ <span className="text-purple-300">(computed)</span></div>
+                        <div><span className="text-gray-400">b,c,d</span> ← a,b,c <span className="text-gray-500">(shift)</span></div>
+                        <div><span className="text-gray-400">f,g,h</span> ← e,f,g <span className="text-gray-500">(shift)</span></div>
                       </div>
                     </div>
                   </div>
@@ -829,12 +862,12 @@ function App() {
                     // Initial hash values h0..h7 (same as in sha256step)
                     const initialH = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];
                     return (
-                      <div className="space-y-0.5">
-                        <div className="text-[8px] text-gray-500 mb-1">Working variables a..h</div>
+                      <div className="space-y-1">
+                        <div className="text-xs text-gray-500 mb-2">Working variables a..h</div>
                         {['a','b','c','d','e','f','g','h'].map((l, i) => (
-                          <div key={i} className="flex gap-1">
-                            <span className="w-4 text-purple-400">{l}</span>
-                            <span className="text-gray-500">{toBin(initialH[i])}</span>
+                          <div key={i} className="flex gap-2 text-xs">
+                            <span className="w-5 text-purple-400 font-bold">{l}</span>
+                            <span className="text-gray-500 font-mono">{toBin(initialH[i])}</span>
                           </div>
                         ))}
                       </div>
@@ -848,9 +881,9 @@ function App() {
             {/* Show k constants grid during kconst phase, compressintro, and compression */}
             {(phase === 'kconst' || phase === 'compressintro' || phase === 'compress') && (
               <div className="pt-3 border-t border-gray-800">
-                <div className="text-[8px] text-gray-500 mb-1">
-                  k[0..63]
-                  {phase === 'compress' && currentRound !== null && <span className="text-cyan-400 ml-2">← k{currentRound}</span>}
+                <div className="text-[10px] text-gray-500 mb-1.5">
+                  <span className="text-cyan-600">Round Constants</span> k₀..k₆₃
+                  {phase === 'compress' && currentRound !== null && <span className="text-cyan-400 ml-2">← using k{currentRound}</span>}
                 </div>
                 <div className="grid grid-cols-4 gap-x-1 gap-y-0.5 text-[7px] font-mono">
                   {k.slice(0, 64).map((kVal, i) => {
@@ -873,37 +906,47 @@ function App() {
         </div>
 
           {/* Column 4: Final hash h0..h7 */}
-          <div className={`w-[380px] shrink-0 p-2 ${!compressDone ? 'opacity-30' : ''}`}>
+          <div className={`w-[320px] shrink-0 p-2 transition-opacity ${!compressDone ? 'opacity-20' : ''}`}>
             <div 
               onClick={() => jumpToPhase(lastClockValue)}
-              className="text-[9px] uppercase tracking-wider text-green-500 mb-2 cursor-pointer hover:text-green-300 hover:underline underline-offset-2 transition-all inline-block"
+              className="text-xs uppercase tracking-wider text-green-600 mb-2 cursor-pointer hover:text-green-400 hover:underline underline-offset-2 transition-all inline-block"
               title="Click to jump to Final Hash"
             >
-              {finished ? '● Final hash' : '○ Final hash'} <span className="text-[8px] opacity-50">↗</span>
+              {finished ? '● Final hash' : '○ Final hash'} <span className="text-[10px] opacity-50">↗</span>
       </div>
 
-            <div className="space-y-0.5">
-              <div className="text-[8px] text-gray-500 mb-1">h0..h7</div>
+            <div className="space-y-0.5 leading-tight">
+              <div className="text-xs text-gray-500 mb-1">h0..h7</div>
               {hs.map((h, i) => (
-                <div key={i} className="flex gap-1">
-                  <span className="text-green-500 w-6">h{i}</span>
-                  <span className={finished ? 'text-white' : 'text-gray-700'}>{toBin(h)}</span>
+                <div key={i} className="flex gap-2 text-xs">
+                  <span className="text-gray-500 w-6">h{i}</span>
+                  <span className={finished ? 'text-white font-mono' : 'text-gray-700 font-mono'}>{toBin(h)}</span>
         </div>
               ))}
               
               {finished && (
-                <div className="mt-4 pt-2 border-t border-gray-800">
-                  <div className="text-[8px] text-green-400 mb-1">SHA-256 (hex):</div>
-                  <div className="text-green-400 break-all">{result}</div>
-        </div>
+                <div className="mt-3 pt-2 border-t border-gray-800 space-y-3">
+                  <div>
+                    <div className="text-[10px] text-green-400/80 mb-1">Combined (256 bits):</div>
+                    <div className="text-green-400/60 font-mono text-[7px] break-all leading-normal">
+                      {hs.map(h => toBin(h)).join('')}
+                    </div>
+                  </div>
+                  <div className="bg-green-900/40 border border-green-500/50 rounded-lg p-3">
+                    <div className="text-xs text-green-300 mb-2 font-bold uppercase tracking-wide">✓ SHA-256 Hash</div>
+                    <div className="text-green-400 font-mono text-sm font-bold break-all leading-relaxed tracking-wider">
+                      {result}
+                    </div>
+                  </div>
+                </div>
               )}
             </div>
           </div>
         </div>
 
         {/* RIGHT SIDE: Detailed step-by-step explanation */}
-        <div className="w-[480px] shrink-0 border-l-2 border-green-900 p-4 bg-gray-900/50 overflow-y-auto overflow-x-hidden flex flex-col">
-          <div className="text-[10px] uppercase tracking-wider text-gray-500 mb-4">Step Details</div>
+        <div className="w-[460px] shrink-0 border-l-2 border-green-500/60 p-3 bg-green-950/40 overflow-y-auto overflow-x-hidden flex flex-col">
+          <div className="text-xs uppercase tracking-wider text-green-600 mb-2 shrink-0">Step Details</div>
           
           {/* Main explanation content */}
           <div className="flex-1">
@@ -927,16 +970,16 @@ function App() {
           
           {/* Formula Reference - only for schedule/compress/digest phases (not init) */}
           {(phase === 'schedule' || phase === 'chunk' || phase === 'compress' || phase === 'digest') && (
-            <div className="mt-4 pt-3 border-t border-gray-700">
+            <div className="mt-6 pt-4 border-t border-gray-700">
               <div className="text-[10px] uppercase tracking-wider text-gray-500 mb-3">Formula Reference</div>
               
               {/* Formulas */}
-              <div className="text-[12px] font-mono space-y-1.5 text-gray-400 mb-4">
+              <div className="text-xs font-mono space-y-3 text-gray-400 mb-4">
                 {(phase === 'schedule' || phase === 'chunk') && (
                   <>
                     <div><span className="text-orange-400">σ₀</span>(x) = ROTR⁷(x) ⊕ ROTR¹⁸(x) ⊕ SHR³(x)</div>
                     <div><span className="text-yellow-400">σ₁</span>(x) = ROTR¹⁷(x) ⊕ ROTR¹⁹(x) ⊕ SHR¹⁰(x)</div>
-                    <div className="pt-1 text-gray-500">w[t] = w[t-16] + σ₀(w[t-15]) + w[t-7] + σ₁(w[t-2])</div>
+                    <div className="pt-3 border-t border-gray-800 text-gray-500">w[t] = w[t-16] + σ₀(w[t-15]) + w[t-7] + σ₁(w[t-2])</div>
                   </>
                 )}
                 {phase === 'compress' && (
@@ -945,8 +988,11 @@ function App() {
                     <div><span className="text-orange-400">Σ₁</span>(e) = ROTR⁶(e) ⊕ ROTR¹¹(e) ⊕ ROTR²⁵(e)</div>
                     <div><span className="text-purple-400">Ch</span>(e,f,g) = (e AND f) ⊕ (NOT e AND g)</div>
                     <div><span className="text-emerald-400">Maj</span>(a,b,c) = (a AND b) ⊕ (a AND c) ⊕ (b AND c)</div>
-                    <div className="pt-1 text-gray-500">T₁ = h + Σ₁(e) + Ch(e,f,g) + k[t] + w[t]</div>
-                    <div className="text-gray-500">T₂ = Σ₀(a) + Maj(a,b,c)</div>
+                    
+                    <div className="pt-3 mt-2 border-t border-gray-800">
+                      <div className="text-gray-500 mb-2">T₁ = h + Σ₁(e) + Ch(e,f,g) + k[t] + w[t]</div>
+                      <div className="text-gray-500">T₂ = Σ₀(a) + Maj(a,b,c)</div>
+                    </div>
                   </>
                 )}
                 {phase === 'digest' && (
@@ -958,20 +1004,12 @@ function App() {
               </div>
               
               {/* Legend - only symbols used in current phase */}
-              <div className="text-[11px] text-gray-600 space-y-0.5 border-t border-gray-800 pt-2">
+              <div className="text-xs text-gray-600 space-y-1 border-t border-gray-800 pt-3">
                 {(phase === 'schedule' || phase === 'chunk') && (
                   <>
                     <div><span className="text-gray-500">ROTR</span> = Rotate Right (circular shift)</div>
                     <div><span className="text-gray-500">SHR</span> = Shift Right (zeros fill left)</div>
                     <div><span className="text-gray-500">⊕</span> = XOR (exclusive or)</div>
-                  </>
-                )}
-                {phase === 'compress' && (
-                  <>
-                    <div><span className="text-gray-500">ROTR</span> = Rotate Right (circular shift)</div>
-                    <div><span className="text-gray-500">⊕</span> = XOR (exclusive or)</div>
-                    <div><span className="text-gray-500">AND</span> = Bitwise AND</div>
-                    <div><span className="text-gray-500">+</span> = Addition mod 2³²</div>
                   </>
                 )}
                 {phase === 'digest' && (
