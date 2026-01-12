@@ -1,0 +1,9 @@
+{
+  "short_name": "Hash Explained",
+  "name": "Hash Explained - Interactive Hash Visualizer",
+  "icons": [],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#111827",
+  "background_color": "#111827"
+}

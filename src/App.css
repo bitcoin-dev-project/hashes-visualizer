@@ -1,0 +1,21 @@
+/* Subtle synchronized pulsing glow animation for clickable elements */
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.7;
+    box-shadow: 0 0 2px currentColor;
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 5px currentColor;
+  }
+}
+
+.pulse-clickable {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.pulse-clickable:hover {
+  animation: none;
+  opacity: 1;
+  box-shadow: 0 0 6px currentColor;
+}
