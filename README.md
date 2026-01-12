@@ -17,9 +17,10 @@ Step forward, step back, autoplay, or jump to any phase. Everything shown in act
 
 Most SHA-256 resources are either dense specs or vague overviews. This tool lets you actually *see* the bits move:
 
-- Rotations that visually wrap around
-- XOR operations combining values bit by bit
-- State updates showing what changes each round vs. what just shifts
+- ROTR/SHR: Rotations that visually wrap around
+- ⊕: XOR operations combining values bit by bit
+- Σ/σ, Ch, Maj: State updates showing what changes each round vs. what just shifts
+- w[t], k[t]: Message schedule words and round constants highlighted as they are used
 
 Limitations: Currently supports messages up to 55 characters (single block) and SHA-256 only. Multi-block hashing and other algorithms (SHA-1, SHA-512, RIPEMD-160, etc.) can be added if there's interest.
 
