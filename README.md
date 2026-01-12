@@ -1,16 +1,16 @@
-# Hash Explained
+# SHA-256 Visualizer
 
-Interactive visual explanations of cryptographic hash algorithms. Learn how hashing works step by step with animations.
+![SHA-256 Visualizer](public/thumbnail.png)
 
-🌐 **[hashexplained.com](https://hashexplained.com)**
+An interactive visual explanation of the SHA-256 hash algorithm. 
+ Learn how hashing works step by step with animatio
+See how your input transforms into a 256-bit hash through padding, message scheduling, and 64 rounds of compression.
 
-## Currently Available
+**Live demo:** https://hashexplained.com
 
-- **SHA-256** — Full step-by-step visual breakdown of the SHA-256 algorithm
+## Limitations
 
-## Coming Soon
-
-More hash algorithms will be added based on community interest.
+Currently supports single-block messages only (up to 55 characters). Multi-block support for longer inputs is not yet implemented.
 
 ## Development
 
@@ -18,10 +18,3 @@ More hash algorithms will be added based on community interest.
 npm install
 npm start
 ```
-
-## Features
-
-- Visual step-by-step breakdown of hash computations
-- Interactive animations showing bit operations
-- Educational explanations of each phase
-- Built with React and Tailwind CSS
