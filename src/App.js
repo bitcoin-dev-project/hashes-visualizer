@@ -68,8 +68,8 @@ function DetailedExplainer({ phase, paddingStep, digestStep, currentWIndex, curr
               <div className="pl-3 space-y-1">
                 <div><span className="text-gray-500">Message: </span><span className="text-yellow-400">"{input}"</span></div>
                 <div><span className="text-gray-500">Characters: </span><span className="text-white">{input.length}</span></div>
-                <div><span className="text-gray-500">Bits per char: </span><span className="text-white">8</span></div>
-                <div><span className="text-gray-500">Total bits: </span><span className="text-white">{input.length} × 8 = <span className="text-green-400 font-bold">{inputLength}</span></span></div>
+                <div><span className="text-gray-500">Bits per char: </span><span className="text-white">{inputLength/input.length}</span></div>
+                <div><span className="text-gray-500">Total bits: </span><span className="text-white">{input.length} × {inputLength/input.length} = <span className="text-green-400 font-bold">{inputLength}</span></span></div>
               </div>
               <div className="border-t border-gray-700 pt-3 mt-3">
                 <div className="mb-2"><span className="text-gray-500">Convert {inputLength} to 64-bit binary:</span></div>
