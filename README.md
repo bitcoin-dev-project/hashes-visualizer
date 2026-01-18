@@ -1,5 +1,7 @@
 # SHA-256 Visualizer
 
+> 🚧 **Disclaimer:** This visualizer is educational and should not be treated as a reference implementation for cryptographic correctness. Parts of the codebase are vibe-coded and AI-assisted.
+
 ![SHA-256 Visualizer](public/demo.gif)
 
 An animated, step-by-step visualizer for SHA-256.
