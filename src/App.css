@@ -142,3 +142,180 @@
     min-width: 0;
   }
 }
+
+/* ================================================
+   LIGHT THEME OVERRIDES
+   Applied when html.theme-light is set.
+   Remaps dark-mode Tailwind utilities to light equivalents.
+   ================================================ */
+
+html.theme-light,
+html.theme-light body {
+  background-color: #ffffff;
+  color: #374151;
+}
+
+/* --- Backgrounds: neutral grays --- */
+.theme-light .bg-black { background-color: #ffffff; }
+.theme-light .bg-gray-900 { background-color: #f9fafb; }
+.theme-light .bg-gray-900\/50 { background-color: rgba(249, 250, 251, 0.5); }
+.theme-light .bg-gray-900\/30 { background-color: rgba(249, 250, 251, 0.3); }
+.theme-light .bg-gray-800 { background-color: #f3f4f6; }
+.theme-light .bg-gray-800\/50 { background-color: rgba(243, 244, 246, 0.5); }
+.theme-light .bg-gray-800\/80 { background-color: rgba(243, 244, 246, 0.8); }
+.theme-light .bg-gray-800\/30 { background-color: rgba(243, 244, 246, 0.3); }
+
+/* --- Backgrounds: tinted surfaces --- */
+.theme-light .bg-green-950\/40 { background-color: rgba(220, 252, 231, 0.5); }
+.theme-light .bg-green-900\/50 { background-color: rgba(220, 252, 231, 0.5); }
+.theme-light .bg-green-900\/40 { background-color: rgba(220, 252, 231, 0.4); }
+.theme-light .bg-green-900\/30 { background-color: rgba(220, 252, 231, 0.35); }
+.theme-light .bg-green-900\/20 { background-color: rgba(220, 252, 231, 0.3); }
+.theme-light .bg-green-900\/60 { background-color: rgba(220, 252, 231, 0.5); }
+.theme-light .bg-purple-950\/20 { background-color: rgba(243, 232, 255, 0.4); }
+.theme-light .bg-purple-950\/30 { background-color: rgba(243, 232, 255, 0.4); }
+.theme-light .bg-purple-900\/30 { background-color: rgba(233, 213, 255, 0.35); }
+.theme-light .bg-purple-900\/20 { background-color: rgba(233, 213, 255, 0.3); }
+.theme-light .bg-purple-900\/50 { background-color: rgba(233, 213, 255, 0.4); }
+.theme-light .bg-cyan-950\/20 { background-color: rgba(207, 250, 254, 0.35); }
+.theme-light .bg-cyan-900\/20 { background-color: rgba(207, 250, 254, 0.3); }
+.theme-light .bg-cyan-900\/30 { background-color: rgba(207, 250, 254, 0.35); }
+.theme-light .bg-cyan-500\/30 { background-color: rgba(6, 182, 212, 0.12); }
+.theme-light .bg-cyan-500\/20 { background-color: rgba(6, 182, 212, 0.1); }
+.theme-light .bg-red-950\/30 { background-color: rgba(254, 226, 226, 0.5); }
+.theme-light .bg-red-900\/20 { background-color: rgba(254, 226, 226, 0.35); }
+.theme-light .bg-orange-950\/30 { background-color: rgba(255, 237, 213, 0.5); }
+.theme-light .bg-orange-900\/20 { background-color: rgba(255, 237, 213, 0.35); }
+.theme-light .bg-yellow-950\/20 { background-color: rgba(254, 252, 232, 0.5); }
+
+/* --- Text: neutral grays (inverted) --- */
+.theme-light .text-white { color: #111827; }
+.theme-light .text-gray-300 { color: #374151; }
+.theme-light .text-gray-400 { color: #4b5563; }
+.theme-light .text-gray-500 { color: #6b7280; }
+.theme-light .text-gray-600 { color: #9ca3af; }
+.theme-light .text-gray-700 { color: #d1d5db; }
+.theme-light .text-gray-800 { color: #e5e7eb; }
+.theme-light .text-gray-900 { color: #f3f4f6; }
+.theme-light .text-black { color: #ffffff; }
+
+/* --- Text: accent colors (darkened for white-bg contrast) --- */
+.theme-light .text-green-300 { color: #15803d; }
+.theme-light .text-green-400 { color: #16a34a; }
+.theme-light .text-green-400\/80 { color: rgba(22, 163, 74, 0.8); }
+.theme-light .text-green-500 { color: #15803d; }
+.theme-light .text-green-600 { color: #166534; }
+.theme-light .text-purple-300 { color: #7e22ce; }
+.theme-light .text-purple-400 { color: #7c3aed; }
+.theme-light .text-cyan-300 { color: #0e7490; }
+.theme-light .text-cyan-400 { color: #0891b2; }
+.theme-light .text-cyan-400\/60 { color: rgba(8, 145, 178, 0.6); }
+.theme-light .text-cyan-400\/70 { color: rgba(8, 145, 178, 0.7); }
+.theme-light .text-cyan-500 { color: #0e7490; }
+.theme-light .text-cyan-500\/70 { color: rgba(14, 116, 144, 0.7); }
+.theme-light .text-cyan-600 { color: #0e7490; }
+.theme-light .text-red-300 { color: #b91c1c; }
+.theme-light .text-red-400 { color: #dc2626; }
+.theme-light .text-red-400\/70 { color: rgba(220, 38, 38, 0.7); }
+.theme-light .text-yellow-400 { color: #a16207; }
+.theme-light .text-yellow-400\/60 { color: rgba(161, 98, 7, 0.6); }
+.theme-light .text-yellow-400\/70 { color: rgba(161, 98, 7, 0.7); }
+.theme-light .text-yellow-500 { color: #a16207; }
+.theme-light .text-yellow-600 { color: #854d0e; }
+.theme-light .text-orange-400 { color: #ea580c; }
+.theme-light .text-orange-400\/60 { color: rgba(234, 88, 12, 0.6); }
+.theme-light .text-blue-400 { color: #2563eb; }
+.theme-light .text-blue-400\/60 { color: rgba(37, 99, 235, 0.6); }
+.theme-light .text-emerald-400 { color: #059669; }
+.theme-light .text-emerald-300 { color: #047857; }
+
+/* --- Borders: neutral grays --- */
+.theme-light .border-gray-800 { border-color: #e5e7eb; }
+.theme-light .border-gray-800\/50 { border-color: rgba(229, 231, 235, 0.5); }
+.theme-light .border-gray-700 { border-color: #d1d5db; }
+
+/* --- Borders: tinted --- */
+.theme-light .border-green-500\/40 { border-color: rgba(22, 163, 74, 0.25); }
+.theme-light .border-green-500\/50 { border-color: rgba(22, 163, 74, 0.3); }
+.theme-light .border-green-500\/30 { border-color: rgba(22, 163, 74, 0.2); }
+.theme-light .border-green-800\/30 { border-color: rgba(22, 163, 74, 0.2); }
+.theme-light .border-green-700\/50 { border-color: rgba(22, 163, 74, 0.3); }
+.theme-light .border-purple-500\/30 { border-color: rgba(124, 58, 237, 0.2); }
+.theme-light .border-purple-500\/20 { border-color: rgba(124, 58, 237, 0.15); }
+.theme-light .border-cyan-500\/30 { border-color: rgba(8, 145, 178, 0.2); }
+.theme-light .border-cyan-500\/20 { border-color: rgba(8, 145, 178, 0.15); }
+.theme-light .border-cyan-500\/50 { border-color: rgba(8, 145, 178, 0.3); }
+.theme-light .border-cyan-800\/30 { border-color: rgba(8, 145, 178, 0.2); }
+.theme-light .border-red-500\/30 { border-color: rgba(220, 38, 38, 0.2); }
+.theme-light .border-red-500\/50 { border-color: rgba(220, 38, 38, 0.3); }
+.theme-light .border-red-800\/40 { border-color: rgba(220, 38, 38, 0.2); }
+.theme-light .border-orange-500\/30 { border-color: rgba(234, 88, 12, 0.2); }
+.theme-light .border-orange-500\/60 { border-color: rgba(234, 88, 12, 0.35); }
+.theme-light .border-yellow-500\/50 { border-color: rgba(161, 98, 7, 0.3); }
+.theme-light .border-green-800\/40 { border-color: rgba(22, 163, 74, 0.2); }
+.theme-light .border-green-500\/60 { border-color: rgba(22, 163, 74, 0.35); }
+.theme-light .border-purple-500\/60 { border-color: rgba(124, 58, 237, 0.35); }
+.theme-light .border-cyan-500\/60 { border-color: rgba(8, 145, 178, 0.35); }
+.theme-light .border-red-500\/60 { border-color: rgba(220, 38, 38, 0.35); }
+
+/* --- Hover states --- */
+.theme-light .hover\:bg-gray-700:hover { background-color: #e5e7eb; }
+.theme-light .hover\:bg-gray-800:hover { background-color: #f3f4f6; }
+.theme-light .hover\:bg-green-900\/70:hover { background-color: rgba(220, 252, 231, 0.5); }
+.theme-light .hover\:bg-green-950\/30:hover { background-color: rgba(220, 252, 231, 0.4); }
+.theme-light .hover\:bg-orange-950\/30:hover { background-color: rgba(255, 237, 213, 0.4); }
+.theme-light .hover\:bg-red-950\/30:hover { background-color: rgba(254, 226, 226, 0.4); }
+.theme-light .hover\:bg-cyan-950\/30:hover { background-color: rgba(207, 250, 254, 0.4); }
+.theme-light .hover\:bg-purple-950\/30:hover { background-color: rgba(243, 232, 255, 0.4); }
+.theme-light .hover\:text-white:hover { color: #111827; }
+.theme-light .hover\:text-green-400:hover { color: #16a34a; }
+.theme-light .hover\:text-green-400\/70:hover { color: rgba(22, 163, 74, 0.7); }
+.theme-light .hover\:text-green-300:hover { color: #15803d; }
+.theme-light .hover\:text-blue-300:hover { color: #2563eb; }
+.theme-light .hover\:text-blue-400:hover { color: #2563eb; }
+.theme-light .hover\:text-orange-400\/70:hover { color: rgba(234, 88, 12, 0.7); }
+.theme-light .hover\:text-cyan-400:hover { color: #0891b2; }
+.theme-light .hover\:text-purple-400:hover { color: #7c3aed; }
+.theme-light .hover\:text-gray-300:hover { color: #374151; }
+.theme-light .hover\:text-gray-400:hover { color: #4b5563; }
+.theme-light .hover\:border-gray-600:hover { border-color: #9ca3af; }
+.theme-light .hover\:border-gray-500:hover { border-color: #9ca3af; }
+.theme-light .hover\:border-green-600:hover { border-color: rgba(22, 163, 74, 0.4); }
+.theme-light .hover\:border-purple-700:hover { border-color: rgba(124, 58, 237, 0.4); }
+.theme-light .hover\:border-cyan-700:hover { border-color: rgba(8, 145, 178, 0.4); }
+
+/* --- Focus states --- */
+.theme-light .focus\:border-green-600:focus { border-color: rgba(22, 163, 74, 0.5); }
+.theme-light .focus\:border-purple-600:focus { border-color: rgba(124, 58, 237, 0.5); }
+.theme-light .focus\:border-cyan-600:focus { border-color: rgba(8, 145, 178, 0.5); }
+.theme-light .focus-within\:border-green-600:focus-within { border-color: rgba(22, 163, 74, 0.5); }
+.theme-light .focus-within\:border-cyan-600:focus-within { border-color: rgba(8, 145, 178, 0.5); }
+
+/* --- Placeholder text --- */
+.theme-light .placeholder\:text-gray-600::placeholder { color: #9ca3af; }
+
+/* --- Rings --- */
+.theme-light .ring-purple-400\/60 { --tw-ring-color: rgba(124, 58, 237, 0.3); }
+.theme-light .ring-cyan-400\/60 { --tw-ring-color: rgba(8, 145, 178, 0.3); }
+
+/* --- Gradient --- */
+.theme-light .from-cyan-600 { --tw-gradient-from: #0891b2; }
+.theme-light .to-cyan-400 { --tw-gradient-to: #06b6d4; }
+
+/* --- Scrollbar overrides --- */
+.theme-light .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.05); }
+.theme-light .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(22, 163, 74, 0.25); }
+.theme-light .horizontal-scroll::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.05); border-radius: 5px; }
+.theme-light .horizontal-scroll::-webkit-scrollbar-thumb { background: rgba(22, 163, 74, 0.35); border: 2px solid rgba(255, 255, 255, 0.8); }
+.theme-light .horizontal-scroll { scrollbar-color: rgba(22, 163, 74, 0.35) rgba(0, 0, 0, 0.05); }
+
+/* --- Mobile section borders --- */
+.theme-light .mobile-section { border-color: rgba(0, 0, 0, 0.08); }
+
+/* --- Shadow for cards in light mode --- */
+.theme-light .hover\:shadow-lg:hover { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.05); }
+.theme-light .hover\:shadow-green-500\/10:hover { --tw-shadow-color: rgba(22, 163, 74, 0.06); }
+.theme-light .hover\:shadow-orange-500\/10:hover { --tw-shadow-color: rgba(234, 88, 12, 0.06); }
+.theme-light .hover\:shadow-red-500\/10:hover { --tw-shadow-color: rgba(220, 38, 38, 0.06); }
+.theme-light .hover\:shadow-cyan-500\/10:hover { --tw-shadow-color: rgba(8, 145, 178, 0.06); }
+.theme-light .hover\:shadow-purple-500\/10:hover { --tw-shadow-color: rgba(124, 58, 237, 0.06); }
