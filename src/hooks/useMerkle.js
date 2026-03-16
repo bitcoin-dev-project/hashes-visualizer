@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { buildMerkleTree, getMerkleProof } from '../lib/merkle';
 import { getSystem } from '../lib/systems';
 
@@ -25,6 +25,29 @@ export function useMerkle() {
 
   const tree = useMemo(() => buildMerkleTree(leaves), [leaves]);
   const baselineTree = useMemo(() => buildMerkleTree(baselineLeaves), [baselineLeaves]);
+
+  // Track hash changes for cascade animation
+  const prevHashRef = useRef(new Map());
+  const [cascadeGen, setCascadeGen] = useState(0);
+  const cascadeMap = useMemo(() => {
+    const changed = new Map();
+    const prev = prevHashRef.current;
+    const next = new Map();
+    tree.forEach((level) => {
+      level.forEach((node) => {
+        next.set(node.id, node.hash);
+        if (prev.has(node.id) && prev.get(node.id) !== node.hash) {
+          changed.set(node.id, node.level);
+        }
+      });
+    });
+    prevHashRef.current = next;
+    return changed;
+  }, [tree]);
+
+  useEffect(() => {
+    if (cascadeMap.size > 0) setCascadeGen((g) => g + 1);
+  }, [cascadeMap]);
 
   const proof = useMemo(() => {
     if (mode === 'proof' && selectedLeafForProof !== null) {
@@ -121,6 +144,8 @@ export function useMerkle() {
     setSelectedNodeId,
     proof,
     tamperedIds,
+    cascadeMap,
+    cascadeGen,
     updateLeaf,
     tamperLeaf,
     addLeaves,

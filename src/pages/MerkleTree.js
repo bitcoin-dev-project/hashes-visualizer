@@ -104,6 +104,8 @@ function SubTree({
   currentSystem,
   handleNodeClick,
   updateLeaf,
+  cascadeMap,
+  cascadeGen,
 }) {
   const entry = nodeMap.get(nodeId);
   if (!entry) return null;
@@ -124,6 +126,7 @@ function SubTree({
   const sharedProps = {
     nodeMap, rootLevel, mode, activeStep, tamperedIds, proof,
     selectedLeafForProof, selectedNodeId, currentSystem, handleNodeClick, updateLeaf,
+    cascadeMap, cascadeGen,
   };
 
   const treeNode = (
@@ -143,6 +146,9 @@ function SubTree({
       accentBg={currentSystem.accentBg}
       accentBorder={currentSystem.accentBorder}
       hideBadge={isRootLevel && currentSystem.id === 'bitcoin'}
+      systemId={currentSystem.id}
+      cascadeDelay={cascadeMap.has(node.id) ? node.level * 150 : undefined}
+      cascadeGen={cascadeGen}
       onClick={() => handleNodeClick(node.id, node.level, node.index)}
       onUpdateValue={node.level === 0 ? (val) => updateLeaf(node.index, val) : undefined}
     />
@@ -184,6 +190,8 @@ export default function MerkleTreePage() {
     setSelectedNodeId,
     proof,
     tamperedIds,
+    cascadeMap,
+    cascadeGen,
     updateLeaf,
     tamperLeaf,
     addLeaves,
@@ -386,6 +394,8 @@ export default function MerkleTreePage() {
                 currentSystem={currentSystem}
                 handleNodeClick={handleNodeClick}
                 updateLeaf={updateLeaf}
+                cascadeMap={cascadeMap}
+                cascadeGen={cascadeGen}
               />
             )}
           </div>

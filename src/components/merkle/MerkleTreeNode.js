@@ -20,6 +20,9 @@ export default function MerkleTreeNode({
   accentBg = 'bg-cyan-950/20',
   accentBorder = 'border-cyan-500/30',
   hideBadge = false,
+  systemId = 'bitcoin',
+  cascadeDelay,
+  cascadeGen,
 }) {
   if (!isVisible) {
     return <div className="w-52 h-12 opacity-0" />;
@@ -78,6 +81,15 @@ export default function MerkleTreeNode({
         stateClasses,
       )}
     >
+      {/* Cascade flash */}
+      {cascadeDelay !== undefined && (
+        <div
+          key={`cascade-${cascadeGen}`}
+          className="absolute inset-0 rounded-lg pointer-events-none merkle-cascade-flash"
+          style={{ animationDelay: `${cascadeDelay}ms` }}
+        />
+      )}
+
       {/* Badge */}
       {!hideBadge && (
         <div
@@ -108,22 +120,72 @@ export default function MerkleTreeNode({
         <span className="font-mono text-sm tracking-widest font-bold">{node.hash}</span>
       </div>
 
-      {/* Leaf data — editable textarea */}
+      {/* Leaf data — editable */}
       {isLeaf && (
         <div className="mt-2 w-full pt-2 border-t border-gray-700/50 relative group/input">
-          <div className="relative">
-            <svg className="absolute left-2 top-2 w-3 h-3 text-gray-600 group-focus-within/input:text-gray-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
-            </svg>
-            <textarea
-              value={node.value}
-              onChange={(e) => onUpdateValue?.(e.target.value)}
-              onClick={(e) => e.stopPropagation()}
-              rows={2}
-              className="text-xs text-gray-300 w-full pl-6 pr-2 py-1.5 font-mono bg-gray-800/70 rounded-md border border-dashed border-gray-600/60 hover:border-gray-500 hover:bg-gray-800 focus:outline-none focus:border-solid focus:border-gray-400 focus:bg-gray-800 placeholder:text-gray-600 cursor-text transition-colors resize-none leading-relaxed"
-              placeholder="type to edit…"
-            />
-          </div>
+          {systemId === 'bitcoin' ? (() => {
+            // parse "Alice → Bob: 1.5 BTC"
+            const arrowIdx = node.value.indexOf(' \u2192 ');
+            const from = arrowIdx >= 0 ? node.value.slice(0, arrowIdx) : '';
+            const rest = arrowIdx >= 0 ? node.value.slice(arrowIdx + 3) : node.value;
+            const colonIdx = rest.indexOf(': ');
+            const to = colonIdx >= 0 ? rest.slice(0, colonIdx) : rest;
+            const amount = colonIdx >= 0 ? rest.slice(colonIdx + 2) : '';
+            const rebuild = (f, t, a) => `${f} \u2192 ${t}: ${a}`;
+            const fieldClass = "w-full bg-transparent text-xs text-gray-200 font-mono focus:outline-none placeholder:text-gray-600";
+            return (
+              <div className="rounded-md border border-dashed border-gray-600/60 bg-gray-800/70 overflow-hidden">
+                <div className="flex items-center gap-2 px-2 py-1 border-b border-gray-700/40">
+                  <span className="text-[9px] text-gray-500 font-bold w-7 shrink-0">From</span>
+                  <input value={from} onChange={(e) => onUpdateValue?.(rebuild(e.target.value, to, amount))} onClick={(e) => e.stopPropagation()} className={fieldClass} placeholder="sender" />
+                </div>
+                <div className="flex items-center gap-2 px-2 py-1 border-b border-gray-700/40">
+                  <span className="text-[9px] text-gray-500 font-bold w-7 shrink-0">To</span>
+                  <input value={to} onChange={(e) => onUpdateValue?.(rebuild(from, e.target.value, amount))} onClick={(e) => e.stopPropagation()} className={fieldClass} placeholder="receiver" />
+                </div>
+                <div className="flex items-center gap-2 px-2 py-1">
+                  <span className="text-[9px] text-orange-400/60 font-bold w-7 shrink-0">BTC</span>
+                  <input value={amount} onChange={(e) => onUpdateValue?.(rebuild(from, to, e.target.value))} onClick={(e) => e.stopPropagation()} className={fieldClass} placeholder="0.0" />
+                </div>
+              </div>
+            );
+          })() : systemId === 'git' ? (() => {
+            const sepIdx = node.value.indexOf(': ');
+            const filename = sepIdx >= 0 ? node.value.slice(0, sepIdx) : '';
+            const content = sepIdx >= 0 ? node.value.slice(sepIdx + 2) : node.value;
+            return (
+              <div className="rounded-md border border-dashed border-gray-600/60 bg-gray-800/70 overflow-hidden">
+                <div className="flex items-center gap-1.5 px-2 py-1 border-b border-gray-700/50 bg-gray-800/50">
+                  <svg className="w-2.5 h-2.5 text-gray-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                  </svg>
+                  <span className="text-[10px] font-mono text-gray-400">{filename}</span>
+                </div>
+                <textarea
+                  value={content}
+                  onChange={(e) => onUpdateValue?.(filename + ': ' + e.target.value)}
+                  onClick={(e) => e.stopPropagation()}
+                  rows={2}
+                  className="text-xs text-gray-300 w-full px-2 py-1.5 font-mono bg-transparent focus:outline-none placeholder:text-gray-600 cursor-text resize-none leading-relaxed"
+                  placeholder="file content…"
+                />
+              </div>
+            );
+          })() : (
+            <div className="relative">
+              <svg className="absolute left-2 top-2 w-3 h-3 text-gray-600 group-focus-within/input:text-gray-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
+              </svg>
+              <textarea
+                value={node.value}
+                onChange={(e) => onUpdateValue?.(e.target.value)}
+                onClick={(e) => e.stopPropagation()}
+                rows={2}
+                className="text-xs text-gray-300 w-full pl-6 pr-2 py-1.5 font-mono bg-gray-800/70 rounded-md border border-dashed border-gray-600/60 hover:border-gray-500 hover:bg-gray-800 focus:outline-none focus:border-solid focus:border-gray-400 focus:bg-gray-800 placeholder:text-gray-600 cursor-text transition-colors resize-none leading-relaxed"
+                placeholder="type to edit…"
+              />
+            </div>
+          )}
         </div>
       )}
     </motion.div>

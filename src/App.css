@@ -355,6 +355,19 @@ html.theme-light body {
   animation: merkle-tamper-glow 1.5s ease-in-out infinite;
 }
 
+/* Cascade flash — ripples up from leaf to root */
+@keyframes merkle-cascade-flash {
+  0% { opacity: 0; }
+  15% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.merkle-cascade-flash {
+  background: radial-gradient(ellipse at center, rgba(255,255,255,0.15) 0%, transparent 70%);
+  opacity: 0;
+  animation: merkle-cascade-flash 0.6s ease-out forwards;
+}
+
 /* --- Merkle Tree: additional light theme overrides --- */
 
 /* Background tints for system accents */
