@@ -319,3 +319,86 @@ html.theme-light body {
 .theme-light .hover\:shadow-red-500\/10:hover { --tw-shadow-color: rgba(220, 38, 38, 0.06); }
 .theme-light .hover\:shadow-cyan-500\/10:hover { --tw-shadow-color: rgba(8, 145, 178, 0.06); }
 .theme-light .hover\:shadow-purple-500\/10:hover { --tw-shadow-color: rgba(124, 58, 237, 0.06); }
+
+/* ================================================
+   MERKLE TREE PAGE STYLES
+   ================================================ */
+
+/* Dot-grid background for tree visualization area */
+.merkle-tree-bg {
+  background-color: #000;
+  background-image:
+    radial-gradient(circle, rgba(75, 85, 99, 0.15) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.theme-light .merkle-tree-bg {
+  background-color: #fafbfc;
+  background-image:
+    radial-gradient(circle, rgba(0, 0, 0, 0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Tamper pulse animation for Merkle nodes */
+@keyframes merkle-tamper-glow {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(239, 68, 68, 0.3);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+    transform: scale(1.02);
+  }
+}
+
+.merkle-tamper-pulse {
+  animation: merkle-tamper-glow 1.5s ease-in-out infinite;
+}
+
+/* --- Merkle Tree: additional light theme overrides --- */
+
+/* Background tints for system accents */
+.theme-light .bg-orange-950\/30 { background-color: rgba(255, 237, 213, 0.5); }
+.theme-light .bg-red-950\/30 { background-color: rgba(254, 226, 226, 0.5); }
+.theme-light .bg-red-950\/10 { background-color: rgba(254, 226, 226, 0.3); }
+.theme-light .bg-cyan-950\/20 { background-color: rgba(207, 250, 254, 0.35); }
+.theme-light .bg-cyan-950\/30 { background-color: rgba(207, 250, 254, 0.45); }
+.theme-light .bg-cyan-950\/10 { background-color: rgba(207, 250, 254, 0.25); }
+.theme-light .bg-purple-950\/20 { background-color: rgba(243, 232, 255, 0.4); }
+.theme-light .bg-emerald-950\/20 { background-color: rgba(209, 250, 229, 0.35); }
+.theme-light .bg-emerald-950\/10 { background-color: rgba(209, 250, 229, 0.25); }
+.theme-light .bg-yellow-950\/20 { background-color: rgba(254, 252, 232, 0.4); }
+
+/* Text accents */
+.theme-light .text-emerald-400 { color: #059669; }
+.theme-light .text-emerald-500 { color: #047857; }
+
+/* Borders */
+.theme-light .border-emerald-500 { border-color: #059669; }
+.theme-light .border-emerald-500\/40 { border-color: rgba(5, 150, 105, 0.25); }
+.theme-light .border-emerald-500\/20 { border-color: rgba(5, 150, 105, 0.15); }
+.theme-light .border-yellow-500 { border-color: #d97706; }
+.theme-light .border-yellow-500\/20 { border-color: rgba(217, 119, 6, 0.15); }
+.theme-light .border-red-500 { border-color: #dc2626; }
+.theme-light .border-red-500\/20 { border-color: rgba(220, 38, 38, 0.15); }
+.theme-light .border-red-500\/40 { border-color: rgba(220, 38, 38, 0.25); }
+.theme-light .border-cyan-500\/40 { border-color: rgba(8, 145, 178, 0.25); }
+
+/* Shadows */
+.theme-light .shadow-red-500\/20 { --tw-shadow-color: rgba(220, 38, 38, 0.08); }
+.theme-light .shadow-emerald-500\/20 { --tw-shadow-color: rgba(5, 150, 105, 0.08); }
+.theme-light .shadow-yellow-500\/20 { --tw-shadow-color: rgba(217, 119, 6, 0.08); }
+.theme-light .shadow-black\/50 { --tw-shadow-color: rgba(0, 0, 0, 0.05); }
+
+/* Hover states for Merkle nodes */
+.theme-light .hover\:bg-gray-700:hover { background-color: #e5e7eb; }
+.theme-light .hover\:border-gray-500:hover { border-color: #9ca3af; }
+.theme-light .border-gray-700\/50 { border-color: rgba(209, 213, 219, 0.5); }
+.theme-light .border-gray-700\/40 { border-color: rgba(209, 213, 219, 0.4); }
+.theme-light .border-gray-700\/70 { border-color: rgba(209, 213, 219, 0.7); }
+.theme-light .bg-gray-800\/70 { background-color: rgba(243, 244, 246, 0.7); }
+.theme-light .bg-gray-800\/60 { background-color: rgba(243, 244, 246, 0.6); }
+.theme-light .bg-gray-900\/50 { background-color: rgba(249, 250, 251, 0.5); }
+.theme-light .bg-gray-900\/80 { background-color: rgba(249, 250, 251, 0.8); }
+.theme-light .bg-gray-900\/30 { background-color: rgba(249, 250, 251, 0.3); }
+.theme-light .bg-gray-900\/95 { background-color: rgba(249, 250, 251, 0.95); }

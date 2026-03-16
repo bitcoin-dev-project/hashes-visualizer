@@ -4,6 +4,7 @@ import { useTheme } from './ThemeContext';
 
 const NAV_ITEMS = [
   { path: '/sha256', label: 'SHA-256', color: 'green' },
+  { path: '/merkle-tree', label: 'Merkle Tree', color: 'cyan' },
 ];
 
 const COLOR_CLASSES = {

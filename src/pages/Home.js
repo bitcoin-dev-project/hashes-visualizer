@@ -7,7 +7,6 @@ const CARDS = [
     path: '/sha256',
     title: 'SHA-256',
     color: 'green',
-
     description: 'The gold standard of cryptographic hashing. Used in Bitcoin, TLS, and digital signatures.',
     details: '256-bit digest · 64 rounds · Merkle-Damgård',
     icon: (
@@ -15,6 +14,20 @@ const CARDS = [
         <div>01101000 01100001</div>
         <div>10011011 10110110</div>
         <div>01111010 11000000</div>
+      </div>
+    ),
+  },
+  {
+    path: '/merkle-tree',
+    title: 'Merkle Tree',
+    color: 'cyan',
+    description: 'The data structure behind Bitcoin, Git, and IPFS. Explore, tamper, and verify Merkle proofs interactively.',
+    details: 'Binary tree · Hash chains · O(log n) proofs',
+    icon: (
+      <div className="font-mono text-[10px] leading-tight opacity-60 space-y-0.5">
+        <div className="text-center">{'    '}[root]</div>
+        <div className="text-center">{'  '}/{'      '}\</div>
+        <div>[h01]{'  '}[h23]</div>
       </div>
     ),
   },
@@ -28,6 +41,14 @@ const COLOR_MAP = {
     badge: 'bg-green-900/50 text-green-400 border-green-500/40',
     detail: 'text-green-500/60',
     glow: 'hover:shadow-green-500/10',
+  },
+  cyan: {
+    border: 'border-cyan-500/30 hover:border-cyan-500/60',
+    bg: 'hover:bg-cyan-950/30',
+    title: 'text-cyan-400',
+    badge: 'bg-cyan-900/50 text-cyan-400 border-cyan-500/40',
+    detail: 'text-cyan-500/60',
+    glow: 'hover:shadow-cyan-500/10',
   },
 };
 
