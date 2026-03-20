@@ -1,4 +1,4 @@
-import React, { useRef, useMemo } from 'react';
+import React, { useRef, useMemo, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { useMerkle } from '../hooks/useMerkle';
@@ -93,6 +93,7 @@ function RootContext({ isFaded, children }) {
 
 function SubTree({
   nodeId,
+  renderKey,
   nodeMap,
   rootLevel,
   mode,
@@ -132,6 +133,7 @@ function SubTree({
   const treeNode = (
     <MerkleTreeNode
       node={node}
+      domId={renderKey}
       isVisible={isVisible}
       isTampered={isTampered}
       isProofPath={isPath}
@@ -163,8 +165,8 @@ function SubTree({
       ) : treeNode}
       {hasChildren && (
         <div className="flex gap-16">
-          <SubTree nodeId={node.leftId} {...sharedProps} />
-          <SubTree nodeId={node.rightId} {...sharedProps} />
+          <SubTree nodeId={node.leftId} renderKey={`${renderKey}-0`} {...sharedProps} />
+          <SubTree nodeId={node.rightId} renderKey={`${renderKey}-1`} {...sharedProps} />
         </div>
       )}
     </div>
@@ -173,6 +175,7 @@ function SubTree({
 
 export default function MerkleTreePage() {
   const containerRef = useRef(null);
+  const scrollRef = useRef(null);
 
   const {
     systemId,
@@ -193,7 +196,6 @@ export default function MerkleTreePage() {
     cascadeMap,
     cascadeGen,
     updateLeaf,
-    tamperLeaf,
     addLeaves,
     removeLeaves,
     reset,
@@ -219,12 +221,20 @@ export default function MerkleTreePage() {
     if (mode === 'proof' && levelNum === 0) {
       setSelectedLeafForProof(nodeIndex);
     }
-    if (mode === 'tamper' && levelNum === 0) {
-      tamperLeaf(nodeIndex);
-      return;
-    }
     setSelectedNodeId((prev) => (prev === nodeId ? null : nodeId));
   };
+
+  // Auto-center the scroll area when tree changes size
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    requestAnimationFrame(() => {
+      const overflowX = el.scrollWidth - el.clientWidth;
+      const overflowY = el.scrollHeight - el.clientHeight;
+      if (overflowX > 0) el.scrollLeft = overflowX / 2;
+      if (overflowY > 0) el.scrollTop = overflowY / 2;
+    });
+  }, [leaves.length]);
 
   return (
     <div className="flex-1 flex overflow-hidden" style={{ height: 'calc(100vh - 41px)' }}>
@@ -369,35 +379,43 @@ export default function MerkleTreePage() {
           </div>
 
           <div
-            ref={containerRef}
-            className="flex-1 flex items-center justify-center px-4 lg:px-6 relative min-h-0"
+            ref={scrollRef}
+            className="flex-1 overflow-auto min-h-0"
           >
-            <TreeConnections
-              tree={tree}
-              containerRef={containerRef}
-              tamperedIds={tamperedIds}
-              proofPathIds={proof.pathIds}
-              visibleLevel={mode === 'explore' ? activeStep : maxLevel}
-            />
-
-            {tree.length > 0 && (
-              <SubTree
-                nodeId={tree[tree.length - 1][0].id}
+            <div
+              ref={containerRef}
+              className="relative min-w-fit min-h-full flex items-center justify-center px-4 lg:px-6 py-4"
+            >
+              <TreeConnections
+                tree={tree}
                 nodeMap={nodeMap}
-                rootLevel={rootLevel}
-                mode={mode}
-                activeStep={activeStep}
+                containerRef={containerRef}
+                scrollRef={scrollRef}
                 tamperedIds={tamperedIds}
-                proof={proof}
-                selectedLeafForProof={selectedLeafForProof}
-                selectedNodeId={selectedNodeId}
-                currentSystem={currentSystem}
-                handleNodeClick={handleNodeClick}
-                updateLeaf={updateLeaf}
-                cascadeMap={cascadeMap}
-                cascadeGen={cascadeGen}
+                proofPathIds={proof.pathIds}
+                visibleLevel={mode === 'explore' ? activeStep : maxLevel}
               />
-            )}
+
+              {tree.length > 0 && (
+                <SubTree
+                  nodeId={tree[tree.length - 1][0].id}
+                  renderKey="R"
+                  nodeMap={nodeMap}
+                  rootLevel={rootLevel}
+                  mode={mode}
+                  activeStep={activeStep}
+                  tamperedIds={tamperedIds}
+                  proof={proof}
+                  selectedLeafForProof={selectedLeafForProof}
+                  selectedNodeId={selectedNodeId}
+                  currentSystem={currentSystem}
+                  handleNodeClick={handleNodeClick}
+                  updateLeaf={updateLeaf}
+                  cascadeMap={cascadeMap}
+                  cascadeGen={cascadeGen}
+                />
+              )}
+            </div>
           </div>
 
         </div>
@@ -420,6 +438,7 @@ export default function MerkleTreePage() {
         rightChild={rightChild}
         system={currentSystem}
         onClose={() => setSelectedNodeId(null)}
+        onUpdateLeaf={updateLeaf}
       />
     </div>
   );

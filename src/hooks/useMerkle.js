@@ -117,14 +117,14 @@ export function useMerkle() {
     setLeaves(sys.defaultLeaves);
     setBaselineLeaves(sys.defaultLeaves);
     setMode('explore');
-    setActiveStep(tree.length);
+    setActiveStep(tree.length - 1);
     setSelectedLeafForProof(null);
     setSelectedNodeId(null);
   };
 
   useEffect(() => {
     if (mode === 'explore') {
-      setActiveStep(tree.length);
+      setActiveStep(tree.length - 1);
     }
   }, [tree.length, mode]);
 
@@ -151,6 +151,6 @@ export function useMerkle() {
     addLeaves,
     removeLeaves,
     reset,
-    maxLevel: tree.length,
+    maxLevel: tree.length - 1,
   };
 }

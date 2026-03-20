@@ -31,6 +31,21 @@ const CARDS = [
       </div>
     ),
   },
+  {
+    path: null,
+    title: 'Keccak-256 / SHA-3',
+    color: 'purple',
+    disabled: true,
+    description: 'The sponge construction powering Ethereum addresses, Solidity selectors, and post-quantum readiness.',
+    details: '256-bit digest · 24 rounds · Sponge construction',
+    icon: (
+      <div className="font-mono text-[10px] leading-tight opacity-60 space-y-0.5">
+        <div>{'  '}absorb ↓</div>
+        <div>[state ⊕ block]</div>
+        <div>{'  '}squeeze ↑</div>
+      </div>
+    ),
+  },
 ];
 
 const COLOR_MAP = {
@@ -49,6 +64,14 @@ const COLOR_MAP = {
     badge: 'bg-cyan-900/50 text-cyan-400 border-cyan-500/40',
     detail: 'text-cyan-500/60',
     glow: 'hover:shadow-cyan-500/10',
+  },
+  purple: {
+    border: 'border-purple-500/30',
+    bg: '',
+    title: 'text-purple-400',
+    badge: 'bg-purple-900/50 text-purple-400 border-purple-500/40',
+    detail: 'text-purple-500/60',
+    glow: '',
   },
 };
 
@@ -101,15 +124,11 @@ export default function Home() {
 
       {/* Cards grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5 max-w-4xl w-full">
-        {CARDS.map(({ path, title, color, description, details, icon }) => {
+        {CARDS.map(({ path, title, color, description, details, icon, disabled }) => {
           const c = COLOR_MAP[color];
 
-          return (
-            <Link
-              key={path}
-              to={path}
-              className={`group relative block rounded-lg border p-5 transition-all duration-200 hover:shadow-lg ${c.border} ${c.bg} ${c.glow}`}
-            >
+          const content = (
+            <>
               {/* Icon area */}
               <div className="mb-4 h-12 flex items-center">
                 {icon}
@@ -130,10 +149,31 @@ export default function Home() {
                 {description}
               </p>
 
-              {/* Bottom arrow hint */}
-              <div className={`mt-4 text-xs ${c.title} opacity-0 group-hover:opacity-100 transition-opacity`}>
-                Explore →
+              {/* Bottom hint */}
+              <div className={`mt-4 text-xs ${disabled ? 'text-gray-600' : `${c.title} opacity-0 group-hover:opacity-100`} transition-opacity`}>
+                {disabled ? 'Coming soon' : 'Explore →'}
               </div>
+            </>
+          );
+
+          if (disabled) {
+            return (
+              <div
+                key={title}
+                className={`relative block rounded-lg border p-5 opacity-50 cursor-default ${c.border}`}
+              >
+                {content}
+              </div>
+            );
+          }
+
+          return (
+            <Link
+              key={path}
+              to={path}
+              className={`group relative block rounded-lg border p-5 transition-all duration-200 hover:shadow-lg ${c.border} ${c.bg} ${c.glow}`}
+            >
+              {content}
             </Link>
           );
         })}

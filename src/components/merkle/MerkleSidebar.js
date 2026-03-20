@@ -84,9 +84,44 @@ export default function MerkleSidebar({
   maxLevel,
 }) {
   const [infoOpen, setInfoOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <div className="w-96 border-l border-gray-800 bg-gray-900/50 h-full flex flex-col shrink-0 relative z-20 hidden lg:flex">
+    <>
+    {/* Mobile toggle button */}
+    <button
+      onClick={() => setMobileOpen(true)}
+      className="lg:hidden fixed bottom-4 left-4 z-40 w-10 h-10 flex items-center justify-center rounded-full bg-gray-800 border border-gray-700 shadow-lg text-gray-300 hover:text-white hover:bg-gray-700 transition-colors"
+      aria-label="Open sidebar"
+    >
+      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+      </svg>
+    </button>
+
+    {/* Mobile backdrop */}
+    {mobileOpen && (
+      <div
+        className="lg:hidden fixed inset-0 bg-black/60 z-40"
+        onClick={() => setMobileOpen(false)}
+      />
+    )}
+
+    <div className={cn(
+      'w-96 max-w-[85vw] border-l border-gray-800 bg-gray-900/50 h-full flex flex-col shrink-0 relative z-50',
+      'lg:relative lg:z-20 lg:flex',
+      mobileOpen ? 'fixed right-0 top-0 flex' : 'hidden lg:flex',
+    )}>
+      {/* Mobile close button */}
+      <button
+        onClick={() => setMobileOpen(false)}
+        className="lg:hidden absolute top-2 right-2 z-10 p-1.5 rounded hover:bg-gray-800 text-gray-400 hover:text-white transition-colors"
+        aria-label="Close sidebar"
+      >
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
       {/* Mode controls */}
       <div className="px-2.5 py-2.5 border-b border-gray-800 space-y-1.5">
         <p className="text-[10px] uppercase tracking-widest font-bold text-gray-500 px-1">
@@ -169,34 +204,46 @@ export default function MerkleSidebar({
 
         {/* Tamper mode context */}
         {mode === 'tamper' && (
-          <div className="p-2.5">
-            <div className="rounded-lg border border-red-500/20 bg-red-950/10 p-3 space-y-1.5 text-xs text-gray-300 leading-snug">
+          <div className="p-2.5 space-y-2">
+            <div className="rounded-lg border border-red-500/20 bg-red-950/10 p-3 space-y-2 text-xs text-gray-300 leading-snug">
               <p className="font-bold text-red-400 flex items-center gap-1.5 text-[11px]">
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
                 </svg>
                 Tamper Detection
               </p>
-              <p>Click <strong className="text-white">Tamper</strong> on any {currentSystem.leafLabel.toLowerCase()} or edit a leaf. Changes cascade up to the {currentSystem.rootLabel}.</p>
+              <p>Edit any <strong className="text-white">{currentSystem.leafLabel.toLowerCase()}</strong> leaf value. Even a small change will cascade all the way up to the {currentSystem.rootLabel}.</p>
+            </div>
+
+            <div className="rounded-lg border border-gray-700/40 bg-gray-800/30 p-3 space-y-2 text-[11px] text-gray-400 leading-snug">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500">Why this matters</p>
+              <p>A Merkle tree makes tampering <strong className="text-gray-200">immediately detectable</strong>. Changing even one byte in a leaf produces a completely different hash, which changes its parent's hash, which changes the next parent, all the way up to the {currentSystem.rootLabel}.</p>
+              <p>Anyone holding the original {currentSystem.rootLabel} can instantly tell that something was modified  - without checking every {currentSystem.leafLabel.toLowerCase()} individually.</p>
             </div>
           </div>
         )}
 
         {/* Proof mode context */}
         {mode === 'proof' && (
-          <div className="p-2.5">
-            <div className="rounded-lg border border-emerald-500/20 bg-emerald-950/10 p-3 space-y-1.5 text-xs text-gray-300 leading-snug">
+          <div className="p-2.5 space-y-2">
+            <div className="rounded-lg border border-emerald-500/20 bg-emerald-950/10 p-3 space-y-2 text-xs text-gray-300 leading-snug">
               <p className="font-bold text-emerald-400 flex items-center gap-1.5 text-[11px]">
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 Merkle Proof
               </p>
-              <p>Click any <strong className="text-white">{currentSystem.leafLabel}</strong> leaf node. The highlighted path is the proof.</p>
+              <p>Click any <strong className="text-white">{currentSystem.leafLabel}</strong> leaf to see its proof path highlighted.</p>
               <ul className="space-y-0.5 pl-2.5 list-disc text-[11px] font-mono">
                 <li className="text-emerald-400">Proof path (green)</li>
-                <li className="text-yellow-400">Sibling hashes (amber)</li>
+                <li className="text-yellow-400">Sibling hashes needed (amber)</li>
               </ul>
+            </div>
+
+            <div className="rounded-lg border border-gray-700/40 bg-gray-800/30 p-3 space-y-2 text-[11px] text-gray-400 leading-snug">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500">Why this matters</p>
+              <p>To prove a {currentSystem.leafLabel.toLowerCase()} is in the tree, you don't need all the data  - just the <strong className="text-emerald-400">path</strong> from leaf to root and the <strong className="text-yellow-400">sibling hash</strong> at each level.</p>
+              <p>That's <strong className="text-gray-200">O(log n)</strong> hashes instead of all n. With 1,000 {currentSystem.leafLabel.toLowerCase()}s, you only need ~10 hashes to verify any one of them.</p>
             </div>
           </div>
         )}
@@ -246,5 +293,6 @@ export default function MerkleSidebar({
       </div>
 
     </div>
+    </>
   );
 }
