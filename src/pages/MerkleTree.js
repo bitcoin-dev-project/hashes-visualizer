@@ -246,11 +246,11 @@ export default function MerkleTreePage() {
         <meta property="og:title" content="Merkle Tree Explorer - Interactive Visualization" />
         <meta property="og:description" content="Build, tamper, and verify Merkle trees interactively. See how Bitcoin, Git, and IPFS use them." />
         <meta property="og:site_name" content="Hash Explained" />
-        <meta property="og:image" content="https://hashexplained.com/social.png" />
+        <meta property="og:image" content="https://hashexplained.com/thubmnail_merkle.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Merkle Tree Explorer - Interactive Visualization" />
         <meta name="twitter:description" content="Build, tamper, and verify Merkle trees interactively." />
-        <meta name="twitter:image" content="https://hashexplained.com/social.png" />
+        <meta name="twitter:image" content="https://hashexplained.com/thubmnail_merkle.png" />
       </Helmet>
 
       <div className="flex-1 flex flex-col relative min-w-0">
