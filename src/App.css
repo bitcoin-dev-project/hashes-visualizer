@@ -190,6 +190,7 @@ html.theme-light body {
 
 /* --- Text: neutral grays (inverted) --- */
 .theme-light .text-white { color: #111827; }
+.theme-light .text-gray-200 { color: #1f2937; }
 .theme-light .text-gray-300 { color: #374151; }
 .theme-light .text-gray-400 { color: #4b5563; }
 .theme-light .text-gray-500 { color: #6b7280; }
@@ -409,9 +410,28 @@ html.theme-light body {
 .theme-light .border-gray-700\/50 { border-color: rgba(209, 213, 219, 0.5); }
 .theme-light .border-gray-700\/40 { border-color: rgba(209, 213, 219, 0.4); }
 .theme-light .border-gray-700\/70 { border-color: rgba(209, 213, 219, 0.7); }
+.theme-light .border-gray-700\/30 { border-color: rgba(209, 213, 219, 0.3); }
+.theme-light .border-gray-600\/60 { border-color: rgba(209, 213, 219, 0.6); }
+.theme-light .border-gray-800\/80 { border-color: rgba(229, 231, 235, 0.8); }
 .theme-light .bg-gray-800\/70 { background-color: rgba(243, 244, 246, 0.7); }
 .theme-light .bg-gray-800\/60 { background-color: rgba(243, 244, 246, 0.6); }
 .theme-light .bg-gray-900\/50 { background-color: rgba(249, 250, 251, 0.5); }
 .theme-light .bg-gray-900\/80 { background-color: rgba(249, 250, 251, 0.8); }
 .theme-light .bg-gray-900\/30 { background-color: rgba(249, 250, 251, 0.3); }
 .theme-light .bg-gray-900\/95 { background-color: rgba(249, 250, 251, 0.95); }
+.theme-light .bg-gray-950\/80 { background-color: rgba(255, 255, 255, 0.9); }
+.theme-light .bg-orange-500\/5 { background-color: rgba(234, 88, 12, 0.06); }
+.theme-light .border-orange-500\/10 { border-color: rgba(234, 88, 12, 0.12); }
+.theme-light .border-orange-500\/50 { border-color: rgba(234, 88, 12, 0.3); }
+.theme-light .border-red-500\/50 { border-color: rgba(220, 38, 38, 0.3); }
+.theme-light .border-cyan-500\/50 { border-color: rgba(8, 145, 178, 0.3); }
+.theme-light .ring-white\/30 { --tw-ring-color: rgba(0, 0, 0, 0.15); }
+.theme-light .hover\:bg-gray-800\/60:hover { background-color: rgba(243, 244, 246, 0.6); }
+.theme-light .hover\:text-cyan-400\/70:hover { color: rgba(8, 145, 178, 0.7); }
+.theme-light .hover\:text-red-400\/70:hover { color: rgba(220, 38, 38, 0.7); }
+.theme-light .text-green-500\/60 { color: rgba(22, 163, 74, 0.6); }
+.theme-light .text-cyan-500\/60 { color: rgba(8, 145, 178, 0.6); }
+.theme-light .text-purple-500\/60 { color: rgba(124, 58, 237, 0.6); }
+.theme-light .text-purple-400 { color: #7c3aed; }
+.theme-light .border-purple-500\/40 { border-color: rgba(124, 58, 237, 0.25); }
+.theme-light .bg-purple-900\/50 { background-color: rgba(233, 213, 255, 0.4); }

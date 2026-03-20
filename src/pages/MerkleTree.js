@@ -29,9 +29,9 @@ const BLOCK_HEADER = {
 
 function FieldRow({ label, value, dimBorder }) {
   return (
-    <div className={cn('flex items-center justify-between gap-4 px-3 py-1.5')}>
-      <span className="text-[10px] font-mono text-gray-500 shrink-0">{label}</span>
-      <span className="text-[10px] font-mono text-gray-400 truncate text-right">{value}</span>
+    <div className={cn('flex items-center justify-between gap-2 lg:gap-4 px-2 lg:px-3 py-1')}>
+      <span className="text-[8px] lg:text-[10px] font-mono text-gray-500 shrink-0">{label}</span>
+      <span className="text-[8px] lg:text-[10px] font-mono text-gray-400 truncate text-right">{value}</span>
     </div>
   );
 }
@@ -45,11 +45,10 @@ function RootContext({ isFaded, children }) {
       animate={{ opacity: isFaded ? 0.2 : 1, y: 0 }}
       transition={{ duration: 0.3, ease: 'easeOut' }}
       className={cn(
-        'relative flex flex-col items-center rounded-lg border overflow-visible transition-opacity duration-200',
+        'relative flex flex-col items-center rounded-lg border overflow-visible transition-opacity duration-200 w-[160px] lg:w-[220px]',
         config.accentBorder,
         'bg-gray-950/80',
       )}
-      style={{ width: 220 }}
     >
       {/* Struct title */}
       <div className={cn(
@@ -157,14 +156,14 @@ function SubTree({
   );
 
   return (
-    <div className="flex flex-col items-center gap-24">
+    <div className="flex flex-col items-center gap-10 lg:gap-24">
       {isRootLevel && isVisible && currentSystem.id === 'bitcoin' ? (
         <RootContext isFaded={isFaded}>
           {treeNode}
         </RootContext>
       ) : treeNode}
       {hasChildren && (
-        <div className="flex gap-16">
+        <div className="flex gap-4 lg:gap-16">
           <SubTree nodeId={node.leftId} renderKey={`${renderKey}-0`} {...sharedProps} />
           <SubTree nodeId={node.rightId} renderKey={`${renderKey}-1`} {...sharedProps} />
         </div>
@@ -349,8 +348,8 @@ export default function MerkleTreePage() {
         <div className="flex-1 relative merkle-tree-bg flex flex-col min-h-0">
 
           {/* System Tabs — floating inside tree area */}
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2">
-            <div className="flex items-center gap-1.5 bg-gray-900/80 backdrop-blur-sm rounded-xl p-1.5 border border-gray-800/80">
+          <div className="absolute top-2 lg:top-4 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-1 lg:gap-2">
+            <div className="flex items-center gap-1 lg:gap-1.5 bg-gray-900/80 backdrop-blur-sm rounded-xl p-1 lg:p-1.5 border border-gray-800/80">
               {SYSTEMS.map((sys) => {
                 const active = systemId === sys.id;
                 return (
@@ -358,22 +357,22 @@ export default function MerkleTreePage() {
                     key={sys.id}
                     onClick={() => setSystemId(sys.id)}
                     className={cn(
-                      'flex items-center gap-2.5 px-5 py-2.5 rounded-lg transition-all border',
+                      'flex items-center gap-1.5 lg:gap-2.5 px-3 py-2 lg:px-5 lg:py-2.5 rounded-lg transition-all border',
                       active
                         ? cn(sys.accentText, sys.accentBg, sys.accentBorder, 'shadow-lg')
                         : 'text-gray-500 border-transparent hover:text-gray-300 hover:bg-gray-800/60',
                     )}
                   >
                     <span className={cn(
-                      'text-xl leading-none',
+                      'text-base lg:text-xl leading-none',
                       active ? '' : 'opacity-50',
                     )}>{sys.symbol}</span>
-                    <span className="text-sm font-bold tracking-wide">{sys.name}</span>
+                    <span className="text-xs lg:text-sm font-bold tracking-wide">{sys.name}</span>
                   </button>
                 );
               })}
             </div>
-            <p className={cn('text-xs font-medium tracking-wide', currentSystem.accentText, 'opacity-70')}>
+            <p className={cn('text-xs font-medium tracking-wide hidden lg:block', currentSystem.accentText, 'opacity-70')}>
               {currentSystem.tagline}
             </p>
           </div>

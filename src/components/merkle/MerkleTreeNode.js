@@ -65,7 +65,7 @@ export default function MerkleTreeNode({
   else if (isRoot || isSelected) hashColor = accentText;
 
   const isLeaf = node.value !== undefined;
-  const widthClass = isRoot ? 'w-48' : isLeaf ? 'w-52' : 'w-44';
+  const widthClass = isRoot ? 'w-36 lg:w-48' : isLeaf ? 'w-40 lg:w-52' : 'w-32 lg:w-44';
 
   return (
     <motion.div
@@ -76,7 +76,7 @@ export default function MerkleTreeNode({
       id={`node-${domId || node.id}`}
       onClick={onClick}
       className={cn(
-        'group relative flex flex-col items-center justify-center px-3 py-2 rounded-lg border-2 transition-all duration-200 z-10 bg-gray-900 cursor-pointer',
+        'group relative flex flex-col items-center justify-center px-2 py-1.5 lg:px-3 lg:py-2 rounded-lg border-2 transition-all duration-200 z-10 bg-gray-900 cursor-pointer',
         widthClass,
         'hover:scale-105 hover:shadow-xl',
         stateClasses,
@@ -118,7 +118,7 @@ export default function MerkleTreeNode({
         <svg className="w-3.5 h-3.5 opacity-60 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 8.25h15m-16.5 7.5h15m-1.8-13.5l-3.9 19.5m-2.1-19.5l-3.9 19.5" />
         </svg>
-        <span className="font-mono text-sm tracking-widest font-bold">{node.hash}</span>
+        <span className="font-mono text-xs lg:text-sm tracking-widest font-bold">{node.hash}</span>
       </div>
 
       {/* Leaf data — editable */}
@@ -133,7 +133,7 @@ export default function MerkleTreeNode({
             const to = colonIdx >= 0 ? rest.slice(0, colonIdx) : rest;
             const amount = colonIdx >= 0 ? rest.slice(colonIdx + 2) : '';
             const rebuild = (f, t, a) => `${f} \u2192 ${t}: ${a}`;
-            const fieldClass = "w-full bg-transparent text-xs text-gray-200 font-mono focus:outline-none placeholder:text-gray-600 hover:text-white transition-colors";
+            const fieldClass = "w-full bg-transparent text-[10px] lg:text-xs text-gray-200 font-mono focus:outline-none placeholder:text-gray-600 hover:text-white transition-colors";
             return (
               <div className="rounded-md border border-dashed border-gray-600/60 bg-gray-800/70 overflow-hidden hover:border-gray-500 focus-within:border-solid focus-within:border-orange-500/50 transition-colors">
                 <div className="flex items-center gap-2 px-2 py-1 border-b border-gray-700/40">

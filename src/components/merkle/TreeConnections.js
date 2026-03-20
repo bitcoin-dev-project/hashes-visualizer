@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { useTheme } from '../ThemeContext';
 
 export default function TreeConnections({
   tree,
@@ -9,6 +10,7 @@ export default function TreeConnections({
   visibleLevel,
   nodeMap,
 }) {
+  const { theme } = useTheme();
   const [lines, setLines] = useState([]);
   const rafRef = useRef(null);
 
@@ -117,8 +119,9 @@ export default function TreeConnections({
         const midY = (line.y1 + line.y2) / 2;
         const d = `M ${line.x1} ${line.y1} C ${line.x1} ${midY}, ${line.x2} ${midY}, ${line.x2} ${line.y2}`;
 
-        let strokeColor = 'rgba(75, 85, 99, 0.4)';
-        let strokeWidth = 1.5;
+        const isLight = theme === 'light';
+        let strokeColor = isLight ? 'rgba(156, 163, 175, 0.6)' : 'rgba(75, 85, 99, 0.4)';
+        let strokeWidth = isLight ? 2 : 1.5;
 
         if (line.state === 'tampered') {
           strokeColor = 'url(#merkle-tampered-grad)';
