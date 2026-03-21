@@ -3,6 +3,39 @@
   "outputDirectory": "build",
   "rewrites": [
     {
+      "source": "/merkle-tree",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(Twitterbot|facebookexternalhit|LinkedInBot|Slackbot|Discordbot|WhatsApp|TelegramBot|redditbot|Embedly|showyoubot|outbrain|pinterest|vkShare).*"
+        }
+      ],
+      "destination": "/api/og?path=/merkle-tree"
+    },
+    {
+      "source": "/sha256",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(Twitterbot|facebookexternalhit|LinkedInBot|Slackbot|Discordbot|WhatsApp|TelegramBot|redditbot|Embedly|showyoubot|outbrain|pinterest|vkShare).*"
+        }
+      ],
+      "destination": "/api/og?path=/sha256"
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(Twitterbot|facebookexternalhit|LinkedInBot|Slackbot|Discordbot|WhatsApp|TelegramBot|redditbot|Embedly|showyoubot|outbrain|pinterest|vkShare).*"
+        }
+      ],
+      "destination": "/api/og?path=/"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
@@ -49,4 +82,3 @@
     }
   ]
 }
-

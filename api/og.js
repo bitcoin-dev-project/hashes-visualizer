@@ -1,5 +1,3 @@
-const BOTS = /Twitterbot|facebookexternalhit|LinkedInBot|Slackbot|Discordbot|WhatsApp|TelegramBot|Googlebot|bingbot|yandex|embedly|showyoubot|outbrain|pinterest|vkShare|W3C_Validator|redditbot/i;
-
 const PAGES = {
   '/merkle-tree': {
     title: 'Merkle Tree Explorer - Interactive Visualization | Hash Explained',
@@ -13,23 +11,18 @@ const PAGES = {
   },
   '/': {
     title: 'Hash Explained - Interactive Cryptographic Hash Visualizers',
-    description: 'Interactive step-by-step visualizations of SHA-256, the avalanche effect, and Merkle trees. See every rotation, XOR, and round of cryptographic hash algorithms.',
+    description: 'Interactive step-by-step visualizations of SHA-256, the avalanche effect, and Merkle trees.',
     image: 'https://hashexplained.com/social.png',
   },
 };
 
-export default function middleware(request) {
-  const userAgent = request.headers.get('user-agent') || '';
+export default function handler(req, res) {
+  const path = req.query.path || '/';
+  const page = PAGES[path] || PAGES['/'];
+  const canonical = `https://hashexplained.com${path === '/' ? '' : path}`;
 
-  if (!BOTS.test(userAgent)) {
-    return; // Not a bot, pass through to SPA
-  }
-
-  const url = new URL(request.url);
-  const page = PAGES[url.pathname] || PAGES['/'];
-  const canonical = `https://hashexplained.com${url.pathname === '/' ? '' : url.pathname}`;
-
-  const html = `<!DOCTYPE html>
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.status(200).send(`<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -50,14 +43,5 @@ export default function middleware(request) {
 <meta name="twitter:image" content="${page.image}" />
 </head>
 <body></body>
-</html>`;
-
-  return new Response(html, {
-    status: 200,
-    headers: { 'Content-Type': 'text/html; charset=utf-8' },
-  });
+</html>`);
 }
-
-export const config = {
-  matcher: ['/', '/sha256', '/merkle-tree'],
-};
