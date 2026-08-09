@@ -106,15 +106,22 @@ function processBlock(block, H) {
   H[7] = (H[7] + h) >>> 0;
 }
 
-export function sha256(message) {
-  const bytes = textToBytes(message);
+// Hashes raw bytes. Needed wherever the input is binary rather than text:
+// UTF-8 encoding a byte string would expand anything above 0x7F into two
+// bytes and silently produce the wrong digest. The BIP-39 checksum is one
+// such case.
+export function sha256Bytes(bytes) {
   const padded = padMessage(bytes);
   const H = new Uint32Array(H_INIT);
-  
+
   for (let i = 0; i < padded.length; i += 64) {
     processBlock(padded.subarray(i, i + 64), H);
   }
-  
+
   return Array.from(H).map(h => h.toString(16).padStart(8, '0')).join('');
+}
+
+export function sha256(message) {
+  return sha256Bytes(textToBytes(message));
 }
 

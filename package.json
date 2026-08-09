@@ -1,7 +1,7 @@
 {
   "name": "hashes-visualizer",
   "version": "1.0.0",
-  "description": "Interactive visual explanations of cryptographic hash algorithms",
+  "description": "Interactive visual explanations of cryptography concepts",
   "license": "MIT",
   "private": true,
   "homepage": "https://hashexplained.com",

@@ -1,0 +1,83 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#020403"/>
+      <stop offset="0.55" stop-color="#04100a"/>
+      <stop offset="1" stop-color="#020806"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" stroke="#173a2a" stroke-opacity="0.24"/>
+    </pattern>
+    <pattern id="fineGrid" width="10" height="10" patternUnits="userSpaceOnUse">
+      <path d="M10 0H0V10" stroke="#173a2a" stroke-opacity="0.1"/>
+    </pattern>
+    <style>
+      .mono { font-family: monospace; }
+      .title { font-family: monospace; font-weight: 800; }
+      .label { font-family: monospace; font-weight: 700; letter-spacing: 0.18em; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="630" fill="#020403"/>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#fineGrid)"/>
+  <ellipse cx="730" cy="324" rx="430" ry="240" fill="#22c55e" fill-opacity="0.09"/>
+
+  <text x="64" y="68" class="mono" font-size="26" fill="#e5e7eb" font-weight="700">hashexplained.com</text>
+  <text x="64" y="216" class="title" font-size="70" fill="#f8fafc">SHA-256</text>
+  <text x="64" y="280" class="title" font-size="48" fill="#86efac">Visualizer</text>
+  <text x="68" y="340" class="mono" font-size="26" fill="#22c55e">message -&gt; digest</text>
+
+  <g transform="translate(408 104)">
+    <rect x="0" y="0" width="720" height="420" rx="24" fill="#07111b" stroke="#166534" stroke-opacity="0.74" stroke-width="2"/>
+    <rect x="24" y="24" width="672" height="372" rx="18" fill="#02060b" fill-opacity="0.7" stroke="#14532d" stroke-opacity="0.55"/>
+
+    <g transform="translate(56 108)">
+      <rect x="0" y="0" width="174" height="204" rx="16" fill="#07120d" stroke="#22c55e" stroke-opacity="0.38"/>
+      <text x="28" y="42" class="mono" font-size="18" fill="#f8fafc">hello</text>
+      <path d="M28 68H124" stroke="#64748b" stroke-width="2"/>
+      <g class="mono" font-size="13">
+        <text x="28" y="106" fill="#86efac">01101000</text>
+        <text x="28" y="130" fill="#94a3b8">01100101</text>
+        <text x="28" y="154" fill="#94a3b8">01101100</text>
+        <text x="28" y="178" fill="#86efac">10000000</text>
+      </g>
+    </g>
+
+    <g transform="translate(250 208)">
+      <path d="M0 0H52" stroke="#22c55e" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M40 -10L54 0L40 10" stroke="#22c55e" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+
+    <g transform="translate(324 98)">
+      <rect x="0" y="0" width="190" height="224" rx="18" fill="#04100a" stroke="#22c55e" stroke-opacity="0.55"/>
+      <circle cx="95" cy="82" r="48" fill="#052e16" stroke="#22c55e" stroke-opacity="0.55" stroke-width="2"/>
+      <path d="M76 82H114M95 63V101" stroke="#86efac" stroke-width="2.3" stroke-linecap="round"/>
+      <path d="M65 52L125 112M125 52L65 112" stroke="#22c55e" stroke-opacity="0.45" stroke-width="1.8"/>
+      <text x="95" y="157" text-anchor="middle" class="label" font-size="13" fill="#86efac">ROUND</text>
+      <g transform="translate(34 178)">
+        <rect x="0" y="0" width="122" height="28" rx="7" fill="#07111b" stroke="#22c55e" stroke-opacity="0.3"/>
+        <text x="18" y="19" class="mono" font-size="13" fill="#86efac">Σ  XOR  ROT</text>
+      </g>
+    </g>
+
+    <g transform="translate(534 208)">
+      <path d="M0 0H46" stroke="#22c55e" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M34 -10L48 0L34 10" stroke="#22c55e" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+
+    <g transform="translate(596 112)">
+      <rect x="0" y="0" width="82" height="202" rx="14" fill="#07120d" stroke="#22c55e" stroke-opacity="0.5"/>
+      <g class="mono" font-size="13">
+        <text x="16" y="34" fill="#86efac">ba78</text>
+        <text x="16" y="66" fill="#94a3b8">16bf</text>
+        <text x="16" y="98" fill="#f8fafc">8f01</text>
+        <text x="16" y="130" fill="#94a3b8">cfea</text>
+        <text x="16" y="162" fill="#86efac">4141</text>
+      </g>
+      <circle cx="41" cy="180" r="6" fill="#22c55e"/>
+    </g>
+
+  </g>
+</svg>

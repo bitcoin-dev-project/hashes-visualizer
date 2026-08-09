@@ -681,11 +681,12 @@ export default function SHA256Page() {
         <meta property="og:title" content="SHA-256 Visualizer - Step-by-Step Hash Algorithm Explained" />
         <meta property="og:description" content="Watch SHA-256 compute a hash step by step. Interactive visualizer showing padding, message schedule, compression rounds, and final digest." />
         <meta property="og:site_name" content="Hash Explained" />
-        <meta property="og:image" content="https://hashexplained.com/social.png" />
+        <meta property="og:image" content="https://hashexplained.com/thumbnail_sha256.png" />
+        <meta property="og:image:alt" content="SHA-256 Visualizer: message bits pass through compression rounds into a 256-bit digest" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="SHA-256 Visualizer - Step-by-Step Hash Algorithm Explained" />
         <meta name="twitter:description" content="Watch SHA-256 compute a hash step by step. See every rotation, XOR, and compression round." />
-        <meta name="twitter:image" content="https://hashexplained.com/social.png" />
+        <meta name="twitter:image" content="https://hashexplained.com/thumbnail_sha256.png" />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "WebApplication",

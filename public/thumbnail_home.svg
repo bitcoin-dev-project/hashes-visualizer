@@ -1,0 +1,93 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#020403"/>
+      <stop offset="0.55" stop-color="#04080d"/>
+      <stop offset="1" stop-color="#02120f"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" stroke="#17303a" stroke-opacity="0.24"/>
+    </pattern>
+    <pattern id="fineGrid" width="10" height="10" patternUnits="userSpaceOnUse">
+      <path d="M10 0H0V10" stroke="#17303a" stroke-opacity="0.1"/>
+    </pattern>
+    <style>
+      .mono { font-family: monospace; }
+      .title { font-family: monospace; font-weight: 800; }
+      .label { font-family: monospace; font-weight: 700; letter-spacing: 0.18em; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="630" fill="#020403"/>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#fineGrid)"/>
+  <ellipse cx="760" cy="320" rx="400" ry="250" fill="#22d3ee" fill-opacity="0.08"/>
+  <ellipse cx="875" cy="345" rx="270" ry="190" fill="#34d399" fill-opacity="0.08"/>
+
+  <text x="64" y="68" class="mono" font-size="26" fill="#e5e7eb" font-weight="700">hashexplained.com</text>
+  <text x="64" y="216" class="title" font-size="50" fill="#f8fafc">Cryptography</text>
+  <text x="64" y="282" class="title" font-size="56" fill="#67e8f9">visible</text>
+  <text x="68" y="340" class="mono" font-size="24" fill="#94a3b8">hashes · entropy · proofs</text>
+
+  <g transform="translate(454 96)">
+    <rect x="0" y="0" width="666" height="438" rx="24" fill="#07111b" stroke="#155e75" stroke-opacity="0.72" stroke-width="2"/>
+    <rect x="24" y="24" width="618" height="390" rx="18" fill="#02060b" fill-opacity="0.68" stroke="#164e63" stroke-opacity="0.5"/>
+
+    <g transform="translate(56 58)">
+      <rect width="246" height="146" rx="15" fill="#07120d" stroke="#22c55e" stroke-opacity="0.42"/>
+      <text x="22" y="32" class="label" font-size="13" fill="#86efac">SHA-256</text>
+      <g transform="translate(28 56)">
+        <rect x="0" y="0" width="34" height="34" rx="5" fill="#052e16" stroke="#22c55e" stroke-opacity="0.45"/>
+        <rect x="44" y="0" width="34" height="34" rx="5" fill="#0b1220" stroke="#334155"/>
+        <rect x="88" y="0" width="34" height="34" rx="5" fill="#052e16" stroke="#22c55e" stroke-opacity="0.45"/>
+        <rect x="132" y="0" width="34" height="34" rx="5" fill="#0b1220" stroke="#334155"/>
+        <text x="12" y="23" class="mono" font-size="14" fill="#86efac">1</text>
+        <text x="56" y="23" class="mono" font-size="14" fill="#64748b">0</text>
+        <text x="100" y="23" class="mono" font-size="14" fill="#86efac">1</text>
+        <text x="144" y="23" class="mono" font-size="14" fill="#64748b">0</text>
+      </g>
+      <path d="M44 112H210" stroke="#22c55e" stroke-opacity="0.35" stroke-width="2"/>
+      <circle cx="128" cy="112" r="6" fill="#22c55e"/>
+    </g>
+
+    <g transform="translate(364 58)">
+      <rect width="246" height="146" rx="15" fill="#07131a" stroke="#22d3ee" stroke-opacity="0.42"/>
+      <text x="22" y="32" class="label" font-size="13" fill="#67e8f9">MERKLE TREE</text>
+      <g stroke="#22d3ee" stroke-opacity="0.4" stroke-width="1.8">
+        <path d="M129 50L88 82M129 50l41 32M88 82L62 112M88 82l26 30M170 82l-26 30M170 82l26 30"/>
+      </g>
+      <g class="mono" font-size="10" text-anchor="middle">
+        <rect x="108" y="38" width="42" height="24" rx="5" fill="#02060b" stroke="#22d3ee" stroke-opacity="0.55"/>
+        <text x="129" y="54" fill="#67e8f9">root</text>
+        <rect x="46" y="102" width="36" height="22" rx="5" fill="#02060b" stroke="#334155"/>
+        <rect x="100" y="102" width="36" height="22" rx="5" fill="#02060b" stroke="#334155"/>
+        <rect x="142" y="102" width="36" height="22" rx="5" fill="#02060b" stroke="#334155"/>
+        <rect x="196" y="102" width="36" height="22" rx="5" fill="#02060b" stroke="#334155"/>
+      </g>
+    </g>
+
+    <g transform="translate(56 236)">
+      <rect width="246" height="146" rx="15" fill="#151005" stroke="#eab308" stroke-opacity="0.42"/>
+      <text x="22" y="32" class="label" font-size="13" fill="#facc15">ENTROPY</text>
+      <line x1="28" y1="73" x2="230" y2="73" stroke="#eab308" stroke-opacity="0.35" stroke-dasharray="3 5"/>
+      <polyline points="28,76 42,44 56,95 72,58 90,64 108,100 128,46 148,84 170,42 196,70 230,52" fill="none" stroke="#67e8f9" stroke-width="2.2" stroke-linecap="round"/>
+      <rect x="50" y="100" width="36" height="36" rx="6" fill="#f8fafc"/>
+      <circle cx="61" cy="111" r="3.2" fill="#111827"/>
+      <circle cx="75" cy="125" r="3.2" fill="#111827"/>
+      <circle cx="75" cy="111" r="3.2" fill="#111827"/>
+      <circle cx="170" cy="118" r="18" fill="#facc15"/>
+      <circle cx="170" cy="118" r="9" fill="#713f12" fill-opacity="0.4"/>
+    </g>
+
+    <g transform="translate(364 236)">
+      <rect width="246" height="146" rx="15" fill="#06120e" stroke="#10b981" stroke-opacity="0.42"/>
+      <text x="22" y="32" class="label" font-size="13" fill="#34d399">ECDSA</text>
+      <path d="M34 104 C72 24 104 24 136 104 S188 170 232 46" fill="none" stroke="#34d399" stroke-width="2.1" stroke-linecap="round"/>
+      <line x1="32" y1="108" x2="230" y2="108" stroke="#334155"/>
+      <circle cx="94" cy="58" r="5" fill="#facc15"/>
+      <circle cx="178" cy="74" r="5" fill="#67e8f9"/>
+      <path d="M100 58H172" stroke="#64748b" stroke-width="1.5" stroke-dasharray="4 5"/>
+    </g>
+  </g>
+</svg>

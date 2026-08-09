@@ -1,0 +1,65 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#020403"/>
+      <stop offset="0.55" stop-color="#041018"/>
+      <stop offset="1" stop-color="#02070a"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" stroke="#17303a" stroke-opacity="0.26"/>
+    </pattern>
+    <pattern id="fineGrid" width="10" height="10" patternUnits="userSpaceOnUse">
+      <path d="M10 0H0V10" stroke="#17303a" stroke-opacity="0.12"/>
+    </pattern>
+    <style>
+      .mono { font-family: monospace; }
+      .title { font-family: monospace; font-weight: 800; }
+      .label { font-family: monospace; font-weight: 700; letter-spacing: 0.18em; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="630" fill="#020403"/>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#fineGrid)"/>
+  <ellipse cx="760" cy="320" rx="420" ry="240" fill="#22d3ee" fill-opacity="0.1"/>
+
+  <text x="64" y="68" class="mono" font-size="26" fill="#e5e7eb" font-weight="700">hashexplained.com</text>
+  <text x="64" y="216" class="title" font-size="70" fill="#f8fafc">Merkle</text>
+  <text x="64" y="280" class="title" font-size="48" fill="#67e8f9">Explorer</text>
+  <text x="68" y="340" class="mono" font-size="26" fill="#22d3ee">proof path</text>
+
+  <g transform="translate(408 96)">
+    <rect x="0" y="0" width="720" height="438" rx="24" fill="#07111b" stroke="#155e75" stroke-opacity="0.72" stroke-width="2"/>
+    <rect x="24" y="24" width="672" height="390" rx="18" fill="#02060b" fill-opacity="0.7" stroke="#164e63" stroke-opacity="0.55"/>
+
+    <g stroke="#22d3ee" stroke-opacity="0.42" stroke-width="2">
+      <path d="M360 118L230 206M360 118l130 88"/>
+      <path d="M230 206L144 304M230 206l86 98"/>
+      <path d="M490 206l-86 98M490 206l86 98"/>
+    </g>
+    <g stroke="#facc15" stroke-opacity="0.95" stroke-width="3">
+      <path d="M144 304L230 206L360 118"/>
+    </g>
+
+    <g class="mono" text-anchor="middle">
+      <rect x="302" y="86" width="116" height="64" rx="12" fill="#06120e" stroke="#10b981" stroke-opacity="0.62"/>
+      <text x="360" y="123" font-size="17" fill="#34d399">root</text>
+
+      <rect x="172" y="180" width="116" height="54" rx="10" fill="#07131a" stroke="#22d3ee" stroke-opacity="0.48"/>
+      <text x="230" y="212" font-size="15" fill="#67e8f9">h01</text>
+      <rect x="432" y="180" width="116" height="54" rx="10" fill="#07131a" stroke="#22d3ee" stroke-opacity="0.48"/>
+      <text x="490" y="212" font-size="15" fill="#67e8f9">h23</text>
+
+      <rect x="96" y="282" width="96" height="50" rx="9" fill="#171006" stroke="#facc15" stroke-opacity="0.72"/>
+      <text x="144" y="312" font-size="14" fill="#facc15">tx0</text>
+      <rect x="268" y="282" width="96" height="50" rx="9" fill="#07131a" stroke="#334155"/>
+      <text x="316" y="312" font-size="14" fill="#94a3b8">tx1</text>
+      <rect x="356" y="282" width="96" height="50" rx="9" fill="#07131a" stroke="#334155"/>
+      <text x="404" y="312" font-size="14" fill="#94a3b8">tx2</text>
+      <rect x="528" y="282" width="96" height="50" rx="9" fill="#07131a" stroke="#334155"/>
+      <text x="576" y="312" font-size="14" fill="#94a3b8">tx3</text>
+    </g>
+
+  </g>
+</svg>
