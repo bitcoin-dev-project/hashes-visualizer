@@ -3,6 +3,17 @@
   "outputDirectory": "build",
   "rewrites": [
     {
+      "source": "/entropy",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(Twitterbot|facebookexternalhit|LinkedInBot|Slackbot|Discordbot|WhatsApp|TelegramBot|redditbot|Embedly|showyoubot|outbrain|pinterest|vkShare).*"
+        }
+      ],
+      "destination": "/api/og?path=/entropy"
+    },
+    {
       "source": "/merkle-tree",
       "has": [
         {
