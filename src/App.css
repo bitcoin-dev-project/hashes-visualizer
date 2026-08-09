@@ -611,3 +611,209 @@ html.theme-light body {
 .theme-light .prng-diagram .stroke-yellow-500 { stroke: #d97706; }
 /* The PRNG box keeps a yellow fill in both themes, so its label stays black. */
 .theme-light .prng-diagram rect.fill-yellow-400 { fill: #fbbf24; }
+
+/* --- Entropy page: intentional light palette ---
+   The generic light theme remaps common dark utilities, but the entropy tool
+   uses many semi-transparent black/custom opacity surfaces. In light mode
+   those were turning into muddy gray overlays. Keep this scoped so SHA-256 and
+   Merkle keep their existing colors. */
+.theme-light .entropy-workbench {
+  background-color: #f7fbfc;
+  color: #334155;
+  background-image:
+    linear-gradient(rgba(217, 119, 6, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(8, 145, 178, 0.05) 1px, transparent 1px);
+}
+
+.theme-light .entropy-workbench .entropy-stage-panel {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(244, 250, 252, 0.9));
+  box-shadow:
+    0 18px 45px rgba(15, 23, 42, 0.11),
+    0 1px 0 rgba(255, 255, 255, 0.75) inset;
+}
+
+.theme-light .entropy-workbench .entropy-machine-core {
+  background: linear-gradient(135deg, #f8fcfd 0%, #eef8fb 100%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.75);
+}
+
+.theme-light .entropy-machine-core::before {
+  background: linear-gradient(90deg, transparent, rgba(8, 145, 178, 0.075), transparent);
+}
+
+.theme-light .entropy-workbench .bg-black\/25,
+.theme-light .entropy-workbench .bg-black\/30,
+.theme-light .entropy-workbench .bg-black\/35,
+.theme-light .entropy-workbench .bg-black\/40,
+.theme-light .entropy-workbench .bg-gray-900\/45,
+.theme-light .entropy-workbench .bg-gray-900\/50,
+.theme-light .entropy-workbench .bg-gray-900\/55,
+.theme-light .entropy-workbench .bg-gray-900\/65,
+.theme-light .entropy-workbench .bg-gray-900\/70 {
+  background-color: rgba(248, 250, 252, 0.82);
+}
+
+.theme-light .entropy-workbench .bg-white\/\[0\.025\],
+.theme-light .entropy-workbench .bg-white\/\[0\.02\] {
+  background-color: rgba(241, 248, 251, 0.78);
+}
+
+.theme-light .entropy-workbench .bg-yellow-950\/20,
+.theme-light .entropy-workbench .bg-yellow-950\/30,
+.theme-light .entropy-workbench .bg-yellow-950\/35,
+.theme-light .entropy-workbench .bg-yellow-900\/50 {
+  background-color: rgba(254, 243, 199, 0.5);
+}
+
+.theme-light .entropy-workbench .bg-cyan-950\/20,
+.theme-light .entropy-workbench .bg-cyan-950\/25,
+.theme-light .entropy-workbench .bg-cyan-950\/30,
+.theme-light .entropy-workbench .bg-cyan-950\/40 {
+  background-color: rgba(207, 250, 254, 0.62);
+}
+
+.theme-light .entropy-workbench .bg-emerald-950\/10,
+.theme-light .entropy-workbench .bg-emerald-950\/20,
+.theme-light .entropy-workbench .bg-emerald-950\/25 {
+  background-color: rgba(209, 250, 229, 0.62);
+}
+
+.theme-light .entropy-workbench .bg-emerald-500\/25 {
+  background-color: rgba(4, 120, 87, 0.18);
+}
+
+.theme-light .entropy-workbench .bg-yellow-500\/50 {
+  background-color: rgba(217, 119, 6, 0.28);
+}
+
+.theme-light .entropy-workbench .bg-red-950\/30 {
+  background-color: rgba(254, 226, 226, 0.66);
+}
+
+.theme-light .entropy-workbench .bg-amber-950\/10 {
+  background-color: rgba(254, 243, 199, 0.42);
+}
+
+.theme-light .entropy-workbench .hover\:bg-gray-900\/55:hover,
+.theme-light .entropy-workbench .hover\:bg-gray-900\/65:hover {
+  background-color: rgba(241, 245, 249, 0.94);
+}
+
+.theme-light .entropy-workbench .hover\:bg-cyan-950\/20:hover,
+.theme-light .entropy-workbench .hover\:bg-cyan-950\/40:hover {
+  background-color: rgba(207, 250, 254, 0.74);
+}
+
+.theme-light .entropy-workbench .text-gray-100 { color: #0f172a; }
+.theme-light .entropy-workbench .text-gray-200 { color: #1e293b; }
+.theme-light .entropy-workbench .text-gray-300 { color: #334155; }
+.theme-light .entropy-workbench .text-gray-400 { color: #64748b; }
+.theme-light .entropy-workbench .text-gray-500 { color: #64748b; }
+.theme-light .entropy-workbench .text-gray-600 { color: #94a3b8; }
+.theme-light .entropy-workbench .text-gray-700 { color: #cbd5e1; }
+.theme-light .entropy-workbench .text-yellow-300,
+.theme-light .entropy-workbench .text-yellow-300\/70,
+.theme-light .entropy-workbench .text-yellow-400,
+.theme-light .entropy-workbench .text-yellow-400\/55,
+.theme-light .entropy-workbench .text-yellow-500,
+.theme-light .entropy-workbench .text-yellow-500\/70,
+.theme-light .entropy-workbench .text-yellow-500\/80,
+.theme-light .entropy-workbench .text-amber-300\/80 {
+  color: #b77900;
+}
+.theme-light .entropy-workbench .text-cyan-300,
+.theme-light .entropy-workbench .text-cyan-300\/90,
+.theme-light .entropy-workbench .text-cyan-400,
+.theme-light .entropy-workbench .text-cyan-500\/70 {
+  color: #0e7490;
+}
+.theme-light .entropy-workbench .text-emerald-300,
+.theme-light .entropy-workbench .text-emerald-400,
+.theme-light .entropy-workbench .text-emerald-500\/70 {
+  color: #047857;
+}
+.theme-light .entropy-workbench .text-red-300\/70,
+.theme-light .entropy-workbench .text-red-400\/80 {
+  color: rgba(185, 28, 28, 0.82);
+}
+.theme-light .entropy-workbench .text-amber-300\/90 {
+  color: #92400e;
+}
+
+.theme-light .entropy-workbench .border-gray-800,
+.theme-light .entropy-workbench .border-gray-800\/80,
+.theme-light .entropy-workbench .border-gray-700 {
+  border-color: rgba(148, 163, 184, 0.34);
+}
+
+.theme-light .entropy-workbench .border-yellow-500\/20,
+.theme-light .entropy-workbench .border-yellow-500\/25,
+.theme-light .entropy-workbench .border-yellow-500\/30,
+.theme-light .entropy-workbench .border-yellow-500\/35,
+.theme-light .entropy-workbench .border-yellow-500\/40,
+.theme-light .entropy-workbench .border-yellow-500\/45,
+.theme-light .entropy-workbench .border-yellow-500\/50,
+.theme-light .entropy-workbench .border-yellow-500\/55,
+.theme-light .entropy-workbench .border-yellow-500\/60 {
+  border-color: rgba(180, 83, 9, 0.34);
+}
+
+.theme-light .entropy-workbench .border-cyan-500\/20,
+.theme-light .entropy-workbench .border-cyan-500\/25,
+.theme-light .entropy-workbench .border-cyan-500\/30,
+.theme-light .entropy-workbench .border-cyan-500\/35,
+.theme-light .entropy-workbench .border-cyan-500\/40,
+.theme-light .entropy-workbench .border-cyan-500\/45 {
+  border-color: rgba(8, 145, 178, 0.32);
+}
+
+.theme-light .entropy-workbench .border-emerald-500\/20,
+.theme-light .entropy-workbench .border-emerald-500\/25,
+.theme-light .entropy-workbench .border-emerald-500\/30,
+.theme-light .entropy-workbench .border-emerald-500\/35,
+.theme-light .entropy-workbench .border-emerald-500\/40,
+.theme-light .entropy-workbench .border-emerald-500\/50 {
+  border-color: rgba(4, 120, 87, 0.28);
+}
+
+.theme-light .entropy-workbench .border-amber-500\/20 {
+  border-color: rgba(180, 83, 9, 0.24);
+}
+
+.theme-light .entropy-workbench .border-red-500\/50 {
+  border-color: rgba(185, 28, 28, 0.36);
+}
+
+.theme-light .entropy-workbench .focus-visible\:ring-yellow-400\/70:focus-visible {
+  --tw-ring-color: rgba(217, 119, 6, 0.32);
+}
+
+.theme-light .entropy-workbench .opacity-70 {
+  opacity: 0.9;
+}
+
+.theme-light .entropy-workbench .shadow-black\/25,
+.theme-light .entropy-workbench .shadow-black\/30 {
+  --tw-shadow-color: rgba(15, 23, 42, 0.08);
+}
+
+.theme-light .entropy-workbench .entropy-conveyor-bead {
+  background: #d97706;
+  box-shadow: 0 0 9px rgba(217, 119, 6, 0.5);
+}
+
+.theme-light .entropy-workbench .trng-wave-line {
+  filter: drop-shadow(0 0 4px rgba(8, 145, 178, 0.3));
+}
+
+.theme-light .entropy-workbench .fill-amber-400\/45 { fill: rgba(245, 158, 11, 0.52); }
+.theme-light .entropy-workbench .fill-amber-400\/35 { fill: rgba(245, 158, 11, 0.44); }
+.theme-light .entropy-workbench .fill-amber-400\/20 { fill: rgba(245, 158, 11, 0.24); }
+.theme-light .entropy-workbench .fill-amber-200\/85 { fill: rgba(146, 64, 14, 0.86); }
+.theme-light .entropy-workbench .stroke-amber-300\/45 { stroke: rgba(180, 83, 9, 0.38); }
+.theme-light .entropy-workbench .fill-amber-100 { fill: #1f2937; }
+.theme-light .entropy-workbench .fill-cyan-300\/80 { fill: rgba(8, 145, 178, 0.72); }
+.theme-light .entropy-workbench .fill-cyan-300\/65 { fill: rgba(8, 145, 178, 0.62); }
+.theme-light .entropy-workbench .fill-cyan-300\/30 { fill: rgba(8, 145, 178, 0.25); }
+.theme-light .entropy-workbench .fill-cyan-950\/20 { fill: rgba(207, 250, 254, 0.55); }
+.theme-light .entropy-workbench .stroke-cyan-500\/35 { stroke: rgba(8, 145, 178, 0.3); }
