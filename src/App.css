@@ -161,6 +161,8 @@ html.theme-light body {
 .theme-light .bg-gray-900\/50 { background-color: rgba(249, 250, 251, 0.5); }
 .theme-light .bg-gray-900\/30 { background-color: rgba(249, 250, 251, 0.3); }
 .theme-light .bg-gray-800 { background-color: #f3f4f6; }
+.theme-light .bg-gray-700 { background-color: #d1d5db; }
+.theme-light .bg-gray-600 { background-color: #9ca3af; }
 .theme-light .bg-gray-800\/50 { background-color: rgba(243, 244, 246, 0.5); }
 .theme-light .bg-gray-800\/80 { background-color: rgba(243, 244, 246, 0.8); }
 .theme-light .bg-gray-800\/30 { background-color: rgba(243, 244, 246, 0.3); }
@@ -185,8 +187,15 @@ html.theme-light body {
 .theme-light .bg-red-950\/30 { background-color: rgba(254, 226, 226, 0.5); }
 .theme-light .bg-red-900\/20 { background-color: rgba(254, 226, 226, 0.35); }
 .theme-light .bg-orange-950\/30 { background-color: rgba(255, 237, 213, 0.5); }
+.theme-light .bg-orange-950\/40 { background-color: rgba(255, 237, 213, 0.55); }
 .theme-light .bg-orange-900\/20 { background-color: rgba(255, 237, 213, 0.35); }
+.theme-light .bg-orange-900\/30 { background-color: rgba(255, 237, 213, 0.45); }
+.theme-light .bg-orange-900\/40 { background-color: rgba(255, 237, 213, 0.5); }
 .theme-light .bg-yellow-950\/20 { background-color: rgba(254, 252, 232, 0.5); }
+.theme-light .bg-yellow-900\/50 { background-color: rgba(254, 249, 195, 0.5); }
+.theme-light .bg-yellow-500\/20 { background-color: rgba(217, 119, 6, 0.12); }
+.theme-light .bg-yellow-950\/30 { background-color: rgba(254, 249, 195, 0.45); }
+.theme-light .bg-yellow-400 { background-color: #d97706; }
 
 /* --- Text: neutral grays (inverted) --- */
 .theme-light .text-white { color: #111827; }
@@ -222,9 +231,12 @@ html.theme-light body {
 .theme-light .text-yellow-400\/60 { color: rgba(161, 98, 7, 0.6); }
 .theme-light .text-yellow-400\/70 { color: rgba(161, 98, 7, 0.7); }
 .theme-light .text-yellow-500 { color: #a16207; }
+.theme-light .text-yellow-500\/60 { color: rgba(161, 98, 7, 0.6); }
 .theme-light .text-yellow-600 { color: #854d0e; }
+.theme-light .text-orange-300 { color: #c2410c; }
 .theme-light .text-orange-400 { color: #ea580c; }
 .theme-light .text-orange-400\/60 { color: rgba(234, 88, 12, 0.6); }
+.theme-light .text-orange-400\/70 { color: rgba(234, 88, 12, 0.75); }
 .theme-light .text-blue-400 { color: #2563eb; }
 .theme-light .text-blue-400\/60 { color: rgba(37, 99, 235, 0.6); }
 .theme-light .text-emerald-400 { color: #059669; }
@@ -253,6 +265,11 @@ html.theme-light body {
 .theme-light .border-orange-500\/30 { border-color: rgba(234, 88, 12, 0.2); }
 .theme-light .border-orange-500\/60 { border-color: rgba(234, 88, 12, 0.35); }
 .theme-light .border-yellow-500\/50 { border-color: rgba(161, 98, 7, 0.3); }
+.theme-light .border-yellow-500\/20 { border-color: rgba(217, 119, 6, 0.16); }
+.theme-light .border-yellow-500\/30 { border-color: rgba(217, 119, 6, 0.2); }
+.theme-light .focus\:border-yellow-500\/40:focus { border-color: rgba(217, 119, 6, 0.4); }
+.theme-light .border-yellow-500\/40 { border-color: rgba(217, 119, 6, 0.25); }
+.theme-light .border-yellow-500\/60 { border-color: rgba(217, 119, 6, 0.35); }
 .theme-light .border-green-800\/40 { border-color: rgba(22, 163, 74, 0.2); }
 .theme-light .border-green-500\/60 { border-color: rgba(22, 163, 74, 0.35); }
 .theme-light .border-purple-500\/60 { border-color: rgba(124, 58, 237, 0.35); }
@@ -265,8 +282,10 @@ html.theme-light body {
 .theme-light .hover\:bg-green-900\/70:hover { background-color: rgba(220, 252, 231, 0.5); }
 .theme-light .hover\:bg-green-950\/30:hover { background-color: rgba(220, 252, 231, 0.4); }
 .theme-light .hover\:bg-orange-950\/30:hover { background-color: rgba(255, 237, 213, 0.4); }
+.theme-light .hover\:bg-orange-900\/40:hover { background-color: rgba(255, 237, 213, 0.45); }
 .theme-light .hover\:bg-red-950\/30:hover { background-color: rgba(254, 226, 226, 0.4); }
 .theme-light .hover\:bg-cyan-950\/30:hover { background-color: rgba(207, 250, 254, 0.4); }
+.theme-light .hover\:bg-yellow-950\/30:hover { background-color: rgba(254, 249, 195, 0.4); }
 .theme-light .hover\:bg-purple-950\/30:hover { background-color: rgba(243, 232, 255, 0.4); }
 .theme-light .hover\:text-white:hover { color: #111827; }
 .theme-light .hover\:text-green-400:hover { color: #16a34a; }
@@ -319,6 +338,7 @@ html.theme-light body {
 .theme-light .hover\:shadow-orange-500\/10:hover { --tw-shadow-color: rgba(234, 88, 12, 0.06); }
 .theme-light .hover\:shadow-red-500\/10:hover { --tw-shadow-color: rgba(220, 38, 38, 0.06); }
 .theme-light .hover\:shadow-cyan-500\/10:hover { --tw-shadow-color: rgba(8, 145, 178, 0.06); }
+.theme-light .hover\:shadow-yellow-500\/10:hover { --tw-shadow-color: rgba(217, 119, 6, 0.06); }
 .theme-light .hover\:shadow-purple-500\/10:hover { --tw-shadow-color: rgba(124, 58, 237, 0.06); }
 
 /* ================================================
@@ -435,3 +455,159 @@ html.theme-light body {
 .theme-light .text-purple-400 { color: #7c3aed; }
 .theme-light .border-purple-500\/40 { border-color: rgba(124, 58, 237, 0.25); }
 .theme-light .bg-purple-900\/50 { background-color: rgba(233, 213, 255, 0.4); }
+
+/* --- Entropy: feedback when a roll lands --- */
+/* Workbench background for the input -> machine -> output flow. */
+.entropy-workbench {
+  background-image:
+    linear-gradient(rgba(250, 204, 21, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 211, 238, 0.04) 1px, transparent 1px);
+  background-size: 28px 28px;
+  background-position: -1px -1px;
+}
+
+.theme-light .entropy-workbench {
+  background-image:
+    linear-gradient(rgba(217, 119, 6, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(8, 145, 178, 0.06) 1px, transparent 1px);
+}
+
+.entropy-stage-panel {
+  backdrop-filter: blur(12px);
+}
+
+.entropy-machine-core::before {
+  content: "";
+  position: absolute;
+  inset: -40% auto -40% -35%;
+  width: 34%;
+  background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.08), transparent);
+  transform: skewX(-14deg);
+  animation: entropy-machine-scan 5.5s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes entropy-machine-scan {
+  0% { transform: translateX(0) skewX(-14deg); }
+  100% { transform: translateX(410%) skewX(-14deg); }
+}
+
+.entropy-conveyor-bead {
+  position: absolute;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #facc15;
+  box-shadow: 0 0 10px rgba(250, 204, 21, 0.65);
+  animation: entropy-conveyor-bead 1.7s ease-in-out infinite;
+}
+
+@keyframes entropy-conveyor-bead {
+  0% { left: 0; }
+  100% { left: calc(100% - 14px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entropy-machine-core::before,
+  .entropy-conveyor-bead {
+    animation: none;
+  }
+}
+
+@keyframes entropy-roll-in {
+  0%   { transform: scale(1.5); background-color: #facc15; border-color: #facc15; color: #111827; }
+  55%  { transform: scale(1); }
+  100% { transform: scale(1); }
+}
+.entropy-roll-in { animation: entropy-roll-in 620ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+
+@keyframes entropy-bump {
+  0%   { transform: translateY(-4px); opacity: 0.35; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+.entropy-bump { animation: entropy-bump 240ms ease-out; }
+
+/* TRNG scope: keep the moving trace legible, and make sampling feel physical. */
+.trng-wave-line {
+  filter: drop-shadow(0 0 5px rgba(165, 243, 252, 0.48));
+}
+
+.trng-wave-sampled {
+  animation: trng-wave-sampled 520ms ease-out;
+}
+
+@keyframes trng-wave-sampled {
+  0% { filter: drop-shadow(0 0 12px rgba(250, 204, 21, 0.9)); }
+  100% { filter: drop-shadow(0 0 5px rgba(165, 243, 252, 0.48)); }
+}
+
+.trng-sample-sweep {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(250, 204, 21, 0.06) 35%,
+    rgba(34, 211, 238, 0.34) 50%,
+    rgba(250, 204, 21, 0.08) 65%,
+    transparent 100%
+  );
+  animation: trng-sample-sweep 560ms ease-out;
+}
+
+@keyframes trng-sample-sweep {
+  0% { opacity: 0; transform: translateX(-120%); }
+  18% { opacity: 1; }
+  100% { opacity: 0; transform: translateX(120%); }
+}
+
+/* --- Entropy pipeline: fit three steps on one screen ---
+   Layout uses min-h-screen, so the page has no definite height and the
+   pipeline's natural height is what pushes the document past the viewport.
+   Tighten the spacing on short screens instead of clipping anything. */
+@media (min-width: 1024px) and (max-height: 800px) {
+  .entropy-pipeline { gap: 0.625rem; padding-top: 0.5rem; padding-bottom: 0.5rem; }
+  .entropy-step { padding: 0.75rem; }
+}
+
+/* --- Thin scrollbars for the entropy readouts ---
+   Content that cannot shrink (bit dumps, word tables) scrolls in place
+   rather than being clipped. */
+.thin-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+.thin-scroll::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.04); border-radius: 3px; }
+.thin-scroll::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.16); border-radius: 3px; }
+.thin-scroll::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.28); }
+.thin-scroll { scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, 0.16) rgba(255, 255, 255, 0.04); }
+
+.theme-light .thin-scroll::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.04); }
+.theme-light .thin-scroll::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.18); }
+.theme-light .thin-scroll { scrollbar-color: rgba(0, 0, 0, 0.18) rgba(0, 0, 0, 0.04); }
+
+/* Bit and hex dumps: fixed-width rows that line up in columns. */
+.entropy-dump {
+  white-space: pre;
+  font-variant-ligatures: none;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- PRNG state diagram in light mode ---
+   The theme-light block above remaps text-* utilities, but SVG glyphs are
+   painted with fill-* and the diagram's panels use bg-black/NN, neither of
+   which is covered. Scoped to .prng-diagram so no global utility changes
+   meaning for the rest of the site. */
+.theme-light .prng-diagram .bg-black\/35 { background-color: #ffffff; }
+.theme-light .prng-diagram .bg-black\/30 { background-color: #f9fafb; }
+.theme-light .prng-diagram .bg-cyan-950\/25 { background-color: rgba(207, 250, 254, 0.5); }
+.theme-light .prng-diagram .fill-gray-600 { fill: #6b7280; }
+.theme-light .prng-diagram .fill-gray-500 { fill: #4b5563; }
+.theme-light .prng-diagram .fill-gray-700 { fill: #d1d5db; }
+.theme-light .prng-diagram .fill-yellow-400 { fill: #b45309; }
+.theme-light .prng-diagram .fill-yellow-400\/30 { fill: rgba(180, 83, 9, 0.35); }
+.theme-light .prng-diagram .fill-cyan-300 { fill: #0e7490; }
+.theme-light .prng-diagram .fill-cyan-300\/60 { fill: rgba(14, 116, 144, 0.75); }
+.theme-light .prng-diagram .fill-cyan-300\/20 { fill: rgba(14, 116, 144, 0.3); }
+.theme-light .prng-diagram .stroke-yellow-500 { stroke: #d97706; }
+/* The PRNG box keeps a yellow fill in both themes, so its label stays black. */
+.theme-light .prng-diagram rect.fill-yellow-400 { fill: #fbbf24; }

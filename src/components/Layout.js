@@ -5,20 +5,26 @@ import { useTheme } from './ThemeContext';
 const NAV_ITEMS = [
   { path: '/sha256', label: 'SHA-256', color: 'green' },
   { path: '/merkle-tree', label: 'Merkle Tree', color: 'cyan' },
+  { path: '/entropy', label: 'Entropy', color: 'yellow' },
 ];
 
 const COLOR_CLASSES = {
   green:  { active: 'text-green-400 border-green-400', hover: 'hover:text-green-400/70' },
   cyan:   { active: 'text-cyan-400 border-cyan-400', hover: 'hover:text-cyan-400/70' },
   purple: { active: 'text-purple-400 border-purple-400', hover: 'hover:text-purple-400/70' },
+  orange: { active: 'text-orange-400 border-orange-400', hover: 'hover:text-orange-400/70' },
+  yellow: { active: 'text-yellow-400 border-yellow-400', hover: 'hover:text-yellow-400/70' },
 };
 
 export default function Layout({ children }) {
   const location = useLocation();
   const { theme, toggle } = useTheme();
 
+  // lg:h-screen gives desktop a definite height so pages with inner
+  // overflow-auto panels scroll inside themselves instead of growing the
+  // document. Mobile keeps min-h-screen and is free to grow.
   return (
-    <div className="font-mono bg-black text-gray-300 min-h-screen flex flex-col">
+    <div className="font-mono bg-black text-gray-300 min-h-screen lg:h-screen flex flex-col">
       {/* Global nav bar */}
       <nav className="border-b border-gray-800 px-3 lg:px-4 py-2 shrink-0">
         <div className="flex items-center justify-between gap-4">

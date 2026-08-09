@@ -1,0 +1,113 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#020403"/>
+      <stop offset="0.55" stop-color="#04080d"/>
+      <stop offset="1" stop-color="#02120f"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#0b111c" stop-opacity="0.94"/>
+      <stop offset="1" stop-color="#07121a" stop-opacity="0.88"/>
+    </linearGradient>
+    <linearGradient id="entropyGlow" x1="315" y1="160" x2="970" y2="520" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#facc15" stop-opacity="0.22"/>
+      <stop offset="0.45" stop-color="#22d3ee" stop-opacity="0.2"/>
+      <stop offset="1" stop-color="#34d399" stop-opacity="0.16"/>
+    </linearGradient>
+    <filter id="softGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="14" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.1 0 0 0 0 0.78 0 0 0 0 0.9 0 0 0 0.5 0"/>
+      <feBlend in="SourceGraphic" mode="screen"/>
+    </filter>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" stroke="#17303a" stroke-opacity="0.26" stroke-width="1"/>
+    </pattern>
+    <pattern id="fineGrid" width="10" height="10" patternUnits="userSpaceOnUse">
+      <path d="M10 0H0V10" stroke="#17303a" stroke-opacity="0.12" stroke-width="1"/>
+    </pattern>
+    <style>
+      .mono { font-family: monospace; }
+      .title { font-family: monospace; font-weight: 800; letter-spacing: 0; }
+      .label { font-family: monospace; font-weight: 700; letter-spacing: 0.18em; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="630" fill="#020403"/>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#fineGrid)"/>
+  <ellipse cx="660" cy="344" rx="410" ry="230" fill="url(#entropyGlow)"/>
+
+  <text x="64" y="66" class="mono" font-size="26" fill="#e5e7eb" font-weight="700">hashexplained.com</text>
+  <text x="64" y="206" class="title" font-size="72" fill="#f8fafc">Entropy</text>
+  <text x="64" y="268" class="title" font-size="50" fill="#67e8f9">Visualizer</text>
+  <text x="68" y="330" class="mono" font-size="26" fill="#facc15">BIP-39 seed words</text>
+
+  <g transform="translate(410 110)">
+    <rect x="0" y="0" width="738" height="410" rx="24" fill="#07111b" stroke="#155e75" stroke-opacity="0.72" stroke-width="2"/>
+    <rect x="22" y="22" width="694" height="366" rx="18" fill="#02060b" fill-opacity="0.62" stroke="#164e63" stroke-opacity="0.55"/>
+
+    <text x="54" y="66" class="label" font-size="15" fill="#22d3ee">SOURCE</text>
+    <text x="338" y="66" class="label" font-size="15" fill="#67e8f9">BITS</text>
+    <text x="598" y="66" class="label" font-size="15" fill="#34d399">WORDS</text>
+
+    <g transform="translate(52 104)">
+      <rect x="0" y="0" width="190" height="220" rx="16" fill="#070b11" stroke="#eab308" stroke-opacity="0.34"/>
+      <g transform="translate(36 32)">
+        <rect x="0" y="0" width="46" height="46" rx="7" fill="#f8fafc" stroke="#cbd5e1"/>
+        <circle cx="14" cy="14" r="3.8" fill="#111827"/>
+        <circle cx="32" cy="32" r="3.8" fill="#111827"/>
+        <circle cx="32" cy="14" r="3.8" fill="#111827"/>
+      </g>
+      <g transform="translate(104 32)">
+        <rect x="0" y="0" width="46" height="46" rx="7" fill="#f8fafc" stroke="#cbd5e1"/>
+        <circle cx="14" cy="12" r="3.8" fill="#111827"/>
+        <circle cx="32" cy="12" r="3.8" fill="#111827"/>
+        <circle cx="14" cy="23" r="3.8" fill="#111827"/>
+        <circle cx="32" cy="23" r="3.8" fill="#111827"/>
+        <circle cx="14" cy="34" r="3.8" fill="#111827"/>
+        <circle cx="32" cy="34" r="3.8" fill="#111827"/>
+      </g>
+      <g transform="translate(34 106)">
+        <line x1="0" y1="34" x2="122" y2="34" stroke="#eab308" stroke-opacity="0.38" stroke-dasharray="3 5"/>
+        <polyline points="0,36 11,15 22,54 34,27 46,31 59,58 73,21 88,47 105,18 122,40" fill="none" stroke="#67e8f9" stroke-width="2" stroke-linecap="round"/>
+      </g>
+    </g>
+
+    <g transform="translate(266 214)">
+      <path d="M0 0H52" stroke="#67e8f9" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M40 -10L54 0L40 10" stroke="#67e8f9" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+
+    <g transform="translate(330 144)">
+      <rect x="0" y="0" width="154" height="140" rx="18" fill="#07131a" stroke="#22d3ee" stroke-opacity="0.55"/>
+      <text x="77" y="45" text-anchor="middle" class="mono" font-size="18" fill="#67e8f9">bits</text>
+      <g class="mono" font-size="14">
+        <text x="34" y="77" fill="#facc15">10110110</text>
+        <text x="34" y="101" fill="#94a3b8">01101001</text>
+      </g>
+      <path d="M41 115H113" stroke="#22d3ee" stroke-opacity="0.7" stroke-width="2"/>
+      <circle cx="77" cy="115" r="6" fill="#facc15"/>
+    </g>
+
+    <g transform="translate(510 214)">
+      <path d="M0 0H70" stroke="#34d399" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M58 -10L72 0L58 10" stroke="#34d399" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+
+    <g transform="translate(598 104)">
+      <rect x="0" y="0" width="96" height="220" rx="14" fill="#07110d" stroke="#10b981" stroke-opacity="0.55"/>
+      <text x="25" y="34" class="mono" font-size="15" fill="#f8fafc">word</text>
+      <text x="25" y="66" class="mono" font-size="15" fill="#94a3b8">word</text>
+      <text x="25" y="98" class="mono" font-size="15" fill="#f8fafc">word</text>
+      <text x="25" y="130" class="mono" font-size="15" fill="#94a3b8">word</text>
+      <text x="25" y="162" class="mono" font-size="15" fill="#f8fafc">word</text>
+      <text x="25" y="194" class="mono" font-size="15" fill="#facc15">word</text>
+    </g>
+
+    <g transform="translate(322 340)" filter="url(#softGlow)">
+      <path d="M0 0H116" stroke="#67e8f9" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M104 -10L118 0L104 10" stroke="#67e8f9" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </g>
+</svg>

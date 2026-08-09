@@ -1,23 +1,33 @@
-# SHA-256 Visualizer
+# Hash Explained
 
-> 🚧 **Disclaimer:** This visualizer is educational and should not be treated as a reference implementation for cryptographic correctness. Parts of the codebase are vibe-coded and AI-assisted.
+Interactive visual tools for understanding cryptography.
+
+[Try it live](https://hashexplained.com)
 
 ![SHA-256 Visualizer](public/demo.gif)
 
-An animated, step-by-step visualizer for SHA-256.
+> Educational only. This project is for learning and visual intuition, not for generating real wallet seed phrases or serving as a reference implementation.
 
-Try it: [hashexplained.com](https://hashexplained.com)
+## What's Included
 
-A tool that lets you watch SHA-256 execute step by step. Every phase is animated:
+- **Entropy Visualizer**: compare dice, coin flips, TRNG-style noise, and PRNG output, then see how entropy becomes BIP-39 seed words.
+- **SHA-256 Visualizer**: watch padding, message schedule, compression rounds, and the final digest step by step.
+- **Merkle Tree Explorer**: build a tree, tamper with leaves, and follow the proof path up to the root.
 
-- Padding
-- Message schedule
-- 64 compression rounds
-- Final hash
+## New: Entropy Visualizer
 
-Limitations: Currently supports messages up to 55 characters (single block) and SHA-256 only. Multi-block hashing and other algorithms (SHA-1, SHA-512, RIPEMD-160, etc.) can be added if there's interest.
+The Entropy tool shows where randomness actually comes from and what happens to it between source and mnemonic. It is meant to make the difference between physical entropy, PRNG output, hashing, checksums, and BIP-39 word selection easier to see.
 
-Reference: [NIST FIPS 180-4: Secure Hash Standard](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf)
+[Open Entropy Visualizer](https://hashexplained.com/entropy)
+
+## Tools
+
+| Tool | What It Shows |
+| --- | --- |
+| [Entropy](https://hashexplained.com/entropy) | Dice, coins, TRNG, and PRNG sources becoming BIP-39 seed words |
+| [SHA-256](https://hashexplained.com/sha256) | Padding, message schedule, compression rounds, and the final digest |
+| [Merkle Tree](https://hashexplained.com/merkle-tree) | Leaves hashing upward into a root, with a highlighted proof path |
+
 
 ## Run Locally
 
@@ -25,5 +35,13 @@ Reference: [NIST FIPS 180-4: Secure Hash Standard](https://nvlpubs.nist.gov/nist
 npm install
 npm start
 ```
+
+Then open `http://localhost:3000`.
+
+## Notes
+
+- Simulated inputs are for education only.
+- The entropy page is not a wallet generator.
+- Some visualizations intentionally simplify implementation details so the core operation is easier to inspect.
 
 MIT License
