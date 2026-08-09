@@ -1,18 +1,23 @@
 const PAGES = {
+  '/entropy': {
+    title: 'Entropy Visualizer - Randomness to Secret Data | Hash Explained',
+    description: 'Choose dice, coins, TRNG, or PRNG and watch randomness become bits and seed words.',
+    image: 'https://hashexplained.com/thumbnail_entropy.png',
+  },
   '/merkle-tree': {
     title: 'Merkle Tree Explorer - Interactive Visualization | Hash Explained',
     description: 'Build, tamper, and verify Merkle trees interactively. See how Bitcoin, Git, and IPFS use them.',
-    image: 'https://hashexplained.com/thubmnail_merkle.png',
+    image: 'https://hashexplained.com/thumbnail_merkle_tree.png',
   },
   '/sha256': {
     title: 'SHA-256 Visualizer - Step by Step | Hash Explained',
     description: 'Interactive step-by-step visualization of the SHA-256 algorithm. See every rotation, XOR, and round.',
-    image: 'https://hashexplained.com/social.png',
+    image: 'https://hashexplained.com/thumbnail_sha256.png',
   },
   '/': {
-    title: 'Hash Explained - Interactive Cryptographic Hash Visualizers',
-    description: 'Interactive step-by-step visualizations of SHA-256, the avalanche effect, and Merkle trees.',
-    image: 'https://hashexplained.com/social.png',
+    title: 'Hash Explained - Interactive Cryptography Visualizers',
+    description: 'Visual tools for SHA-256, Merkle trees, entropy, seed words, and signatures.',
+    image: 'https://hashexplained.com/thumbnail_home.png',
   },
 };
 
