@@ -154,6 +154,74 @@ function FormulaTerm({ value, label, accent = false }) {
   );
 }
 
+// A deliberately generous attacker, roughly a warehouse of GPUs: the exact
+// rate barely matters, since every 10 extra bits multiplies the search by
+// about a thousand. The lesson is the wall, not the number.
+const GUESSES_PER_SECOND = 1e12;
+const AGE_OF_UNIVERSE_YEARS = 1.38e10;
+
+// Worked in log space: 2^256 seconds overflows nothing here because the
+// exponent is the only thing ever held in a double.
+function crackTime(bits) {
+  const log10Seconds = bits * Math.log10(2) - Math.log10(GUESSES_PER_SECOND);
+  if (log10Seconds < 0) return { text: 'instant' };
+  let value = 10 ** log10Seconds;
+  for (const [size, name] of [[60, 'second'], [60, 'minute'], [24, 'hour'], [365.25, 'day']]) {
+    if (value < size) {
+      const n = Math.round(value);
+      return { text: `${n} ${name}${n === 1 ? '' : 's'}` };
+    }
+    value /= size;
+  }
+  if (value < 1e6) return { text: `${Math.round(value).toLocaleString('en-US')} years` };
+  const log10Years = log10Seconds - Math.log10(31557600);
+  const universes = Math.floor(log10Years - Math.log10(AGE_OF_UNIVERSE_YEARS));
+  return { exp: Math.floor(log10Years), universes: universes > 0 ? universes : null };
+}
+
+function crackTier(bits) {
+  if (bits < 1) return { label: 'known', cls: 'text-red-400' };
+  if (bits < 40) return { label: 'trivial', cls: 'text-red-400' };
+  if (bits < 80) return { label: 'weak', cls: 'text-orange-400' };
+  if (bits < 128) return { label: 'borderline', cls: 'text-yellow-400' };
+  return { label: 'out of reach', cls: 'text-emerald-400' };
+}
+
+function BruteForceReadout({ bits }) {
+  const tier = crackTier(bits);
+  const time = crackTime(bits);
+  const shownBits = Number.isInteger(bits) ? bits : bits.toFixed(1);
+
+  return (
+    <div className="mt-3 rounded border border-gray-800 bg-black/25 px-3 py-2 text-[9px] leading-relaxed">
+      <div className="flex items-center justify-between gap-2">
+        <span className="uppercase tracking-widest text-gray-500">Brute force</span>
+        <span className={`uppercase tracking-widest ${tier.cls}`}>{tier.label}</span>
+      </div>
+      <div className="mt-1 text-gray-400">
+        {bits < 1 ? (
+          <>1 guess &middot; <span className={tier.cls}>instant</span></>
+        ) : (
+          <>
+            2<sup>{shownBits}</sup> guesses &middot;{' '}
+            <span className={tier.cls}>
+              {time.text || <>10<sup>{time.exp}</sup> years</>}
+            </span>
+          </>
+        )}
+      </div>
+      {time.universes && (
+        <div className="text-gray-600">
+          &asymp; 10<sup>{time.universes}</sup> &times; the age of the universe
+        </div>
+      )}
+      <div className="text-gray-600">
+        at 10<sup>12</sup> guesses per second
+      </div>
+    </div>
+  );
+}
+
 function SourceProgress({ source, collectedBits, targetBits, count, flipCount, trngCount }) {
   const value = source === 'dice' ? collectedBits.toFixed(1) : collectedBits.toFixed(0);
   const pct = targetBits ? Math.max(0, Math.min(100, (collectedBits / targetBits) * 100)) : 0;
@@ -211,6 +279,9 @@ function SourceProgress({ source, collectedBits, targetBits, count, flipCount, t
           style={{ width: `${pct}%` }}
         />
       </div>
+      {/* Capped at the target: past it the hash truncates to targetBits, so
+          extra rolls widen nothing an attacker has to search. */}
+      <BruteForceReadout bits={Math.min(collectedBits, targetBits)} />
       {note && (
         <div className="mt-2 text-center text-[9px] leading-relaxed text-gray-500">
           {note}

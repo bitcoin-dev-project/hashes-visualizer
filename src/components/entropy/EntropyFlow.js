@@ -33,10 +33,11 @@ const SOURCE_NAMES = {
 };
 
 // Named after the lane each one comes from, so the entropy panel can spell out
-// the actual conditioning step instead of leaving an arrow to imply it.
+// the actual conditioning step instead of leaving an arrow to imply it. Only
+// the hashed lanes appear here: coin flips and the PRNG stream are used as
+// entropy directly, with no SHA-256 between source and entropy.
 const HASH_INPUT_NAMES = {
   dice: 'digits',
-  coin: 'bits',
   trng: 'clean bits',
 };
 
@@ -396,7 +397,9 @@ function MnemonicSteps({ entropy, target, chunks, ready, source }) {
   const checksum = hasEntropy ? entropyChecksumBits(entropy) : '';
   const entropyExplain = source === 'prng'
     ? `BIP-39 starts with these ${target.bits} bits from the PRNG stream. No extra SHA-256 is applied here.`
-    : `BIP-39 starts with exactly these ${target.bits} bits of entropy from the machine.`;
+    : source === 'coin'
+      ? `BIP-39 starts with your ${target.bits} flips used directly as the ${target.bits} entropy bits. The only hash in this lane is the checksum in step 2.`
+      : `BIP-39 starts with exactly these ${target.bits} bits of entropy from the machine.`;
   const bitsExplain = `BIP-39 hashes the entropy bytes with SHA-256, appends the first ${shape.checksumBits} checksum bits, then reads ${shape.totalBits} bits in 11-bit groups.`;
   const mnemonicExplain = 'Each 11-bit group is a number from 0 to 2047. That number picks one word from the BIP-39 wordlist.';
 
@@ -503,6 +506,11 @@ export default function EntropyFlow({
   const dropped = 256 - target.bits;
   const started = hasDice || hasCoin || hasTrng || hasPrng;
   const directPrng = selectedSource === 'prng';
+  // Coins skip the conditioning hash: 128 fair flips already are 128 uniform
+  // bits, so they pack straight into hex and the only hash in the whole lane
+  // is the BIP-39 checksum.
+  const directCoin = selectedSource === 'coin';
+  const direct = directPrng || directCoin;
   const prngCallBits = prngCallGoal ? target.bits / prngCallGoal : 32;
   const prngOutputBits = Math.min(target.bits, prngCalls * prngCallBits);
   const hashInputName = HASH_INPUT_NAMES[selectedSource] || 'input';
@@ -704,11 +712,13 @@ export default function EntropyFlow({
               {selectedSource && (
                 <>
                   <StepArrow
-                    label={directPrng ? 'use stream' : 'sha256'}
+                    label={directPrng ? 'use stream' : directCoin ? 'pack bits' : 'sha256'}
                     title={
                       directPrng
                         ? `${prngCallGoal} PRNG calls produce ${target.bits} bits; use them as entropy`
-                        : `sha256(${hashInputName}) returns 256 bits; keep the first ${target.bits} bits`
+                        : directCoin
+                          ? `${target.bits} flips are exactly ${target.bits} bits; every 4 become one hex digit, no hash`
+                          : `sha256(${hashInputName}) returns 256 bits; keep the first ${target.bits} bits`
                     }
                     active={started}
                   />
@@ -727,6 +737,10 @@ export default function EntropyFlow({
                           <>
                             <span className="text-gray-500">stream =</span>
                           </>
+                        ) : directCoin ? (
+                          <>
+                            <span className="text-gray-500">bits =</span>
+                          </>
                         ) : (
                           <>
                             <span className="text-gray-500">sha256(</span>
@@ -740,14 +754,20 @@ export default function EntropyFlow({
                       <Digest
                         full={fullDigest}
                         keptHex={target.bits / 4}
-                        placeholderHex={directPrng ? target.bits / 4 : 64}
+                        placeholderHex={direct ? target.bits / 4 : 64}
                       />
                       {directPrng && (
                         <div className="mt-2 text-[9px] text-gray-500">
                           <span className="text-cyan-300">{prngOutputBits}</span> / {target.bits} bits from stream
                         </div>
                       )}
-                      {!directPrng && dropped > 0 && (
+                      {directCoin && (
+                        <div className="mt-2 text-[9px] text-gray-500">
+                          <span className="text-cyan-300">{Math.min(flipCount, target.bits)}</span> / {target.bits} bits
+                          from flips &middot; used directly, no hash
+                        </div>
+                      )}
+                      {!direct && dropped > 0 && (
                         <div className="mt-2 text-[9px] text-gray-500">
                           SHA-256 always returns 256 bits &middot; the dimmed{' '}
                           <span className="text-gray-500">{dropped}</span> are dropped

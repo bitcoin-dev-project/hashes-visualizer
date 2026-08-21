@@ -1,5 +1,3 @@
-import { sha256 } from './sha256';
-
 // A fair coin has two equally likely faces, so one flip carries log2(2) bits.
 // That is exactly 1, which is what makes coins the tidiest source on the page:
 // a d6 hands you 2.585 bits and wastes the fraction, a coin hands you a whole
@@ -36,17 +34,26 @@ export function flipGuessSpace(count) {
   return `2^${count}`;
 }
 
-// Same construction as the dice: hash the recorded flips and keep the leading
-// bits. Worth knowing that for coins the hash is pure formatting, since the
-// flips were already uniform bits. It still cannot add what was not there.
-export function digestFromFlips(flips) {
-  if (!flips.length) return '';
-  return sha256(flips.join(''));
+// No hash here, unlike the dice. Fair flips are already uniform bits, so the
+// flips ARE the entropy: pack them MSB-first, four flips per hex digit, and
+// the only hash anywhere in the coin lane is the BIP-39 checksum. The dice
+// lane must hash because log2(6) bits per roll never fills whole digits; a
+// hash here would be harmless but would make the mnemonic irreproducible in
+// any other coin-flip tool.
+// Only complete nibbles are emitted, so a partial tray packs partially.
+export function hexFromFlips(flips) {
+  let out = '';
+  for (let i = 0; i + 4 <= flips.length; i += 4) {
+    out += parseInt(flips.slice(i, i + 4).join(''), 2).toString(16);
+  }
+  return out;
 }
 
+// The entropy exists only once every one of its bits has been flipped; extra
+// flips past the target change nothing an attacker would have to search.
 export function entropyFromFlips(flips, bits) {
-  if (!flips.length) return '';
-  return sha256(flips.join('')).slice(0, bits / 4);
+  if (flips.length < bits) return '';
+  return hexFromFlips(flips.slice(0, bits));
 }
 
 // Accepts what someone flipping a real coin would actually type: 0/1, or H/T

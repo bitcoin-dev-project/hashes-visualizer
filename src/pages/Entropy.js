@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { Keyboard } from 'lucide-react';
 import EntropyFlow from '../components/entropy/EntropyFlow';
 import { TARGETS, bitsFromRolls, digestFromRolls, entropyFromRolls, parseRolls } from '../lib/entropy';
-import { bitsFromFlips, digestFromFlips, entropyFromFlips, parseFlips } from '../lib/coin';
+import { bitsFromFlips, entropyFromFlips, hexFromFlips, parseFlips } from '../lib/coin';
 import {
   DEFAULT_PRNG_STATE,
   PRNG_BYTES_PER_CALL,
@@ -41,14 +41,17 @@ export default function EntropyPage() {
   // entropy belongs to whatever created S0, not to the PRNG itself.
   const prngEntropyBits = selectedSource === 'prng' ? prngSeedBits : 0;
   const diceHex = rolls.length ? entropyFromRolls(rolls, target.bits) : '';
-  const coinHex = flips.length ? entropyFromFlips(flips, target.bits) : '';
+  // Coins are direct: the entropy is the flips themselves, so it is complete
+  // only once every one of the target bits has actually been flipped.
+  const coinHex = entropyFromFlips(flips, target.bits);
   const trngHex = trngBits.length ? trngDigest(trngBits).slice(0, target.bits / 4) : '';
   const prngPreview = prngStream(prngState, effectivePrngCalls);
   const prngHex = effectivePrngCalls >= prngCallGoal ? prngPreview.slice(0, target.bits / 4) : '';
   // Hash-conditioned sources show the full 256-bit digest in the machine.
-  // PRNG shows the stream directly, because those bytes are the entropy.
+  // PRNG shows the stream directly, and coins show the flips packing into hex
+  // nibble by nibble, because in both lanes those bits are the entropy.
   const diceFull = rolls.length ? digestFromRolls(rolls) : '';
-  const coinFull = flips.length ? digestFromFlips(flips) : '';
+  const coinFull = flips.length ? hexFromFlips(flips.slice(0, target.bits)) : '';
   const trngFull = trngBits.length ? trngDigest(trngBits) : '';
   const prngFull = prngPreview;
 
@@ -72,8 +75,9 @@ export default function EntropyPage() {
     prng: prngFull,
   };
   const collected = BITS_BY_SOURCE[selectedSource] || 0;
-  // Entropy exists from the first roll, flip, clean bit, or PRNG initial state.
-  // Whether it is enough for the selected mnemonic length is separate.
+  // Hashed sources show entropy from the first roll or clean bit, since the
+  // digest exists immediately. Coins are direct, so their entropy (and the
+  // mnemonic) appears only once every target bit has been flipped.
   const entropy = HEX_BY_SOURCE[selectedSource] || '';
   const fullDigest = FULL_BY_SOURCE[selectedSource] || '';
   const enough = Boolean(selectedSource && entropy && collected >= target.bits);
