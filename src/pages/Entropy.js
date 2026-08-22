@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Keyboard } from 'lucide-react';
+import { Keyboard, TriangleAlert, X } from 'lucide-react';
 import EntropyFlow from '../components/entropy/EntropyFlow';
 import { TARGETS, bitsFromRolls, digestFromRolls, entropyFromRolls, parseRolls } from '../lib/entropy';
 import { bitsFromFlips, entropyFromFlips, hexFromFlips, parseFlips } from '../lib/coin';
@@ -25,6 +25,8 @@ export default function EntropyPage() {
   const [prngSeedBits, setPrngSeedBits] = useState(0);
   const [prngCalls, setPrngCalls] = useState(0);
   const [prngReference, setPrngReference] = useState(null);
+  // Deliberately not persisted: the warning should come back on every visit.
+  const [showWarning, setShowWarning] = useState(true);
 
   const target = TARGETS[targetIdx];
   const prngCallGoal = Math.ceil(target.bits / (PRNG_BYTES_PER_CALL * 8));
@@ -190,6 +192,34 @@ export default function EntropyPage() {
         })}</script>
       </Helmet>
 
+      {/* Safety notice */}
+      {showWarning && (
+        <div className="shrink-0 px-3 pt-3 lg:px-5">
+          <div className="w-full max-w-[1760px] mx-auto rounded-lg border border-red-500/40 bg-red-950/40 px-4 py-3 flex items-start gap-3">
+            <TriangleAlert size={18} strokeWidth={2} className="text-red-400 shrink-0 mt-0.5" />
+            <div className="text-[13px] leading-relaxed">
+              <span className="font-semibold text-red-300">
+                Educational demo only. Never use a seed phrase from this page for a real wallet.
+              </span>{' '}
+              <span className="text-red-200/80">
+                The dice, coins, TRNG, and PRNG here are simulated in your browser and are not a
+                secure source of randomness. Any mnemonic shown on this page must be treated as
+                compromised. To create a real wallet, generate the seed phrase on a trusted
+                hardware or software wallet.
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowWarning(false)}
+              aria-label="Dismiss warning"
+              className="ml-auto shrink-0 p-1 rounded text-red-400/70 hover:text-red-300"
+            >
+              <X size={14} strokeWidth={2} />
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Body */}
       <div className="entropy-workbench flex-1 min-h-0 overflow-auto flex flex-col px-3 py-3 lg:px-5 lg:py-4">
         {showManual ? (
@@ -273,7 +303,8 @@ export default function EntropyPage() {
       {/* Footer */}
       <div className="px-4 py-2 border-t border-gray-800 shrink-0 flex items-center justify-between gap-3">
         <span className="text-[10px] text-gray-600">
-          <span className="text-gray-500">Simulated input, educational only.</span> Not for a real wallet.
+          <span className="text-gray-500">Simulated input, educational only.</span>{' '}
+          <span className="text-red-400/90">Never use these seed phrases for a real wallet.</span>
         </span>
         {!showManual && (selectedSource === 'dice' || selectedSource === 'coin') && (
           <button
