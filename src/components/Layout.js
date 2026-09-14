@@ -4,6 +4,7 @@ import { useTheme } from './ThemeContext';
 
 const NAV_ITEMS = [
   { path: '/sha256', label: 'SHA-256', color: 'green' },
+  { path: '/chacha20', label: 'ChaCha20', color: 'purple' },
   { path: '/merkle-tree', label: 'Merkle Tree', color: 'cyan' },
   { path: '/entropy', label: 'Entropy', color: 'yellow' },
 ];
@@ -27,7 +28,7 @@ export default function Layout({ children }) {
     <div className="font-mono bg-black text-gray-300 min-h-screen lg:h-screen flex flex-col">
       {/* Global nav bar */}
       <nav className="border-b border-gray-800 px-3 lg:px-4 py-2 shrink-0">
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-x-4 gap-y-2">
           {/* Left: Site name */}
           <Link 
             to="/" 
@@ -37,7 +38,7 @@ export default function Layout({ children }) {
           </Link>
 
           {/* Center: Nav tabs */}
-          <div className="flex items-center gap-1 overflow-x-auto">
+          <div className="flex items-center gap-1 overflow-x-auto order-3 sm:order-none w-full sm:w-auto min-w-0">
             {NAV_ITEMS.map(({ path, label, color }) => {
               const isActive = location.pathname === path;
               const colors = COLOR_CLASSES[color];

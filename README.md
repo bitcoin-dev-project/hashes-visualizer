@@ -12,6 +12,7 @@ Interactive visual tools for understanding cryptography.
 
 - **Entropy Visualizer**: compare dice, coin flips, TRNG-style noise, and PRNG output, then see how entropy becomes BIP-39 seed words.
 - **SHA-256 Visualizer**: watch padding, message schedule, compression rounds, and the final digest step by step.
+- **ChaCha20 Visualizer**: inspect the state, every quarter-round operation, the keystream, and reversible XOR. An optional Poly1305 chapter demonstrates authentication and tampering.
 - **Merkle Tree Explorer**: build a tree, tamper with leaves, and follow the proof path up to the root.
 
 ## New: Entropy Visualizer
@@ -26,6 +27,7 @@ The Entropy tool shows where randomness actually comes from and what happens to 
 | --- | --- |
 | [Entropy](https://hashexplained.com/entropy) | Dice, coins, TRNG, and PRNG sources becoming BIP-39 seed words |
 | [SHA-256](https://hashexplained.com/sha256) | Padding, message schedule, compression rounds, and the final digest |
+| [ChaCha20](https://hashexplained.com/chacha20) | State matrix, 20 mixing rounds, keystream, encryption/decryption, and Poly1305 authentication |
 | [Merkle Tree](https://hashexplained.com/merkle-tree) | Leaves hashing upward into a root, with a highlighted proof path |
 
 

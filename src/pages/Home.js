@@ -39,6 +39,17 @@ function ShaVisual() {
   );
 }
 
+function ChaChaVisual() {
+  return (
+    <div className="relative h-full overflow-hidden rounded-md border border-purple-500/20 bg-purple-950/20 p-3">
+      <div className="grid grid-cols-4 gap-1.5">
+        {Array.from({ length: 16 }, (_, i) => <div key={i} className={`rounded border px-1 py-1 text-center font-mono text-[8px] ${i % 5 === 0 ? 'border-purple-500/60 bg-purple-900/30 text-purple-300' : 'border-gray-800 text-gray-500'}`}>{String(i).padStart(2, '0')}</div>)}
+      </div>
+      <div className="mt-3 flex items-center justify-center gap-2 font-mono text-[9px] text-purple-300"><span>key → stream</span><span className="text-gray-500">⊕</span><span>message</span></div>
+    </div>
+  );
+}
+
 function MerkleVisual() {
   return (
     <div className="relative h-full overflow-hidden rounded-md border border-cyan-500/15 bg-black/30 p-3">
@@ -151,6 +162,13 @@ const CARDS = [
     visual: <ShaVisual />,
   },
   {
+    path: '/chacha20',
+    title: 'ChaCha20',
+    color: 'purple',
+    tag: 'encryption',
+    visual: <ChaChaVisual />,
+  },
+  {
     path: '/merkle-tree',
     title: 'Merkle Tree',
     color: 'cyan',
@@ -175,6 +193,13 @@ const CARDS = [
 ];
 
 const COLOR_MAP = {
+  purple: {
+    border: 'border-purple-500/30 hover:border-purple-500/60',
+    bg: 'hover:bg-purple-950/30',
+    title: 'text-purple-300',
+    detail: 'text-purple-400',
+    glow: 'hover:shadow-purple-500/10',
+  },
   green: {
     border: 'border-green-500/25 hover:border-green-500/55',
     bg: 'hover:bg-green-950/20',
@@ -285,7 +310,7 @@ export default function Home() {
           </h1>
         </header>
 
-        <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
           {CARDS.map((card) => (
             <ConceptCard key={card.title} card={card} />
           ))}
