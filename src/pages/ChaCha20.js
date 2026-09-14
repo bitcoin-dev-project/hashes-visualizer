@@ -50,59 +50,52 @@ function ByteGrid({ bytes, selected, onSelect, used = bytes.length }) {
   );
 }
 
-function Explanation({ stage, block, selectedWord, quarter, operation, onOperation, counter }) {
+function Explanation({ stage, selectedWord, quarter, operation, onOperation, counter }) {
   return (
     <>
       {stage === 0 && (
         <>
-          <h3>Three inputs, different jobs</h3>
+          <h3>Build the starting state</h3>
+          <p>The key, nonce, and counter fill the matrix. The message joins later, through XOR.</p>
           <dl className="cc-input-explainer">
             <div>
-              <dt className="cc-tone-key">Key · 256 bits · secret</dt>
-              <dd>
-                Shared by sender and receiver. It determines the keystream. The example is public; a
-                real key must be unpredictable and secret.
-              </dd>
+              <dt className="cc-tone-key">Key</dt>
+              <dd>A secret shared by sender and receiver.</dd>
             </div>
             <div>
-              <dt className="cc-tone-nonce">Nonce · 96 bits · public</dt>
-              <dd>
-                A “number used once”: choose a unique value for each message under the same key. The
-                receiver needs it too.
-              </dd>
+              <dt className="cc-tone-nonce">Nonce</dt>
+              <dd>Use a new value for each message with the same key.</dd>
             </div>
             <div>
-              <dt className="cc-tone-counter">Counter · 32 bits · public</dt>
-              <dd>
-                Which 64-byte block to generate. This block uses {counter}. The next uses{' '}
-                {counter === 0xffffffff
-                  ? 'a new nonce because this counter is exhausted'
-                  : counter + 1}
-                .
-              </dd>
+              <dt className="cc-tone-counter">Counter</dt>
+              <dd>This block’s number: {counter}.</dd>
             </div>
           </dl>
-          <div className="cc-callout">
-            <strong>The message is not in this matrix.</strong>
-            <p>
-              ChaCha20 first creates bytes from the key, nonce, and counter. The message joins
-              later, through XOR.
-            </p>
-          </div>
-          <h3>What is a word?</h3>
-          <p>
-            A word here is a 32-bit number: four bytes, displayed as eight hex digits. Sixteen words
-            × four bytes = 64 bytes.
-          </p>
-          <p>
-            <strong>Selected: word {selectedWord}.</strong> {wordSource(selectedWord).detail}
-          </p>
           <details className="cc-more">
-            <summary>Why do the bytes look reversed?</summary>
+            <summary>Learn more</summary>
+            <h3>What is a word?</h3>
             <p>
-              Little-endian means the first byte is the least significant one. Key bytes{' '}
-              <code>00 01 02 03</code> become the number <code>03020100</code>. Turning that number
-              back into bytes restores <code>00 01 02 03</code>.
+              One word is 32 bits: four bytes, shown as eight hex digits. The 16 words make a
+              64-byte state.
+            </p>
+            <p>
+              <strong>Word {selectedWord}:</strong> {wordSource(selectedWord).detail}
+            </p>
+            <h3>Why do the bytes look reversed?</h3>
+            <p>
+              Little-endian puts the least significant byte first. Bytes <code>00 01 02 03</code>{' '}
+              become the word <code>03020100</code>; writing it back restores the same bytes.
+            </p>
+            <h3>ChaCha, ChaCha20, or SHA-256?</h3>
+            <p>
+              ChaCha is the family; ChaCha20 uses 20 mixing rounds. This page uses the IETF variant.
+              Unlike a <Link to="/sha256">SHA-256 fingerprint</Link>, encryption can be undone with
+              the key.
+            </p>
+            <h3>Try changing an input</h3>
+            <p>
+              The same key, nonce, and counter always produce the same stream. Changing just the
+              message leaves that stream unchanged. A real key must be unpredictable and secret.
             </p>
           </details>
         </>
@@ -114,82 +107,70 @@ function Explanation({ stage, block, selectedWord, quarter, operation, onOperati
           </h3>
           <p>
             {quarter.kind === 'Column'
-              ? 'Pick four words down a column. Apply the same recipe to each of the four columns.'
-              : 'Pick one word from each row along a wrapping diagonal. This mixes words that were in different columns.'}
+              ? 'Mix the four highlighted words down a column.'
+              : 'Mix the four highlighted words along a wrapping diagonal.'}
           </p>
           <QuarterRound quarter={quarter} operation={operation} onOperation={onOperation} />
-          <div className="cc-callout">
-            <strong>Why “20”?</strong>
+          <details className="cc-more">
+            <summary>Why 20 rounds?</summary>
             <p>
-              10 column rounds + 10 diagonal rounds = 20 rounds. Each round contains 4 quarter
-              rounds: 80 quarter rounds in total. The rotation amounts 16, 12, 8, and 7 repeat each
-              time.
+              10 column rounds + 10 diagonal rounds = 20 rounds. Each contains four quarter rounds,
+              so there are 80 in total.
             </p>
-          </div>
+            <p>
+              Every quarter round uses the same addition, XOR, and rotation recipe. Switching
+              between columns and diagonals mixes words across the state. Colors continue to
+              identify each word’s original input.
+            </p>
+          </details>
         </>
       )}
       {stage === 2 && (
         <>
-          <h3>One addition per position</h3>
+          <h3>Add matching words</h3>
           <p>
-            After all 20 rounds, add each mixed word to its matching original word. Every sum wraps
-            modulo 2³².
+            Add each mixed word to its original value, keeping the lowest 32 bits. Select a cell to
+            inspect its sum.
           </p>
-          <div className="cc-addition">
-            <span>word[{selectedWord}] · mixed</span>
-            <code>{wordHex(block.mixed[selectedWord])}</code>
-            <span>+ original</span>
-            <code>{wordHex(block.initial[selectedWord])}</code>
-            <span>= output word</span>
-            <strong>{wordHex(block.final[selectedWord])}</strong>
-          </div>
-          <p>
-            Click another matrix cell to inspect its addition. This is called{' '}
-            <strong>feed-forward</strong>. It is part of the block function, after the rounds.
-          </p>
-          <div className="cc-callout">
-            <strong>Keep the original.</strong>
+          <details className="cc-more">
+            <summary>Learn more</summary>
             <p>
-              The rounds update a working copy; the starting state is still available for this
-              addition.
+              This step is called <strong>feed-forward</strong>. The rounds change a working copy;
+              the original state is saved for these 16 additions.
             </p>
-          </div>
+            <p>
+              Each sum wraps modulo 2³²: discard any carry above bit 31. This happens once, after
+              all 20 rounds.
+            </p>
+          </details>
         </>
       )}
       {stage === 3 && (
         <>
-          <h3>Words → bytes, in order</h3>
-          <p>
-            Read output words 0 through 15. Write each word as four little-endian bytes. Together
-            they form the keystream: 64 bytes that look random but are reproducible.
-          </p>
-          <div className="cc-addition">
-            <span>Output word[{selectedWord}]</span>
-            <code>{wordHex(block.final[selectedWord])}</code>
-            <span>Least significant byte first</span>
-            <strong>
-              {Array.from(serializeWords([block.final[selectedWord]]), byteHex).join(' ')}
-            </strong>
-          </div>
-          <p>
-            The same key + nonce + counter always gives the same stream. Sender and receiver can
-            generate it independently.
-          </p>
-          <div className="cc-callout">
-            <strong>Need more than 64 bytes?</strong>
+          <h3>Words become a stream</h3>
+          <p>Write each word as four little-endian bytes. The 16 words give 64 keystream bytes.</p>
+          <details className="cc-more">
+            <summary>Learn more</summary>
             <p>
-              Increment the counter, rebuild the starting state, and run all 20 rounds again. Join
-              the blocks. The last block only uses as many bytes as the message needs; no message
-              padding is required.
+              Read words 0 through 15 in order, writing each one’s least significant byte first.
             </p>
-          </div>
+            <p>
+              Sender and receiver generate the same stream using the same key, nonce, and counter.
+            </p>
+            <h3>Messages longer than 64 bytes</h3>
+            <p>
+              Increase the counter and run the block function again. Join the blocks, using only the
+              bytes the message needs. No message padding is required.
+            </p>
+          </details>
         </>
       )}
       {stage === 4 && (
         <>
-          <h3>XOR encrypts and decrypts</h3>
+          <h3>The same XOR works both ways</h3>
           <p>
-            Take one message byte and one keystream byte. XOR their bits. Repeat for every byte.
+            XOR each message byte with a stream byte. XOR with that stream again to recover the
+            message.
           </p>
           <div className="cc-formula">
             <span>ENCRYPT</span>
@@ -197,26 +178,23 @@ function Explanation({ stage, block, selectedWord, quarter, operation, onOperati
             <span>DECRYPT</span>
             <code>ciphertext ⊕ stream = plaintext</code>
           </div>
-          <p>
-            XORing the same value twice cancels it: <code>(P ⊕ K) ⊕ K = P</code>. Decryption
-            regenerates the stream; it does not reverse the 20 rounds.
-          </p>
-          <div className="cc-callout">
-            <strong>The ciphertext has the same byte length.</strong>
+          <details className="cc-more">
+            <summary>Learn more</summary>
             <p>
-              ChaCha20 changes the message bytes. It does not compress them or produce a fixed-size
-              hash.
+              <code>(P ⊕ K) ⊕ K = P</code>: XORing the same value twice cancels it. Decryption
+              regenerates the stream; it does not reverse the rounds.
             </p>
-          </div>
-          <h3>One rule to remember</h3>
-          <p>
-            Never reuse a nonce for a different message under the same key. Repeating the stream
-            reveals the XOR of the two plaintexts: <code>C₁ ⊕ C₂ = P₁ ⊕ P₂</code>.
-          </p>
-          <p>
-            ChaCha20 alone does not detect changes. Open the Poly1305 chapter below to see
-            authentication in action.
-          </p>
+            <p>The ciphertext has exactly the same byte length as the message.</p>
+            <h3>Never repeat the stream</h3>
+            <p>
+              Never reuse a nonce for a different message under the same key. Repeating the stream
+              reveals <code>C₁ ⊕ C₂ = P₁ ⊕ P₂</code>.
+            </p>
+            <p>
+              Encryption alone does not detect changes. The optional Poly1305 demo below shows how
+              authentication adds this check.
+            </p>
+          </details>
         </>
       )}
     </>
@@ -259,9 +237,7 @@ function XorMessage({
       </div>
       {length > 0 ? (
         <>
-          <p className="cc-muted">
-            Select a byte of the {decrypt ? 'ciphertext' : 'UTF-8 message'} to inspect its XOR.
-          </p>
+          <p className="cc-muted">Select a byte to inspect its XOR.</p>
           <ByteGrid
             bytes={source.slice(offset, offset + length)}
             selected={index - offset}
@@ -290,9 +266,7 @@ function XorMessage({
           </div>
         </>
       ) : (
-        <div className="cc-callout">
-          An empty message produces empty ciphertext. There are no message bytes to XOR.
-        </div>
+        <div className="cc-callout">Empty message → empty ciphertext.</div>
       )}
       <div className="cc-output">
         <span>
@@ -301,12 +275,7 @@ function XorMessage({
         <output data-testid="chacha-output">
           {decrypt ? new TextDecoder().decode(output) : bytesToHex(output) || '(empty)'}
         </output>
-        <small>
-          {output.length} bytes ·{' '}
-          {decrypt
-            ? 'The original UTF-8 message, recovered with the same stream.'
-            : 'Only the required keystream bytes were used.'}
-        </small>
+        <small>{output.length} bytes</small>
       </div>
     </div>
   );
@@ -434,7 +403,7 @@ export default function ChaCha20Page() {
     {
       id: 'nonce',
       label: 'Nonce',
-      hint: '12 bytes · 24 hex digits · public',
+      hint: '12 bytes · 24 hex digits',
       value: nonceText,
       setter: setNonceText,
       tone: 'nonce',
@@ -442,7 +411,7 @@ export default function ChaCha20Page() {
     {
       id: 'counter',
       label: 'Starting counter',
-      hint: '32-bit integer · one increment per block',
+      hint: '32-bit integer',
       value: counterText,
       setter: setCounterText,
       tone: 'counter',
@@ -469,11 +438,10 @@ export default function ChaCha20Page() {
       <div className="cc-container">
         <header className="cc-header">
           <div>
-            <div className="cc-eyebrow">Interactive cryptography / stream cipher</div>
+            <div className="cc-eyebrow">Stream cipher</div>
             <h1>
-              ChaCha20<span>From a secret key to a secret message.</span>
+              ChaCha20<span>Encryption.</span>
             </h1>
-            <p>Build a stream of bytes. Mix it with your message. Follow every step.</p>
           </div>
           <a
             href="https://www.rfc-editor.org/rfc/rfc8439.html"
@@ -484,21 +452,10 @@ export default function ChaCha20Page() {
             RFC 8439 ↗
           </a>
         </header>
-        <div className="cc-intro">
-          <span className="cc-badge">THE BIG IDEA</span>
-          <p>
-            <Link to="/sha256">SHA-256</Link> makes a fingerprint.{' '}
-            <strong>ChaCha20 encrypts, so someone with the key can recover the message.</strong>{' '}
-            “ChaCha” is the family; “20” is the number of mixing rounds. This page uses the IETF
-            variant.
-          </p>
-        </div>
-
         <div className={`cc-workbench ${showExplanation ? '' : 'cc-without-explanation'}`}>
           <aside className="cc-inputs" aria-label="Cipher inputs">
             <div className="cc-panel-heading">
-              <span className="cc-section-label">01 / Your inputs</span>
-              <span className="cc-local">Local only</span>
+              <span className="cc-section-label">Inputs</span>
             </div>
             <div className="cc-examples">
               <button type="button" onClick={() => loadExample(false)}>
@@ -524,12 +481,9 @@ export default function ChaCha20Page() {
               />
               <small id="cc-message-hint">
                 {input.errors.message ||
-                  `${input.plaintext.length} / 256 bytes · ${Math.ceil(input.plaintext.length / 64)} keystream block${Math.ceil(input.plaintext.length / 64) === 1 ? '' : 's'} needed`}
+                  `${input.plaintext.length} / 256 bytes · ${Math.ceil(input.plaintext.length / 64)} block${Math.ceil(input.plaintext.length / 64) === 1 ? '' : 's'}`}
               </small>
             </label>
-            <div className="cc-input-divider">
-              <span>Used to build the state ↓</span>
-            </div>
             {fields.map((field) => (
               <label
                 className={`cc-field cc-tone-${field.tone}`}
@@ -565,22 +519,11 @@ export default function ChaCha20Page() {
                 <small id={`cc-${field.id}-hint`}>{input.errors[field.id] || field.hint}</small>
               </label>
             ))}
-            <div className="cc-input-note">
-              <strong>Try this as you learn</strong>
-              <p>
-                Change the message: the state stays the same. Change one key or nonce digit: the
-                keystream changes.
-              </p>
-            </div>
-            <p className="cc-footnote">
-              Public example key. All calculations stay in your browser. Built for learning, not for
-              protecting real secrets.
-            </p>
           </aside>
 
           <section className="cc-visualizer" aria-label="ChaCha20 walkthrough">
             <div className="cc-panel-heading">
-              <span className="cc-section-label">02 / Follow the transformation</span>
+              <span className="cc-section-label">Walkthrough</span>
               <button
                 type="button"
                 className="cc-explain-toggle"
@@ -756,33 +699,13 @@ export default function ChaCha20Page() {
                         active={quarter ? quarter.indices : []}
                         selected={selectedWord}
                         onSelect={setSelectedWord}
-                        initial={block.initial}
-                        isInitial={stage === 0}
                       />
                       <div className="cc-state-caption">
-                        {stage === 0
-                          ? 'Click any word to inspect it. Colors show where the starting words come from.'
-                          : stage === 1
-                            ? `Highlighted words are a, b, c, d for this quarter round. Matrix shows ${operation === 0 ? 'the values before it starts' : `values after operation ${operation} of 12`}. Colors keep their original input labels as values mix.`
-                            : 'Each cell now contains (mixed word + original word) mod 2³².'}
+                        {stage === 1
+                          ? `${operation === 0 ? 'Before mixing' : `After operation ${operation} / 12`} · quarter round ${step} / 80`
+                          : '16 × 32-bit words · select a cell to inspect'}
                       </div>
                     </>
-                  )}
-                  {stage === 0 && (
-                    <div className="cc-pipeline">
-                      <span>key + nonce + counter</span>
-                      <ArrowRight size={16} />
-                      <strong>ChaCha20 block</strong>
-                      <ArrowRight size={16} />
-                      <span>64 keystream bytes</span>
-                    </div>
-                  )}
-                  {stage === 1 && (
-                    <div className="cc-mix-summary">
-                      <strong>{step} / 80</strong>
-                      <span>quarter rounds reached</span>
-                      <span className="cc-muted">ADD + XOR + ROTATE</span>
-                    </div>
                   )}
                   {stage === 2 && (
                     <div className="cc-feed-forward">
@@ -796,10 +719,7 @@ export default function ChaCha20Page() {
                   )}
                   {stage === 3 && (
                     <>
-                      <p className="cc-muted">
-                        One complete keystream block. Dimmed bytes are unused for this message
-                        block.
-                      </p>
+                      <p className="cc-muted">64 bytes · dimmed bytes are unused</p>
                       <ByteGrid
                         bytes={block.bytes}
                         selected={selectedByte}
@@ -817,7 +737,6 @@ export default function ChaCha20Page() {
                             ' '
                           )}
                         </output>
-                        <small>Click a byte to inspect the word it came from.</small>
                       </div>
                     </>
                   )}
@@ -834,13 +753,6 @@ export default function ChaCha20Page() {
                     />
                   )}
                   <div className="cc-next">
-                    <span>
-                      {step === LAST_STEP
-                        ? 'Same stream. Same XOR. Original message.'
-                        : stage === 1
-                          ? 'One step = one quarter round. Inspect its 12 operations in the explanation.'
-                          : 'Move at your own pace. Every displayed value is computed from your inputs.'}
-                    </span>
                     {step < LAST_STEP && (
                       <button
                         type="button"
@@ -861,14 +773,14 @@ export default function ChaCha20Page() {
             <aside className="cc-explanation" aria-label="Step explanation">
               <div className="cc-panel-heading">
                 <span className="cc-section-label">
-                  <BookOpen size={14} /> Why this step?
+                  <BookOpen size={14} /> This step
                 </span>
               </div>
               <div className="cc-explanation-body">
                 {input.valid && block ? (
                   <Explanation
+                    key={stage}
                     stage={stage}
-                    block={block}
                     selectedWord={selectedWord}
                     quarter={quarter}
                     operation={operation}
@@ -887,13 +799,7 @@ export default function ChaCha20Page() {
         </div>
         {input.valid && <AuthenticationDemo secretKey={input.secretKey} nonce={input.nonce} />}
         <footer className="cc-footer">
-          <span>ChaCha20 · 256-bit key · 96-bit nonce · 20 rounds</span>
-          <span>
-            Algorithm & test vectors:{' '}
-            <a href="https://www.rfc-editor.org/rfc/rfc8439.html" target="_blank" rel="noreferrer">
-              RFC 8439 ↗
-            </a>
-          </span>
+          <span>Educational demo · public example key · runs locally</span>
         </footer>
       </div>
     </main>

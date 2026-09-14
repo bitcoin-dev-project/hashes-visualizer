@@ -32,10 +32,6 @@ export default function QuarterRound({ quarter, operation, onOperation }) {
   const b = before[op.source];
   return (
     <div className="cc-quarter">
-      <p>
-        A quarter round mixes just <strong>four of the sixteen words</strong>. Here, a, b, c, d
-        refer to positions <code>{quarter.indices.join(', ')}</code>.
-      </p>
       <div className="cc-registers">
         {'abcd'.split('').map((letter, i) => (
           <div key={letter}>
@@ -46,8 +42,7 @@ export default function QuarterRound({ quarter, operation, onOperation }) {
           </div>
         ))}
       </div>
-      <div className="cc-section-label">Inside this quarter round</div>
-      <p className="cc-muted">Select an operation to see its exact effect on the matrix.</p>
+      <div className="cc-section-label">Select an operation</div>
       <div className="cc-operations">
         {OPERATIONS.map((item, i) => (
           <button
@@ -98,22 +93,6 @@ export default function QuarterRound({ quarter, operation, onOperation }) {
             {op.type === 'rotate' ? op.amount : wordHex(b)}
             <br />= {wordHex(after[op.target])}
           </code>
-          {op.type === 'add' && (
-            <p>
-              Normal addition, wrapping at 2³².{' '}
-              {a + b > 0xffffffff
-                ? 'This sum overflows, so discard the carry above bit 31.'
-                : 'This sum fits in 32 bits, so nothing wraps this time.'}
-            </p>
-          )}
-          {op.type === 'xor' && (
-            <p>Compare each pair of bits: 0 ⊕ 0 = 0, 1 ⊕ 1 = 0, and 0 ⊕ 1 = 1.</p>
-          )}
-          {op.type === 'rotate' && (
-            <p>
-              The highlighted bits leave the left edge and reappear on the right. No bits are lost.
-            </p>
-          )}
           <div className="cc-bits">
             <BitLine label="in" value={a} highlight={op.type === 'rotate' ? op.amount : 0} />
             {op.type !== 'rotate' && <BitLine label={op.type === 'add' ? '+' : '⊕'} value={b} />}
@@ -124,6 +103,23 @@ export default function QuarterRound({ quarter, operation, onOperation }) {
               rotated
             />
           </div>
+          <details className="cc-more" key={op.type}>
+            <summary>How {op.type === 'rotate' ? 'rotation' : op.type.toUpperCase()} works</summary>
+            {op.type === 'add' && (
+              <p>
+                Normal addition, wrapping at 2³².{' '}
+                {a + b > 0xffffffff
+                  ? 'This sum overflows, so discard the carry above bit 31.'
+                  : 'This sum fits in 32 bits, so nothing wraps this time.'}
+              </p>
+            )}
+            {op.type === 'xor' && (
+              <p>Compare each pair of bits: 0 ⊕ 0 = 0, 1 ⊕ 1 = 0, and 0 ⊕ 1 = 1.</p>
+            )}
+            {op.type === 'rotate' && (
+              <p>The highlighted bits wrap from the left edge to the right. No bits are lost.</p>
+            )}
+          </details>
         </div>
       )}
     </div>

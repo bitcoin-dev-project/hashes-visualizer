@@ -28,14 +28,7 @@ export function wordSource(index) {
   };
 }
 
-export default function StateMatrix({
-  words,
-  active = [],
-  selected,
-  onSelect,
-  initial,
-  isInitial,
-}) {
+export default function StateMatrix({ words, active = [], selected, onSelect }) {
   return (
     <>
       <div className="cc-matrix" aria-label="ChaCha20 state: sixteen 32-bit words">
@@ -56,9 +49,6 @@ export default function StateMatrix({
                 <span>{slot >= 0 ? `${'abcd'[slot]} · ${source.name}` : source.name}</span>
               </span>
               <strong>{wordHex(word)}</strong>
-              <span className="cc-word-caption">
-                {isInitial ? '32 bits' : word === initial[i] ? 'unchanged' : 'mixed value'}
-              </span>
             </button>
           );
         })}
