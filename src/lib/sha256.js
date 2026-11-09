@@ -69,7 +69,7 @@ function padMessage(bytes) {
   return padded;
 }
 
-function processBlock(block, H) {
+function processBlock(block, H, rounds) {
   const W = new Uint32Array(64);
   const view = new DataView(block.buffer, block.byteOffset, 64);
   
@@ -83,7 +83,7 @@ function processBlock(block, H) {
   
   let [a, b, c, d, e, f, g, h] = H;
   
-  for (let t = 0; t < 64; t++) {
+  for (let t = 0; t < rounds; t++) {
     const T1 = (h + bigSigma1(e) + ch(e, f, g) + K[t] + W[t]) >>> 0;
     const T2 = (bigSigma0(a) + maj(a, b, c)) >>> 0;
     h = g;
@@ -110,12 +110,17 @@ function processBlock(block, H) {
 // UTF-8 encoding a byte string would expand anything above 0x7F into two
 // bytes and silently produce the wrong digest. The BIP-39 checksum is one
 // such case.
-export function sha256Bytes(bytes) {
+// The default is standard SHA-256. A smaller round count is an educational
+// variant applied to every block, including the final padding block.
+export function sha256Bytes(bytes, rounds = 64) {
+  if (!Number.isInteger(rounds) || rounds < 1 || rounds > 64) {
+    throw new Error('Rounds per block must be an integer from 1 to 64.');
+  }
   const padded = padMessage(bytes);
   const H = new Uint32Array(H_INIT);
 
   for (let i = 0; i < padded.length; i += 64) {
-    processBlock(padded.subarray(i, i + 64), H);
+    processBlock(padded.subarray(i, i + 64), H, rounds);
   }
 
   return Array.from(H).map(h => h.toString(16).padStart(8, '0')).join('');

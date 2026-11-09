@@ -5,15 +5,30 @@ import {
   chunkString,
   rotateRight,
   stringToBinary,
-  binaryToString,
-  binaryToHex,
-  stringToHex,
-  hexToString, hexToBinary, decimalToBinary, calculateK
+  hexToBinary, normalizeHex, decimalToBinary, calculateK
 } from '../lib/encoding';
 
 import { WCalculationAnimation, CompressionRoundExplainer } from '../components/BitAnimations';
 
-function DetailedExplainer({ phase, paddingStep, digestStep, currentWIndex, currentRound, input, inputBinary, inputLength, kZeros, lengthBits, wView, letters, lettersBefore, hs, hsBefore, k, toBin }) {
+const COMPRESSION_START = 57;
+
+function normalizeInput(input, base) {
+  if (base === 'hex') return normalizeHex(input);
+  if (base === 'bin') return input.replace(/\s/g, '');
+  return input;
+}
+
+function validateInput(input, base) {
+  input = normalizeInput(input, base);
+  if (base === 'hex') {
+    if (!/^[0-9a-f]*$/i.test(input)) return 'Hex accepts 0–9 and A–F. Spaces and an optional 0x prefix are allowed.';
+    if (input.length % 2 !== 0) return 'Hex needs two digits per byte. Add one more digit.';
+  }
+  if (base === 'bin' && !/^[01]*$/.test(input)) return 'Binary accepts only 0 and 1.';
+  return '';
+}
+
+function DetailedExplainer({ phase, paddingStep, digestStep, currentWIndex, currentRound, input, inputBase, inputBinary, inputLength, kZeros, lengthBits, wView, letters, lettersBefore, hs, hsBefore, k, toBin, roundsPerBlock, blockIndex }) {
 
   if (phase === 'padding') {
     const titles = ["Message → Bits", "Add '1' marker", "Pad with zeros", "Add length", "Block ready"];
@@ -23,15 +38,15 @@ function DetailedExplainer({ phase, paddingStep, digestStep, currentWIndex, curr
         
         {paddingStep === 0 && (
           <div className="space-y-4">
-            <div className="text-gray-400 text-sm leading-relaxed">Each character → 8 bits (ASCII/UTF-8)</div>
+            <div className="text-gray-400 text-sm leading-relaxed">Each byte → 8 bits. Text is encoded as UTF-8; hex represents the bytes directly.</div>
             <div className="bg-gray-800/50 rounded p-4 space-y-2">
-              {input.split('').map((char, i) => (
+              {chunkString(inputBinary, 8).map((bits, i) => (
                 <div key={i} className="flex items-center gap-4 text-sm">
-                  <span className="text-yellow-400 font-bold">'{char}'</span>
+                  <span className="text-yellow-400 font-bold">0x{parseInt(bits, 2).toString(16).padStart(2, '0')}</span>
                   <span className="text-gray-500">→</span>
-                  <span className="text-gray-400">{char.charCodeAt(0)}</span>
+                  <span className="text-gray-400">{parseInt(bits, 2)}</span>
                   <span className="text-gray-500">→</span>
-                  <span className="text-white font-mono">{inputBinary.slice(i*8, (i+1)*8)}</span>
+                  <span className="text-white font-mono">{bits}</span>
                 </div>
               ))}
             </div>
@@ -53,7 +68,7 @@ function DetailedExplainer({ phase, paddingStep, digestStep, currentWIndex, curr
             <div className="text-gray-400 text-sm leading-relaxed">Pad with zeros until length ≡ 448 (mod 512)</div>
             <div className="bg-gray-800/50 rounded p-4 text-sm space-y-2">
               <div><span className="text-gray-500">Current: </span><span className="text-white">{inputLength + 1} bits</span></div>
-              <div><span className="text-gray-500">Need: </span><span className="text-white">448 bits</span></div>
+              <div><span className="text-gray-500">Target before length: </span><span className="text-white">{inputLength + 1 + kZeros} bits</span></div>
               <div><span className="text-gray-500">Add: </span><span className="text-blue-400 font-bold">{kZeros} zeros</span></div>
             </div>
           </div>
@@ -65,10 +80,9 @@ function DetailedExplainer({ phase, paddingStep, digestStep, currentWIndex, curr
             <div className="bg-gray-800/50 rounded p-4 text-sm space-y-3">
               <div className="text-gray-500 font-medium">How we calculate length:</div>
               <div className="pl-3 space-y-1">
-                <div><span className="text-gray-500">Message: </span><span className="text-yellow-400">"{input}"</span></div>
-                <div><span className="text-gray-500">Characters: </span><span className="text-white">{input.length}</span></div>
-                <div><span className="text-gray-500">Bits per char: </span><span className="text-white">{inputLength/input.length}</span></div>
-                <div><span className="text-gray-500">Total bits: </span><span className="text-white">{input.length} × {inputLength/input.length} = <span className="text-green-400 font-bold">{inputLength}</span></span></div>
+                <div className="break-all"><span className="text-gray-500">Message: </span><span className="text-yellow-400">"{input}"</span></div>
+                <div><span className="text-gray-500">Input format: </span><span className="text-white">{inputBase === 'hex' ? 'Hex bytes' : inputBase === 'bin' ? 'Binary bits' : 'UTF-8 text'}</span></div>
+                <div><span className="text-gray-500">Total bits: </span><span className="text-green-400 font-bold">{inputLength}</span></div>
               </div>
               <div className="border-t border-gray-700 pt-3 mt-3">
                 <div className="mb-2"><span className="text-gray-500">Convert {inputLength} to 64-bit binary:</span></div>
@@ -80,12 +94,12 @@ function DetailedExplainer({ phase, paddingStep, digestStep, currentWIndex, curr
         
         {paddingStep === 4 && (
           <div className="space-y-4">
-            <div className="text-gray-400 text-sm leading-relaxed">512-bit block ready</div>
+            <div className="text-gray-400 text-sm leading-relaxed">Padded message ready: {(inputLength + 1 + kZeros + 64) / 512} × 512-bit blocks</div>
             <div className="bg-gray-800/50 rounded p-4 text-sm space-y-2">
               <div><span className="text-white">{inputLength}</span><span className="text-gray-500"> (message) + </span></div>
               <div><span className="text-green-400">1</span><span className="text-gray-500"> (marker) + </span></div>
               <div><span className="text-blue-400">{kZeros}</span><span className="text-gray-500"> (zeros) + </span></div>
-              <div><span className="text-purple-400">64</span><span className="text-gray-500"> (length) = </span><span className="text-white font-bold">512 bits</span></div>
+              <div><span className="text-purple-400">64</span><span className="text-gray-500"> (length) = </span><span className="text-white font-bold">{inputLength + 1 + kZeros + 64} bits</span></div>
             </div>
           </div>
         )}
@@ -133,6 +147,17 @@ function DetailedExplainer({ phase, paddingStep, digestStep, currentWIndex, curr
   }
 
   if (phase === 'init') {
+    if (blockIndex > 0) {
+      return (
+        <div className="space-y-4">
+          <div className="text-purple-400 font-bold text-base">Load Previous Block Result</div>
+          <p className="text-gray-400 text-sm">Block {blockIndex + 1} starts from the previous block’s hash words after {roundsPerBlock} rounds.</p>
+          <div className="space-y-1 font-mono text-[10px]">
+            {hsBefore.map((word, i) => <div key={i} className="text-purple-300">{'abcdefgh'[i]} = {toBin(word)}</div>)}
+          </div>
+        </div>
+      );
+    }
     const hPrimes = [2, 3, 5, 7, 11, 13, 17, 19];
     const hValues = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];
     const varNames = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
@@ -235,7 +260,7 @@ function DetailedExplainer({ phase, paddingStep, digestStep, currentWIndex, curr
         <div className="text-orange-400 font-bold text-base">Compression Overview</div>
         
         <div className="text-gray-400 text-sm space-y-3 leading-relaxed">
-          <p>Now we run <span className="text-orange-400 font-bold">64 rounds</span> of compression. Each round:</p>
+          <p>Now we run <span className="text-orange-400 font-bold">{roundsPerBlock} rounds</span> of compression per block. Each round:</p>
         </div>
         
         <div className="space-y-4 text-sm">
@@ -284,7 +309,7 @@ function DetailedExplainer({ phase, paddingStep, digestStep, currentWIndex, curr
         </div>
         
         <div className="text-gray-600 text-sm pt-4 border-t border-gray-800 leading-relaxed">
-          After 64 rounds, the final a..h values are added back to h₀..h₇ to produce the hash.
+          After {roundsPerBlock} rounds, the final a..h values are added back to h₀..h₇ to produce the block result.
         </div>
       </div>
     );
@@ -294,6 +319,7 @@ function DetailedExplainer({ phase, paddingStep, digestStep, currentWIndex, curr
     return (
       <CompressionRoundExplainer 
         round={currentRound}
+        totalRounds={roundsPerBlock}
         letters={letters}
         lettersBefore={lettersBefore}
         wView={wView}
@@ -305,7 +331,7 @@ function DetailedExplainer({ phase, paddingStep, digestStep, currentWIndex, curr
 
   if (phase === 'digest') {
     const varNames = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-    const titles = ["Compression Complete", "Update Hash Values", "Concatenate", "Final Hash"];
+    const titles = ["Compression Complete", "Update Hash Values", "Concatenate", roundsPerBlock === 64 ? "Final Hash" : `${roundsPerBlock}-Step Digest`];
     
     return (
       <div className="space-y-5">
@@ -314,7 +340,7 @@ function DetailedExplainer({ phase, paddingStep, digestStep, currentWIndex, curr
         {digestStep === 0 && (
           <div className="space-y-4">
             <div className="text-gray-400 text-sm leading-relaxed">
-              All 64 rounds complete. Now add a..h back to H₀..H₇.
+              All {roundsPerBlock} rounds of this block are complete. Now add a..h back to H₀..H₇.
             </div>
             <div className="bg-gray-800/50 rounded p-3 space-y-1.5 font-mono text-[10px]">
               <div className="text-gray-500 mb-2">Final working variables:</div>
@@ -377,21 +403,20 @@ function DetailedExplainer({ phase, paddingStep, digestStep, currentWIndex, curr
 }
 
 export default function SHA256Page() {
-  const [result, setResult] = useState('');
   const [inputBase, setInputBase] = useState('text');
-  const [paddedInput, setPaddedInput] = useState('0');
-  const [wView, setWView] = useState(new Array(64).fill(0));
-  const [letters, setLetters] = useState([]);
-  const [lettersBefore, setLettersBefore] = useState([]);
-  const [hs, setHs] = useState([]);
-  const [hsBefore, setHsBefore] = useState([]);
+  const [roundsPerBlock, setRoundsPerBlock] = useState(64);
   const [clock, setClock] = useState(0);
   const [input, setInput] = useState('');
-  const [inputPlaceholder, setInputPlaceholderInput] = useState('Enter message to hash...');
-  const [chunksCount, setChunksCount] = useState(1);
+  const inputPlaceholder = inputBase === 'bin' ? '10101...' : inputBase === 'hex' ? 'a1b5c8' : 'Enter message to hash...';
   const [autoplay, setAutoplay] = useState(false);
   const [showExplanation, setShowExplanation] = useState(true);
   const finalHashRef = useRef(null);
+  const digestStart = COMPRESSION_START + roundsPerBlock;
+  const stepsPerBlock = digestStart + 4;
+  const inputError = validateInput(input, inputBase);
+  const validInput = inputError ? '' : normalizeInput(input, inputBase);
+  const paddedInput = padding(validInput, inputBase);
+  const chunksCount = paddedInput.length / 512;
 
   const k = [
     1116352408, 1899447441, -1245643825, -373957723, 961987163, 1508970993,
@@ -417,18 +442,14 @@ export default function SHA256Page() {
   }, [clock, autoplay]);
 
   useEffect(() => {
-    setPaddedInput(padding('', inputBase));
-  }, []);
-
-  useEffect(() => {
-    const cycleClk = clock % 121;
+    const cycleClk = clock % stepsPerBlock;
     const isFinished = clock >= lastClockStateless(chunksCount);
-    const isDigestPhase = cycleClk >= 117;
+    const isDigestPhase = cycleClk >= digestStart;
     
     if ((isFinished || isDigestPhase) && finalHashRef.current) {
       finalHashRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     }
-  }, [clock, chunksCount]);
+  }, [clock, chunksCount, stepsPerBlock, digestStart]);
 
   function onAutoClock() {
     setAutoplay(!autoplay);
@@ -436,148 +457,86 @@ export default function SHA256Page() {
   }
 
   function onClock() {
-      if (clock < lastClock()) setClock(clock + 1);
-    let res = shaStepped(input, firstLoop(clock), secondLoop(clock), chunksLoop(clock));
-    setWView(res.w);
-    setResult(res.hash);
-    setHs(res.hs);
-    setHsBefore(res.hsBefore);
-    setLetters(res.letters);
-    setLettersBefore(res.lettersBefore);
+    if (clock < lastClock()) setClock(clock + 1);
   }
 
   function onInputChange(value) {
-    if(inputBase === 'bin' && !['0', '1', ''].includes(value.substr(-1))) return;
-    if(inputBase === 'hex' && !['a', 'b', 'c', 'd', 'e', 'f', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ''].includes(value.substr(-1))) return;
+    setClock(clockForInput(value, inputBase));
     setInput(value);
-    setPaddedInput(padding(value, inputBase));
-    if(clock === 0) value = '';
-    let res = shaStepped(value, firstLoop(clock), secondLoop(clock), chunksLoop(clock));
-    setWView(res.w);
-    setResult(res.hash);
-    setHs(res.hs);
-    setHsBefore(res.hsBefore);
-    setLetters(res.letters);
-    setLettersBefore(res.lettersBefore);
+    setAutoplay(false);
+  }
+
+  function clockForInput(value, base) {
+    if (validateInput(value, base)) return 0;
+    const nextChunks = padding(normalizeInput(value, base), base).length / 512;
+    if (clock === lastClock()) return lastClockStateless(nextChunks);
+    const block = Math.min(chunksLoop(clock) - 1, nextChunks - 1);
+    return block * stepsPerBlock + cycleClock();
   }
 
   function onClockBack() {
     if(clock === 0) return;
     setClock(clock - 1);
-    let value = input;
-    if(clock === 1) value = '';
-    let res = shaStepped(value, firstLoop(clock - 2), secondLoop(clock - 2), chunksLoop(clock));
-    setWView(res.w);
-    setResult(res.hash);
-    setLetters(res.letters);
-    setLettersBefore(res.lettersBefore);
-    setHs(res.hs);
-    setHsBefore(res.hsBefore);
+    setAutoplay(false);
   }
 
   function firstLoop(clock) {
-    let step = clock % 121;
-    if(step < 5) return 15;
-    if(step + 11 < 64) return 10 + step;
-    return 63;
+    const step = clock % stepsPerBlock;
+    return step < 6 ? 15 : Math.min(10 + step, 63);
   }
 
   function secondLoop(clock) {
-    let step = clock % 121;
-    if(step >= 53 && step < 117) return step - 53;
-    if(step >= 117) return 63;
-    return 0;
+    const step = clock % stepsPerBlock;
+    return Math.min(Math.max(step - COMPRESSION_START, -1), roundsPerBlock - 1);
   }
 
   function chunksLoop(clock) {
-    if(clock < 121) return 1;
-    return Math.floor(clock / 121) + 1;
+    return Math.floor(clock / stepsPerBlock) + 1;
   }
 
   function onInputBaseChange(value) {
+    setClock(clockForInput(input, value));
     setInputBase(value);
-    if(value === 'bin') {
-      if(inputBase === 'text') setInput(stringToBinary(input));
-      if(inputBase === 'hex') setInput(hexToBinary(input));
-      setInputPlaceholderInput('10101...');
-    }
-    if(value === 'text') {
-      if(inputBase === 'bin') {
-        setInput(binaryToString(input));
-        if(binaryToString(input) === '\x00') setInput('');
-      }
-      if(inputBase === 'hex') setInput(hexToString(input));
-      setInputPlaceholderInput('Type message...');
-    }
-    if(value === 'hex') {
-      if(inputBase === 'bin') setInput(binaryToHex(input));
-      if(inputBase === 'text') setInput(stringToHex(input));
-      setInputPlaceholderInput('a1b5c8');
-    }
+    setAutoplay(false);
+  }
+
+  function onRoundsPerBlockChange(value) {
+    const block = Math.floor(clock / stepsPerBlock);
+    const step = clock % stepsPerBlock;
+    const newDigestStart = COMPRESSION_START + value;
+    const nextStep = step < COMPRESSION_START
+      ? step
+      : step >= digestStart
+        ? newDigestStart + step - digestStart
+        : COMPRESSION_START + Math.min(step - COMPRESSION_START, value - 1);
+    setRoundsPerBlock(value);
+    setClock(block * (newDigestStart + 4) + nextStep);
+    setAutoplay(false);
   }
 
   function onClockFinish() {
-    let cyclesCount = paddedInput.length / 512;
-    setClock(lastClockStateless(cyclesCount));
-    let res = shaStepped(input, 63, 63, cyclesCount);
-    setWView(res.w);
-    setResult(res.hash);
-    setLetters(res.letters);
-    setLettersBefore(res.lettersBefore);
-    setHs(res.hs);
-    setHsBefore(res.hsBefore);
+    jumpToPhase(lastClock());
   }
 
   function onClockInit() {
-    setClock(0);
-    setAutoplay(false);
-    let res = shaStepped('', firstLoop(0), secondLoop(0), 1);
-    setWView(res.w);
-    setResult(res.hash);
-    setLetters(res.letters);
-    setLettersBefore(res.lettersBefore);
-    setHs(res.hs);
-    setHsBefore(res.hsBefore);
-  }
-
-  function onFullReset() {
-    setInput('');
-    setPaddedInput(padding('', inputBase));
-    setClock(0);
-    setAutoplay(false);
-    let res = shaStepped('', firstLoop(0), secondLoop(0), 1);
-    setWView(res.w);
-    setResult(res.hash);
-    setLetters(res.letters);
-    setLettersBefore(res.lettersBefore);
-    setHs(res.hs);
-    setHsBefore(res.hsBefore);
+    jumpToPhase(0);
   }
 
   function jumpToPhase(targetClock) {
-    setClock(targetClock);
+    setClock(Math.max(0, Math.min(targetClock, lastClock())));
     setAutoplay(false);
-    let res = shaStepped(input, firstLoop(targetClock), secondLoop(targetClock), chunksLoop(targetClock));
-    setWView(res.w);
-    setResult(res.hash);
-    setLetters(res.letters);
-    setLettersBefore(res.lettersBefore);
-    setHs(res.hs);
-    setHsBefore(res.hsBefore);
   }
 
   function lastClock() {
-    if(chunksCount === 1) return 120;
-    return 120 + 121 * (chunksCount - 1);
+    return lastClockStateless(chunksCount);
   }
 
   function lastClockStateless(chunks) {
-    if(chunks === 1) return 120;
-    return 120 + 121 * (chunks - 1);
+    return stepsPerBlock * chunks - 1;
   }
 
   function cycleClock() {
-    return clock % 121;
+    return clock % stepsPerBlock;
   }
 
   function shaStepped(message, firstLoop, secondLoop, chunksLoop) {
@@ -589,7 +548,6 @@ export default function SHA256Page() {
     let lettersBefore = [];
     let inputPadded = padding(message, inputBase);
     let chunks = chunkString(inputPadded);
-    setChunksCount(chunks.length);
 
     for(let n = 0; n < chunksLoop; n++) {
       let chunk = chunks[n];
@@ -606,7 +564,8 @@ export default function SHA256Page() {
       }
 
       a = h0; b = h1; c = h2; d = h3; e = h4; f = h5; g = h6; h = h7;
-      let secondLoopForCurrentChunk = n < chunksLoop - 1 ? 63 : secondLoop;
+      lettersBefore = [a, b, c, d, e, f, g, h];
+      let secondLoopForCurrentChunk = n < chunksLoop - 1 ? roundsPerBlock - 1 : secondLoop;
       for(let i = 0; i <= secondLoopForCurrentChunk; i++) {
         S1 = (rotateRight(e, 6) ^ rotateRight(e, 11) ^ rotateRight(e, 25)) >>> 0;
         ch = (e & f) ^ ((~e) & g) >>> 0;
@@ -620,6 +579,7 @@ export default function SHA256Page() {
       }
 
       hsBefore = [h0, h1, h2, h3, h4, h5, h6, h7];
+      if (secondLoopForCurrentChunk < 0) continue;
       h0 = (h0 + a) % (2**32); h1 = (h1 + b) % (2**32); h2 = (h2 + c) % (2**32); h3 = (h3 + d) % (2**32);
       h4 = (h4 + e) % (2**32); h5 = (h5 + f) % (2**32); h6 = (h6 + g) % (2**32); h7 = (h7 + h) % (2**32);
     }
@@ -631,15 +591,19 @@ export default function SHA256Page() {
     return { w, s0, s1, S1, ch, temp1, S0, maj, temp2, letters: [a, b, c, d, e, f, g, h], hash, chunks, hs: [h0, h1, h2, h3, h4, h5, h6, h7], hsBefore, lettersBefore };
   }
 
+  const { w: wView, hash: result, letters, lettersBefore, hs, hsBefore } = shaStepped(validInput, firstLoop(clock), secondLoop(clock), chunksLoop(clock));
   const toBin = (n) => decimalToBinary(n >>> 0).padStart(32, '0');
   const localClock = cycleClock();
+  const blockIndex = chunksLoop(clock) - 1;
+  const blockStart = blockIndex * stepsPerBlock;
+  const completedRounds = Math.min(Math.max(localClock - COMPRESSION_START + 1, 0), roundsPerBlock);
   const lastClockValue = lastClock();
   const finished = clock >= lastClockValue;
 
   const getInputBinary = () => {
-    if(inputBase === 'text') return stringToBinary(input);
-    if(inputBase === 'hex') return hexToBinary(input);
-    return input;
+    if(inputBase === 'text') return stringToBinary(validInput);
+    if(inputBase === 'hex') return hexToBinary(validInput);
+    return validInput;
   };
   const inputBinary = getInputBinary();
   const inputLength = inputBinary.length;
@@ -650,7 +614,7 @@ export default function SHA256Page() {
   const chunkDone = localClock >= 6;
   const scheduleDone = localClock >= 54;
   const initDone = localClock >= 55;
-  const compressDone = localClock >= 117;
+  const compressDone = localClock >= digestStart;
 
   let phase = 'padding';
   if(localClock >= 0 && localClock <= 4) phase = 'padding';
@@ -659,14 +623,14 @@ export default function SHA256Page() {
   else if(localClock === 54) phase = 'init';
   else if(localClock === 55) phase = 'kconst';
   else if(localClock === 56) phase = 'compressintro';
-  else if(localClock >= 57 && localClock <= 116) phase = 'compress';
-  else if(localClock >= 117) phase = 'digest';
+  else if(localClock >= COMPRESSION_START && localClock < digestStart) phase = 'compress';
+  else if(localClock >= digestStart) phase = 'digest';
 
   const paddingStep = Math.min(localClock, 4);
-  const digestStep = localClock >= 117 ? Math.min(localClock - 117, 3) : 0;
+  const digestStep = localClock >= digestStart ? Math.min(localClock - digestStart, 3) : 0;
   const currentWIndex = localClock >= 6 && localClock <= 53 ? localClock + 10 : null;
   const wComputedUpTo = localClock >= 6 ? Math.min(localClock + 10, 63) : (localClock >= 5 ? 15 : -1);
-  const currentRound = localClock >= 57 ? localClock - 57 : null;
+  const currentRound = phase === 'compress' ? completedRounds - 1 : null;
 
   const btnClass = 'px-3 py-1 rounded bg-gray-800 text-white border border-gray-700 hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed text-xs';
 
@@ -704,13 +668,16 @@ export default function SHA256Page() {
         {/* Mobile controls */}
         <div className="lg:hidden space-y-3">
           <div className="flex items-center gap-2 bg-gray-900 border border-gray-700 rounded px-2 py-2 focus-within:border-green-600 transition-colors">
-            <select value={inputBase} onChange={e => onInputBaseChange(e.target.value)} className="bg-transparent text-gray-400 py-0.5 px-1 rounded text-xs cursor-pointer">
+            <select aria-label="Input format" title="Interpret the input as text, binary, or hex" value={inputBase} onChange={e => onInputBaseChange(e.target.value)} className="bg-transparent text-gray-400 py-0.5 px-1 rounded text-xs cursor-pointer">
               <option value="text">Txt</option>
               <option value="bin">Bin</option>
               <option value="hex">Hex</option>
             </select>
             <input
               type="text"
+              aria-label="Message"
+              aria-invalid={Boolean(inputError)}
+              aria-describedby={inputError ? 'sha256-input-error' : undefined}
               value={input}
               onChange={e => onInputChange(e.target.value)}
               placeholder={inputPlaceholder}
@@ -722,9 +689,9 @@ export default function SHA256Page() {
             <div className="flex items-center gap-1">
               <button className={`${btnClass} !px-2`} onClick={onClockInit} disabled={clock === 0} title="Reset">⟲</button>
               <button className={`${btnClass} !px-3`} onClick={onClockBack} disabled={clock === 0} title="Step back">←</button>
-              <button className={`${btnClass} !px-4 ${!finished ? 'bg-green-900/50 border-green-700/50 text-green-400' : ''}`} onClick={onAutoClock} disabled={finished}>{autoplay ? '⏸' : '▶'}</button>
-              <button className={`${btnClass} !px-3`} onClick={onClock} disabled={finished} title="Step forward">→</button>
-              <button className={`${btnClass} !px-2`} onClick={onClockFinish} title="Skip to end">⏭</button>
+              <button className={`${btnClass} !px-4 ${!finished ? 'bg-green-900/50 border-green-700/50 text-green-400' : ''}`} onClick={onAutoClock} disabled={finished || Boolean(inputError)}>{autoplay ? '⏸' : '▶'}</button>
+              <button className={`${btnClass} !px-3`} onClick={onClock} disabled={finished || Boolean(inputError)} title="Step forward">→</button>
+              <button className={`${btnClass} !px-2`} onClick={onClockFinish} disabled={Boolean(inputError)} title="Skip to end">⏭</button>
             </div>
             <span className="text-gray-500 text-xs whitespace-nowrap bg-gray-800/50 px-2 py-1 rounded">{clock}/{lastClockValue}</span>
           </div>
@@ -733,7 +700,7 @@ export default function SHA256Page() {
         {/* Desktop controls */}
         <div className="hidden lg:flex items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <span className="text-green-500 text-xs px-2 py-0.5 bg-green-900/30 border border-green-500/30 rounded">SHA-256</span>
+            <span className="text-green-500 text-xs px-2 py-0.5 bg-green-900/30 border border-green-500/30 rounded">{roundsPerBlock === 64 ? 'SHA-256' : `SHA-256 · ${roundsPerBlock}-step`}</span>
             <a 
               href="https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf" 
               target="_blank" 
@@ -748,13 +715,16 @@ export default function SHA256Page() {
           
           <div className="flex items-center gap-3 flex-1 justify-center">
             <div className="flex items-center gap-2 bg-gray-900 border border-gray-700 rounded px-3 py-1.5 min-w-[250px] max-w-[400px] flex-1 focus-within:border-green-600 transition-colors">
-              <select value={inputBase} onChange={e => onInputBaseChange(e.target.value)} className="bg-transparent text-gray-400 py-0.5 px-1 rounded text-xs cursor-pointer hover:text-gray-300">
+              <select aria-label="Input format" title="Interpret the input as text, binary, or hex" value={inputBase} onChange={e => onInputBaseChange(e.target.value)} className="bg-transparent text-gray-400 py-0.5 px-1 rounded text-xs cursor-pointer hover:text-gray-300">
                 <option value="text">Text</option>
                 <option value="bin">Binary</option>
                 <option value="hex">Hex</option>
               </select>
               <input
                 type="text"
+                aria-label="Message"
+                aria-invalid={Boolean(inputError)}
+                aria-describedby={inputError ? 'sha256-input-error' : undefined}
                 value={input}
                 onChange={e => onInputChange(e.target.value)}
                 placeholder={inputPlaceholder}
@@ -765,9 +735,9 @@ export default function SHA256Page() {
             <div className="flex items-center gap-1">
               <button className={btnClass} onClick={onClockInit} disabled={clock === 0} title="Reset">Reset</button>
               <button className={btnClass} onClick={onClockBack} disabled={clock === 0} title="Step back">←</button>
-              <button className={`${btnClass} ${!finished ? 'bg-green-900/50 border-green-700/50 text-green-400' : ''}`} onClick={onAutoClock} disabled={finished} title={autoplay ? 'Pause' : 'Play'}>{autoplay ? '⏸' : '▶'}</button>
-              <button className={btnClass} onClick={onClock} disabled={finished} title="Step forward">→</button>
-              <button className={btnClass} onClick={onClockFinish} title="Skip to end">⏭</button>
+              <button className={`${btnClass} ${!finished ? 'bg-green-900/50 border-green-700/50 text-green-400' : ''}`} onClick={onAutoClock} disabled={finished || Boolean(inputError)} title={autoplay ? 'Pause' : 'Play'}>{autoplay ? '⏸' : '▶'}</button>
+              <button className={btnClass} onClick={onClock} disabled={finished || Boolean(inputError)} title="Step forward">→</button>
+              <button className={btnClass} onClick={onClockFinish} disabled={Boolean(inputError)} title="Skip to end">⏭</button>
             </div>
             
             <span className="text-gray-500 text-xs whitespace-nowrap">{clock}/{lastClockValue}</span>
@@ -775,9 +745,11 @@ export default function SHA256Page() {
           
           <div className="w-[100px]"></div>
         </div>
+        {inputError && <p id="sha256-input-error" role="alert" className="mt-1 text-[11px] text-red-400">{inputError}</p>}
       </div>
 
       {/* Main content area */}
+      {!inputError && (
       <div className="flex-1 flex flex-col lg:flex-row overflow-auto lg:overflow-hidden min-h-0">
         
         <div className="flex-1 flex flex-col lg:flex-row lg:items-stretch overflow-x-auto overflow-y-auto lg:overflow-y-hidden horizontal-scroll">
@@ -785,7 +757,7 @@ export default function SHA256Page() {
           {/* Column 1: Message → Padded block */}
           <div className={`w-full lg:w-[290px] shrink-0 border-b lg:border-b-0 lg:border-r border-gray-800 p-3 lg:p-2 overflow-hidden transition-opacity ${paddingDone && phase !== 'padding' ? 'lg:opacity-20' : ''}`}>
             <div 
-              onClick={() => jumpToPhase(0)}
+              onClick={() => jumpToPhase(blockStart)}
               className="text-[11px] lg:text-[10px] uppercase tracking-wider text-green-600 mb-2 lg:mb-1 cursor-pointer hover:text-green-400 hover:underline underline-offset-2 transition-all inline-block"
               title="Click to jump to Padding"
             >
@@ -800,7 +772,7 @@ export default function SHA256Page() {
                 if (paddingStep >= 2) blockBits += '0'.repeat(kZeros);
                 if (paddingStep >= 3) blockBits += lengthBits;
                 
-                const rows = chunkString(blockBits.padEnd(512, ' '), 32);
+                const rows = chunkString(blockBits.slice(blockIndex * 512, (blockIndex + 1) * 512).padEnd(512, ' '), 32);
                 const showWordLabels = paddingStep >= 4;
                 
                 return rows.map((row, rowIdx) => {
@@ -815,7 +787,7 @@ export default function SHA256Page() {
                       )}
                       <span className="text-[9px] lg:text-[11px]">
                         {row.split('').map((bit, bitIdx) => {
-                          const globalBit = rowIdx * 32 + bitIdx;
+                          const globalBit = blockIndex * 512 + rowIdx * 32 + bitIdx;
                           let color = 'text-gray-700';
                           
                           if (globalBit < inputLength) {
@@ -824,7 +796,7 @@ export default function SHA256Page() {
                             color = 'text-green-400 font-bold';
                           } else if (globalBit < inputLength + 1 + kZeros) {
                             color = 'text-blue-400/70';
-                          } else if (globalBit >= 448) {
+                          } else if (globalBit >= paddedInput.length - 64) {
                             color = 'text-purple-400';
                           }
                           
@@ -841,7 +813,7 @@ export default function SHA256Page() {
           {/* Column 2: Message schedule w[0..63] */}
           <div className={`w-full lg:w-[400px] shrink-0 border-b lg:border-b-0 lg:border-r border-gray-800 p-3 lg:p-2 flex flex-col overflow-hidden transition-opacity ${scheduleDone && phase !== 'schedule' && phase !== 'chunk' && phase !== 'compress' ? 'lg:opacity-20' : ''}`}>
             <div 
-              onClick={() => jumpToPhase(6)}
+              onClick={() => jumpToPhase(blockStart + 6)}
               className="text-[11px] lg:text-[10px] uppercase tracking-wider text-green-600 mb-2 lg:mb-1 cursor-pointer hover:text-green-400 hover:underline underline-offset-2 transition-all inline-block shrink-0"
               title="Click to jump to Message Schedule"
             >
@@ -853,7 +825,7 @@ export default function SHA256Page() {
                 const computed = i <= wComputedUpTo;
                 const current = i === currentWIndex;
                 const fromChunk = i < 16;
-                const usedInCompression = phase === 'compress' && currentRound > 0 && currentRound === i;
+                const usedInCompression = phase === 'compress' && currentRound === i;
                 const dimmedDuringCompression = phase === 'compress' && currentRound !== i;
                 
                 const isW16 = phase === 'schedule' && currentWIndex !== null && currentWIndex >= 16 && i === currentWIndex - 16;
@@ -881,23 +853,78 @@ export default function SHA256Page() {
           </div>
 
           {/* Column 3: Working variables a..h */}
-          <div className={`w-full lg:w-[580px] shrink-0 border-b lg:border-b-0 lg:border-r border-gray-800 p-3 lg:p-2 flex flex-col self-stretch transition-opacity ${compressDone && phase !== 'compress' && phase !== 'init' ? 'lg:opacity-20' : ''}`}>
-            <div 
-              onClick={() => jumpToPhase(55)}
-              className="text-[11px] lg:text-xs uppercase tracking-wider text-green-600 mb-2 cursor-pointer hover:text-green-400 hover:underline underline-offset-2 transition-all inline-block shrink-0"
-              title="Click to jump to Compression"
-            >
-              {phase === 'init' || phase === 'compress' ? '● Compression' : compressDone ? '✓ Compressed' : '○ Compression'} <span className="text-[10px] opacity-50">↗</span>
+          <div className="w-full lg:w-[580px] shrink-0 border-b lg:border-b-0 lg:border-r border-gray-800 p-3 lg:p-2 flex flex-col self-stretch overflow-y-auto">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-2 shrink-0">
+              <div
+                onClick={() => jumpToPhase(blockStart + 55)}
+                className="text-[11px] lg:text-xs uppercase tracking-wider text-green-600 mr-auto cursor-pointer hover:text-green-400 hover:underline underline-offset-2 transition-all"
+                title="Click to jump to Compression"
+              >
+                {phase === 'init' || phase === 'compress' ? '● Compression' : compressDone ? '✓ Compressed' : '○ Compression'} <span className="text-[10px] opacity-50">↗</span>
+              </div>
+              {chunksCount > 1 && (
+                <div className="flex items-center gap-1 text-[10px]">
+                  <label htmlFor="sha256-block" className="text-gray-500">Block</label>
+                  <select
+                    id="sha256-block"
+                    value={blockIndex}
+                    onChange={e => jumpToPhase(Number(e.target.value) * stepsPerBlock + localClock)}
+                    className="bg-transparent border border-gray-800 rounded px-1 py-0.5 text-gray-400"
+                  >
+                    {Array.from({ length: chunksCount }, (_, i) => <option key={i} value={i}>{i + 1}/{chunksCount}</option>)}
+                  </select>
+                </div>
+              )}
+              <div className="flex items-center gap-1 text-[10px]">
+                <label htmlFor="sha256-round" className="text-gray-500">Round</label>
+                <select
+                  id="sha256-round"
+                  value={completedRounds}
+                  onChange={e => jumpToPhase(blockStart + COMPRESSION_START - 1 + Number(e.target.value))}
+                  className="bg-transparent border border-gray-800 rounded px-1 py-0.5 text-cyan-300"
+                  title="Completed rounds (0 = initial state)"
+                >
+                  {Array.from({ length: roundsPerBlock + 1 }, (_, i) => <option key={i} value={i}>{i}</option>)}
+                </select>
+                <span className="text-gray-600">/</span>
+                <label htmlFor="sha256-round-limit" className="sr-only">Rounds per block</label>
+                <select
+                  id="sha256-round-limit"
+                  value={roundsPerBlock}
+                  onChange={e => onRoundsPerBlockChange(Number(e.target.value))}
+                  className="bg-transparent border border-gray-800 rounded px-1 py-0.5 text-gray-400"
+                  title="Rounds per block: 64 is standard SHA-256; lower values apply to every block"
+                >
+                  {Array.from({ length: 64 }, (_, i) => <option key={i} value={i + 1}>{i + 1}</option>)}
+                </select>
+              </div>
             </div>
+
+            {completedRounds > 0 && (
+              <section aria-label="Compression result" className="mb-2 text-[10px] leading-relaxed">
+                <details>
+                  <summary className="text-gray-500 cursor-pointer" title="Result details">
+                    <code data-testid="sha256-round-result" className="text-cyan-300 break-all select-all">{result}</code>
+                  </summary>
+                  <div className="pt-1 space-y-1 text-gray-400">
+                    <p>
+                      {completedRounds < roundsPerBlock
+                        ? `Preview if this block stopped here: add a..h to its starting H₀..H₇ (mod 2³²). Earlier blocks use ${roundsPerBlock} rounds. SHA-256 requires all 64 rounds of every block.`
+                        : blockIndex < chunksCount - 1
+                          ? 'This block is complete. Its result becomes the starting H₀..H₇ for the next block.'
+                          : roundsPerBlock === 64
+                            ? 'All blocks and all 64 rounds are complete. This is the SHA-256 hash.'
+                            : `All blocks use ${roundsPerBlock} rounds, including the padding block. This is a reduced-round digest; standard SHA-256 uses 64 rounds per block.`}
+                    </p>
+                    <div>Working state a..h (hex):</div>
+                    <code data-testid="sha256-working-state" className="block text-purple-300 break-all select-all">{letters.map(n => (n >>> 0).toString(16).padStart(8, '0')).join('')}</code>
+                  </div>
+                </details>
+              </section>
+            )}
             
             {(phase === 'init' || phase === 'kconst' || phase === 'compressintro' || phase === 'compress' || compressDone) && (
-              <div className="flex-1 space-y-1 overflow-hidden">
-                {phase === 'compress' && currentRound !== null && (
-                  <div className="bg-cyan-900/30 border border-cyan-800/30 rounded px-2 py-1 mb-1">
-                    <span className="text-cyan-400 font-bold text-xs">Round {currentRound}/63</span>
-                  </div>
-                )}
-                
+              <div className="space-y-1">
                 {phase === 'compress' && lettersBefore.length > 0 ? (
                   <div className="space-y-0.5">
                     <div className="hidden lg:block">
@@ -967,14 +994,13 @@ export default function SHA256Page() {
                   </div>
                 ) : (
                   (() => {
-                    const initialH = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];
                     return (
                       <div className="space-y-1">
                         <div className="text-[11px] lg:text-xs text-gray-500 mb-2">Working variables a..h</div>
                         {['a','b','c','d','e','f','g','h'].map((l, i) => (
                           <div key={i} className="flex gap-2 text-[10px] lg:text-xs whitespace-nowrap">
                             <span className="w-4 lg:w-5 text-purple-400 font-bold">{l}</span>
-                            <span className="text-gray-500 font-mono">{toBin(initialH[i])}</span>
+                            <span className="text-gray-500 font-mono">{toBin(letters[i])}</span>
                           </div>
                         ))}
                       </div>
@@ -1041,8 +1067,8 @@ export default function SHA256Page() {
               
               {phase === 'digest' && digestStep >= 3 && (
                 <div className="mt-3 bg-green-900/40 border border-green-500/50 rounded-lg p-3">
-                  <div className="text-xs text-green-300 mb-2 font-bold uppercase tracking-wide">✓ SHA-256 Hash</div>
-                  <div className="text-green-400 font-mono text-xs lg:text-sm font-bold break-all leading-relaxed tracking-wider">
+                  <div className="text-xs text-green-300 mb-2 font-bold uppercase tracking-wide">{finished ? roundsPerBlock === 64 ? '✓ SHA-256 Hash' : `✓ ${roundsPerBlock}-Step Digest` : `✓ Block ${blockIndex + 1} result`}</div>
+                  <div data-testid={finished ? 'sha256-final-hash' : undefined} className="text-green-400 font-mono text-xs lg:text-sm font-bold break-all leading-relaxed tracking-wider">
                     {result}
                   </div>
                 </div>
@@ -1067,6 +1093,7 @@ export default function SHA256Page() {
               currentWIndex={currentWIndex} 
               currentRound={currentRound}
               input={input}
+              inputBase={inputBase}
               inputBinary={inputBinary}
               inputLength={inputLength}
               kZeros={kZeros}
@@ -1078,6 +1105,8 @@ export default function SHA256Page() {
               hsBefore={hsBefore}
               k={k}
               toBin={toBin}
+              roundsPerBlock={roundsPerBlock}
+              blockIndex={blockIndex}
             />
             </div>
           
@@ -1153,6 +1182,7 @@ export default function SHA256Page() {
           </button>
         )}
       </div>
+      )}
     </div>
   );
 }

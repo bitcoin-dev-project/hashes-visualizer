@@ -592,7 +592,7 @@ export function WCalculationAnimation({ t, wView, toBin }) {
 // Compression Round Explainer with expandable Ch and Maj
 // ============================================================================
 
-export function CompressionRoundExplainer({ round, letters, lettersBefore = [], wView, k, toBin }) {
+export function CompressionRoundExplainer({ round, totalRounds = 64, letters, lettersBefore = [], wView, k, toBin }) {
   const [showSigma1, setShowSigma1] = useState(false);
   const [showCh, setShowCh] = useState(false);
   const [showSigma0, setShowSigma0] = useState(false);
@@ -626,7 +626,7 @@ export function CompressionRoundExplainer({ round, letters, lettersBefore = [], 
 
   return (
     <div className="space-y-4">
-      <div className="text-gray-200 font-bold text-lg">Round {r} of 64</div>
+      <div className="text-gray-200 font-bold text-lg">Round {r + 1} of {totalRounds}</div>
       
       {/* T1 calculation */}
       <div className="space-y-2">

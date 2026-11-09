@@ -1,0 +1,14 @@
+// The two 128-byte messages in the user's screenshot of the 38-step claim.
+// Checkpoints were independently calculated with a Python implementation;
+// full-round digests were also checked with Python hashlib / Node crypto.
+export const COLLISION_MESSAGES = [
+  '33ee28ac5f8ef994c787777c079d17e11198d1beb527c8554bfeff014ab531951cf31bd2bbfc637e122da4f948e6e447d5a6b8b6ea9e7af5aac1aeabeeaceb0dbd07668b833fe88e689ffe8da52259da14b9855eee5138ba88355f4806d5cf5d161c50014c6b7d7e0e7eb888747559fc990a7af69dd8e59f57d7f6a3c0fbd03b',
+  '33ee28ac5f8ef994c787777c079d17e11198d1beb527c8554bfeff014ab531951cf31bd2bbfc637e122da4f948e6e447d5a6b8b6ea9e7af5aac1aeabeeaceb0dbd07668b833fe88e689ffe8da52259da14b9855eee5138ba88355f4838b3d19d161c4ffd4c6b7d7e0e813888747559fc990a7af69dd8e59f57d7f6a3c0fbd03f',
+];
+
+export const REDUCED_38_DIGEST = '5b61bad37673bb3323d64bc4fad45b44a7e6bf048d787d6127ec259b12d0d63f';
+export const REDUCED_38_BLOCK_2 = '9f5936ca5239e115c1db7dd911f2d68810171e5fe37fa36679b07ba42ba4433c';
+export const FULL_DIGESTS = [
+  '4c42ae94384da693626926c66cb466033fb073d323804d6a5cc62dd8384dc42f',
+  '879f296753b3af6872b0a4f7ef33097a365b96ed21bd8fa795cf94e5f6ca0612',
+];
