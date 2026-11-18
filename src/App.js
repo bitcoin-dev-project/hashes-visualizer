@@ -5,7 +5,6 @@ import Layout from './components/Layout';
 import Home from './pages/Home';
 import SHA256Page from './pages/SHA256';
 import ChaCha20Page from './pages/ChaCha20';
-import MerkleTreePage from './pages/MerkleTree';
 import EntropyPage from './pages/Entropy';
 import NotFound from './pages/NotFound';
 
@@ -16,7 +15,6 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/sha256" element={<SHA256Page />} />
         <Route path="/chacha20" element={<ChaCha20Page />} />
-        <Route path="/merkle-tree" element={<MerkleTreePage />} />
         <Route path="/entropy" element={<EntropyPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

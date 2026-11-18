@@ -341,55 +341,7 @@ html.theme-light body {
 .theme-light .hover\:shadow-yellow-500\/10:hover { --tw-shadow-color: rgba(217, 119, 6, 0.06); }
 .theme-light .hover\:shadow-purple-500\/10:hover { --tw-shadow-color: rgba(124, 58, 237, 0.06); }
 
-/* ================================================
-   MERKLE TREE PAGE STYLES
-   ================================================ */
-
-/* Dot-grid background for tree visualization area */
-.merkle-tree-bg {
-  background-color: #000;
-  background-image:
-    radial-gradient(circle, rgba(75, 85, 99, 0.15) 1px, transparent 1px);
-  background-size: 24px 24px;
-}
-
-.theme-light .merkle-tree-bg {
-  background-color: #fafbfc;
-  background-image:
-    radial-gradient(circle, rgba(0, 0, 0, 0.06) 1px, transparent 1px);
-  background-size: 24px 24px;
-}
-
-/* Tamper pulse animation for Merkle nodes */
-@keyframes merkle-tamper-glow {
-  0%, 100% {
-    box-shadow: 0 0 8px rgba(239, 68, 68, 0.3);
-    transform: scale(1);
-  }
-  50% {
-    box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
-    transform: scale(1.02);
-  }
-}
-
-.merkle-tamper-pulse {
-  animation: merkle-tamper-glow 1.5s ease-in-out infinite;
-}
-
-/* Cascade flash — ripples up from leaf to root */
-@keyframes merkle-cascade-flash {
-  0% { opacity: 0; }
-  15% { opacity: 1; }
-  100% { opacity: 0; }
-}
-
-.merkle-cascade-flash {
-  background: radial-gradient(ellipse at center, rgba(255,255,255,0.15) 0%, transparent 70%);
-  opacity: 0;
-  animation: merkle-cascade-flash 0.6s ease-out forwards;
-}
-
-/* --- Merkle Tree: additional light theme overrides --- */
+/* --- Additional light theme overrides --- */
 
 /* Background tints for system accents */
 .theme-light .bg-orange-950\/30 { background-color: rgba(255, 237, 213, 0.5); }
@@ -424,7 +376,7 @@ html.theme-light body {
 .theme-light .shadow-yellow-500\/20 { --tw-shadow-color: rgba(217, 119, 6, 0.08); }
 .theme-light .shadow-black\/50 { --tw-shadow-color: rgba(0, 0, 0, 0.05); }
 
-/* Hover states for Merkle nodes */
+/* Hover states and translucent surfaces */
 .theme-light .hover\:bg-gray-700:hover { background-color: #e5e7eb; }
 .theme-light .hover\:border-gray-500:hover { border-color: #9ca3af; }
 .theme-light .border-gray-700\/50 { border-color: rgba(209, 213, 219, 0.5); }
@@ -615,8 +567,8 @@ html.theme-light body {
 /* --- Entropy page: intentional light palette ---
    The generic light theme remaps common dark utilities, but the entropy tool
    uses many semi-transparent black/custom opacity surfaces. In light mode
-   those were turning into muddy gray overlays. Keep this scoped so SHA-256 and
-   Merkle keep their existing colors. */
+   those were turning into muddy gray overlays. Keep this scoped so other tools
+   keep their existing colors. */
 .theme-light .entropy-workbench {
   background-color: #f7fbfc;
   color: #334155;

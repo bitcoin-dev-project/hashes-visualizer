@@ -14,17 +14,6 @@
       "destination": "/api/og?path=/entropy"
     },
     {
-      "source": "/merkle-tree",
-      "has": [
-        {
-          "type": "header",
-          "key": "user-agent",
-          "value": ".*(Twitterbot|facebookexternalhit|LinkedInBot|Slackbot|Discordbot|WhatsApp|TelegramBot|redditbot|Embedly|showyoubot|outbrain|pinterest|vkShare).*"
-        }
-      ],
-      "destination": "/api/og?path=/merkle-tree"
-    },
-    {
       "source": "/sha256",
       "has": [
         {
