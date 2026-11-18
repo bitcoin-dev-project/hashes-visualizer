@@ -5,13 +5,11 @@ import { useTheme } from './ThemeContext';
 const NAV_ITEMS = [
   { path: '/sha256', label: 'SHA-256', color: 'green' },
   { path: '/chacha20', label: 'ChaCha20', color: 'purple' },
-  { path: '/merkle-tree', label: 'Merkle Tree', color: 'cyan' },
   { path: '/entropy', label: 'Entropy', color: 'yellow' },
 ];
 
 const COLOR_CLASSES = {
   green:  { active: 'text-green-400 border-green-400', hover: 'hover:text-green-400/70' },
-  cyan:   { active: 'text-cyan-400 border-cyan-400', hover: 'hover:text-cyan-400/70' },
   purple: { active: 'text-purple-400 border-purple-400', hover: 'hover:text-purple-400/70' },
   orange: { active: 'text-orange-400 border-orange-400', hover: 'hover:text-orange-400/70' },
   yellow: { active: 'text-yellow-400 border-yellow-400', hover: 'hover:text-yellow-400/70' },

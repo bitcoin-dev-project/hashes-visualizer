@@ -50,34 +50,6 @@ function ChaChaVisual() {
   );
 }
 
-function MerkleVisual() {
-  return (
-    <div className="relative h-full overflow-hidden rounded-md border border-cyan-500/15 bg-black/30 p-3">
-      <svg viewBox="0 0 260 120" className="h-full w-full" aria-hidden="true">
-        <g fill="none" stroke="currentColor" strokeWidth="1.5" className="text-cyan-500/35">
-          <path d="M130 28L78 62M130 28l52 34M78 62L48 96M78 62l30 34M182 62l-30 34M182 62l30 34" />
-        </g>
-        {[
-          [130, 24, 'root', 'fill-cyan-300'],
-          [78, 62, 'h01', 'fill-cyan-400/80'],
-          [182, 62, 'h23', 'fill-cyan-400/80'],
-          [48, 96, 'tx0', 'fill-gray-500'],
-          [108, 96, 'tx1', 'fill-gray-500'],
-          [152, 96, 'tx2', 'fill-gray-500'],
-          [212, 96, 'tx3', 'fill-gray-500'],
-        ].map(([x, y, label, tone]) => (
-          <g key={label}>
-            <rect x={x - 18} y={y - 10} width="36" height="20" rx="4" className="fill-gray-950 stroke-cyan-500/35" />
-            <text x={x} y={y + 3} textAnchor="middle" className={tone} fontFamily="monospace" fontSize="9">
-              {label}
-            </text>
-          </g>
-        ))}
-      </svg>
-    </div>
-  );
-}
-
 function MiniDie({ x, y, value }) {
   const pips = {
     1: [[0, 0]],
@@ -169,13 +141,6 @@ const CARDS = [
     visual: <ChaChaVisual />,
   },
   {
-    path: '/merkle-tree',
-    title: 'Merkle Tree',
-    color: 'cyan',
-    tag: 'proofs',
-    visual: <MerkleVisual />,
-  },
-  {
     path: '/entropy',
     title: 'Entropy',
     color: 'yellow',
@@ -206,13 +171,6 @@ const COLOR_MAP = {
     title: 'text-green-300',
     detail: 'text-green-500/65',
     glow: 'hover:shadow-green-500/10',
-  },
-  cyan: {
-    border: 'border-cyan-500/25 hover:border-cyan-500/55',
-    bg: 'hover:bg-cyan-950/20',
-    title: 'text-cyan-300',
-    detail: 'text-cyan-500/65',
-    glow: 'hover:shadow-cyan-500/10',
   },
   yellow: {
     border: 'border-yellow-500/25 hover:border-yellow-500/55',
@@ -270,30 +228,30 @@ export default function Home() {
     <div className="flex-1 overflow-auto px-4 py-8 lg:px-6 lg:py-12">
       <Helmet>
         <title>Hash Explained - Interactive Cryptography Visualizers</title>
-        <meta name="description" content="Interactive visual explanations of cryptography concepts: SHA-256, Merkle trees, entropy sources, BIP-39 mnemonics, and digital signatures." />
+        <meta name="description" content="Interactive visual explanations of cryptography concepts: SHA-256, ChaCha20, entropy sources, BIP-39 mnemonics, and digital signatures." />
         <link rel="canonical" href="https://hashexplained.com/" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://hashexplained.com/" />
         <meta property="og:title" content="Hash Explained - Interactive Cryptography Visualizers" />
-        <meta property="og:description" content="Learn cryptography by watching the moving parts: hashes, Merkle proofs, entropy, seed words, and signatures." />
+        <meta property="og:description" content="Learn cryptography by watching the moving parts: hashes, encryption, entropy, seed words, and signatures." />
         <meta property="og:site_name" content="Hash Explained" />
         <meta property="og:image" content="https://hashexplained.com/thumbnail_home.png" />
         <meta property="og:image:alt" content="Hash Explained: Interactive Cryptography Visualizers" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Hash Explained - Interactive Cryptography Visualizers" />
-        <meta name="twitter:description" content="Visual, step-by-step explanations of hashes, Merkle proofs, entropy, seed words, and signatures." />
+        <meta name="twitter:description" content="Visual, step-by-step explanations of hashes, encryption, entropy, seed words, and signatures." />
         <meta name="twitter:image" content="https://hashexplained.com/thumbnail_home.png" />
         <script type="application/ld+json">{JSON.stringify({
           '@context': 'https://schema.org',
           '@type': 'WebApplication',
           name: 'Hash Explained',
-          description: 'Interactive visual explanations of cryptography concepts including SHA-256, Merkle trees, entropy sources, BIP-39 mnemonics, and digital signatures.',
+          description: 'Interactive visual explanations of cryptography concepts including SHA-256, ChaCha20, entropy sources, BIP-39 mnemonics, and digital signatures.',
           url: 'https://hashexplained.com',
           applicationCategory: 'EducationalApplication',
           operatingSystem: 'Web',
           featureList: [
             'SHA-256 algorithm visualization',
-            'Merkle tree builder and verifier',
+            'ChaCha20 encryption visualization',
             'Entropy and BIP-39 mnemonic visualization',
             'Digital signature visual explanations',
           ],
